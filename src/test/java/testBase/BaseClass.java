@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
@@ -11,12 +12,17 @@ import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeDriver;
+import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Parameters;
@@ -24,7 +30,7 @@ import org.testng.annotations.Parameters;
 public class BaseClass {
 
     public static WebDriver driver;
-    Logger log;
+    public Logger log;
     public Properties p;
 
     @SuppressWarnings("null")
@@ -57,7 +63,36 @@ public class BaseClass {
             }
         }else if(p.getProperty("executionEnv").equalsIgnoreCase("remote")){
             log.info("Running on Remote Environment");
-            // Implement remote WebDriver setup here
+            URL gridURL = new URL("http://localhost:4444/wd/hub");
+            MutableCapabilities options;
+            switch (browser.toLowerCase()) {
+                case "chrome":
+                    options = new ChromeOptions();
+                    break;
+                case "firefox":
+                    options = new FirefoxOptions();
+                    break;
+                case "edge":
+                    options = new EdgeOptions();
+                    break;
+                default:
+                    log.error("Invalid browser specified: " + browser);
+                    throw new IllegalArgumentException("Invalid browser specified: " + browser);
+
+            }
+
+            switch (OS.toLowerCase()){
+                case "linux":
+                    options.setCapability("platformName", "linux");
+                    break;
+                case "windows":
+                    options.setCapability("platformName", "windows");
+                    break;
+                case "mac":
+                    options.setCapability("platformName", "mac");
+            }
+            driver =new RemoteWebDriver(gridURL,options);
+
         }
 
         driver.manage().deleteAllCookies();
@@ -81,18 +116,18 @@ public class BaseClass {
 
     public String captureScreen(String tname) throws IOException {
 
-		String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
-				
-		TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
-		File sourceFile = takesScreenshot.getScreenshotAs(OutputType.FILE);
-		
-		String targetFilePath=System.getProperty("user.dir")+"\\screenshots\\" + tname + "_" + timeStamp + ".png";
-		File targetFile=new File(targetFilePath);
-		
-		sourceFile.renameTo(targetFile);
-			
-		return targetFilePath;
+       String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
 
-	}
-    
+       TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+       File sourceFile = takesScreenshot.getScreenshotAs(OutputType.FILE);
+
+       String targetFilePath=System.getProperty("user.dir")+"\\screenshots\\" + tname + "_" + timeStamp + ".png";
+       File targetFile=new File(targetFilePath);
+
+       sourceFile.renameTo(targetFile);
+
+       return targetFilePath;
+
+    }
+
 }
