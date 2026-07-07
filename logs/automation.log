@@ -1,0 +1,52 @@
+2026-07-08 00:59:05 INFO  Utils:112 - [TestNG] Running:
+  Command line suite
+
+2026-07-08 00:59:05 INFO  HomePageTest:50 - Running on Local Environment
+2026-07-08 00:59:05 INFO  HomePageTest:51 - OS: windows
+2026-07-08 00:59:05 INFO  HomePageTest:52 - Browser: chrome
+2026-07-08 00:59:16 INFO  HomePageTest:36 - Running TC_002_verify_page_loads_under_acceptable_time ------ > 
+2026-07-08 01:26:34 INFO  Utils:112 - [TestNG] Running:
+  Command line suite
+
+2026-07-08 01:26:34 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 01:26:34 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 01:26:34 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 01:33:16 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 01:33:16 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 01:33:16 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 01:36:50 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 01:36:50 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 01:36:50 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 01:38:21 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 01:38:21 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 01:38:21 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 01:57:31 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 01:57:31 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 01:57:31 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 01:59:21 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 01:59:21 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 01:59:21 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:00:21 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 02:00:21 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 02:00:21 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:06:41 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 02:06:41 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 02:06:41 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:10:49 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 02:10:49 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 02:10:49 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:16:58 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 02:16:58 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 02:16:58 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:19:04 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 02:19:04 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 02:19:04 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:19:42 INFO  SourceDestinationTest:50 - Running on Local Environment
+2026-07-08 02:19:42 INFO  SourceDestinationTest:51 - OS: windows
+2026-07-08 02:19:42 INFO  SourceDestinationTest:52 - Browser: chrome
+2026-07-08 02:20:32 INFO  SourceDestinationTest:49 - Running on Local Environment
+2026-07-08 02:20:32 INFO  SourceDestinationTest:50 - OS: windows
+2026-07-08 02:20:32 INFO  SourceDestinationTest:51 - Browser: chrome
+2026-07-08 02:22:31 INFO  SourceDestinationTest:49 - Running on Local Environment
+2026-07-08 02:22:31 INFO  SourceDestinationTest:50 - OS: windows
+2026-07-08 02:22:31 INFO  SourceDestinationTest:51 - Browser: chrome

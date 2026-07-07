@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
+<suite name="RedBus Automation Suite">
+    <parameter name="OS" value="windows"/>
+    <parameter name="browser" value="chrome"/>
+
+    <!-- <test name="Home Page Functional Tests">
+        <classes>
+            <class name="testCases.HomePageTest"/>
+        </classes>
+    </test> -->
+
+    <test name="Source and Destination Tests">
+        <classes>
+            <class name="testCases.SourceDestinationTest"/>
+             <methods>
+                    <include name="testSourceDestination"/>
+                </methods>
+        </classes>
+
+    </test>
+</suite>

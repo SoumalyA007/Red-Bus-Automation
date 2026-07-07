@@ -12,6 +12,7 @@ import java.util.Properties;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
@@ -23,8 +24,9 @@ import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.annotations.AfterClass;
+import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
 public class BaseClass {
@@ -36,8 +38,8 @@ public class BaseClass {
     @SuppressWarnings("null")
     @BeforeClass
     @Parameters({"OS", "browser"})
-    public void setup(String OS, String browser) throws FileNotFoundException, IOException{
-        FileReader file = new FileReader("C:\\Software Testing\\Selenium\\redbus_automation\\src\\test\\resources\\config.properties");
+    public void setup(@Optional("windows") String OS, @Optional("chrome") String browser) throws FileNotFoundException, IOException{
+        FileReader file = new FileReader(System.getProperty("user.dir") + "\\src\\test\\resources\\config.properties");
         p = new Properties();
         p.load(file);
 
@@ -102,16 +104,29 @@ public class BaseClass {
     }
 
 
-    @AfterClass
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
-        }
-    }
+    // @AfterClass
+    // public void tearDown() {
+    //     if (driver != null) {
+    //         driver.quit();
+    //     }
+    // }
 
 
     public WebDriver getDriver() {
         return driver;
+    }
+
+    public long getPageLoadTimeInMillis(String url) {
+        long startTime = System.nanoTime();
+        driver.get(url);
+        new WebDriverWait(driver, Duration.ofSeconds(20))
+            .until(driver ->
+                    ((JavascriptExecutor) driver)
+                            .executeScript("return document.readyState")
+                            .equals("complete"));
+        long endTime = System.nanoTime();
+
+        return Duration.ofNanos(endTime - startTime).toMillis();
     }
 
     public String captureScreen(String tname) throws IOException {
