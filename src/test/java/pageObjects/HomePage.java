@@ -1,5 +1,8 @@
 package pageObjects;
 
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -24,40 +27,50 @@ public class HomePage extends BasePage {
     }
 
     @FindBy(xpath = "//button[normalize-space()='Account']")
-    private WebElement accountButton;
+    public WebElement accountButton;
 
     @FindBy(xpath = "//button[@aria-label='Sign up']")
-    private WebElement signInSignUpButton;
+    public WebElement signInSignUpButton;
 
     @FindBy(xpath = "//button[normalize-space()='Log in']")
-    private WebElement loginButton;
+    public WebElement loginButton;
 
     @FindBy(xpath = "//img[@title='Online Bus Tickets Booking']")
-    private WebElement busTicketBookingOption;
+    public WebElement busTicketBookingOption;
 
     @FindBy(xpath = "//img[@title='Online Train Tickets Booking']")
-    private WebElement trainTicketBookingOption;
+    public WebElement trainTicketBookingOption;
 
-    @FindBy(css = "div[class='inputAndSwapWrapper___9a5930'] div[class='srcDestWrapper___e85828 ']")
-    private WebElement journeyFrom;
+//    @FindBy(xpath="//input[@id='srcinput']")
+//    private WebElement journeyFrom;
 
-    @FindBy(css = "body > div:nth-child(4) > main:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > search:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)")
-    private WebElement journeyTo;
+//    @FindBy(css="div[class='inputAndSwapWrapper___ed8f88'] div[class='srcDestWrapper___fe1a27 ']")
+//    private WebElement journeyFrom;
+    @FindBy(xpath="(//div[contains(@class,'srcDestWrapper___')])[1]")
+    public WebElement journeyFrom;
+
+//    @FindBy(css="body > div:nth-child(4) > main:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > search:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)")
+//    private WebElement journeyTo;
+    @FindBy(xpath = "(//div[contains(@class,'srcDestWrapper___')])[2]")
+    public WebElement journeyTo;
 
     @FindBy(xpath = "//div[@aria-label='Select date of journey']")
-    private WebElement journeyDate;
+    public WebElement journeyDate;
 
     @FindBy(xpath = "//button[normalize-space()='Search buses']")
-    private WebElement searchBusesButton;
+    public WebElement searchBusesButton;
 
     @FindBy(xpath = "//button[normalize-space()='Book now']")
-    private WebElement bookNowButton;
+    public WebElement bookNowButton;
 
     @FindBy(xpath = "//img[@title='redBus']")
-    private WebElement redBusLogo;
+    public WebElement redBusLogo;
 
     @FindBy(xpath = "//div[@class='footer']")
-    private WebElement footer;
+    public WebElement footer;
+
+    @FindBy(xpath = "//div[contains(@class,'suggestionsWrapper___')]")
+    public WebElement autoSuggestion;
 
     public void clickAccountButton() {
         accountButton.click();
@@ -79,38 +92,23 @@ public class HomePage extends BasePage {
         trainTicketBookingOption.click();
     }
 
-    public void setJourneyFrom(String from) {
-        journeyFrom.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement sourceInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@id='srcinput']")));
-        sourceInput.clear();
-        sourceInput.sendKeys(from);
-        // Click the first autocomplete suggestion so the city gets committed to the div
-        WebElement firstSuggestion = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".srcDestWrapper___e85828.focused___4f7642")));
-        firstSuggestion.click();
-    }
-
-    public void setJourneyTo(String to) {
-        journeyTo.click();
-        WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        WebElement destinationInput = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.xpath("//input[@id='destinput']")));
-        destinationInput.clear();
-        destinationInput.sendKeys(to);
-        // Click the first autocomplete suggestion so the city gets committed to the div
-        WebElement firstSuggestion = wait.until(ExpectedConditions.visibilityOfElementLocated(
-                By.cssSelector(".srcDestWrapper___e85828.focused___4f7642")));
-        firstSuggestion.click();
-    }
-
     public String getJourneyFrom() {
-        return journeyFrom.getAttribute("value");
+        WebElement element = driver.findElement(By.xpath("//input[@id='srcinput']"));
+        return element.getAttribute("value");
     }
 
     public String getJourneyTo() {
-        return journeyTo.getAttribute("value");
+        WebElement element = driver.findElement(By.xpath("//input[@id='destinput']"));
+        return element.getAttribute("value");
+    }
+
+
+    public void clickJourneyFrom() {
+        journeyFrom.click();
+    }
+
+    public void clickJourneyTo() {
+        journeyTo.click();
     }
 
     public void clickJourneyDate() {
@@ -200,14 +198,45 @@ public class HomePage extends BasePage {
     }
 
     @SuppressWarnings("unchecked")
-    public List<String> getBrokenImageSources() {
-        scrollThroughPageToLoadLazyImages();
+    public List<String> getBrokenImageSources() throws IOException {
 
-        return (List<String>) ((JavascriptExecutor) driver).executeScript(
-                "return Array.from(document.images)"
-                        + ".filter(img => img.src && (!img.complete || img.naturalWidth === 0 || img.naturalHeight === 0))"
-                        + ".map(img => img.currentSrc || img.src);");
+    scrollThroughPageToLoadLazyImages();
+
+    List<WebElement> images = driver.findElements(By.tagName("img"));
+    List<String> brokenImages = new ArrayList<>();
+
+    for (WebElement image : images) {
+
+        String src = image.getAttribute("src");
+
+        if (src == null || src.isBlank()) {
+            continue;
+        }
+
+        // Ignore embedded/local images
+        if (!src.startsWith("http")) {
+            continue;
+        }
+
+        HttpURLConnection connection =
+                (HttpURLConnection) new URL(src).openConnection();
+
+        connection.setRequestMethod("HEAD");
+        connection.setConnectTimeout(5000);
+        connection.setReadTimeout(5000);
+
+        int responseCode = connection.getResponseCode();
+
+        if (responseCode >= 400) {
+            brokenImages.add(src + " (HTTP " + responseCode + ")");
+        }
+
+        connection.disconnect();
     }
+
+    return brokenImages;
+}
+
 
     private Map<String, WebElement> getMajorHomepageElements() {
         Map<String, WebElement> majorElements = new LinkedHashMap<>();
