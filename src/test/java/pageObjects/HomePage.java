@@ -66,6 +66,16 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'suggestionsWrapper___')]")
     public WebElement autoSuggestion;
 
+    @FindBy(xpath = "//div[contains(@class,'swapWrap__') and @role='button']")
+    public WebElement swapButton;
+
+    @FindBy(xpath = "//input[contains(@class,'inputField') and @id='srcinput']")
+    public WebElement currentSource;
+
+    @FindBy(xpath = "//input[contains(@class,'inputField') and @id='destinput']")
+    public WebElement currentDestination;
+
+
     public void clickAccountButton() {
         accountButton.click();
     }
@@ -86,14 +96,14 @@ public class HomePage extends BasePage {
         trainTicketBookingOption.click();
     }
 
-    public String getJourneyFrom() {
-        WebElement element = driver.findElement(By.xpath("//input[@id='srcinput']"));
-        return element.getAttribute("value");
+    public String getCurrentSource(){
+        String value = currentSource.getAttribute("value");
+        return value;
     }
 
-    public String getJourneyTo() {
-        WebElement element = driver.findElement(By.xpath("//input[@id='destinput']"));
-        return element.getAttribute("value");
+    public String getCurrentDestination(){
+        String value = currentDestination.getAttribute("value");
+        return value;
     }
 
 
@@ -155,6 +165,10 @@ public class HomePage extends BasePage {
 
     public boolean isAccountButtonDisplayed() {
         return accountButton.isDisplayed();
+    }
+
+    public void clickSwapButton(){
+        swapButton.click();
     }
 
     public boolean isPageLoadedSuccessfully() {
