@@ -25,6 +25,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -143,6 +144,19 @@ public class BaseClass {
 
        return targetFilePath;
 
+    }
+
+        public void logTestStart(String testName) {
+        log.info("Running " + testName + " ------ > ");
+    }
+
+    public void logTestPass(String testName) {
+        log.info(testName + " ------ > PASSED");
+    }
+
+    public void logTestFailure(String testName, Throwable e) {
+        log.error(testName + " ------ > FAILED. Exception: " + e.getMessage(), e);
+        Assert.fail(testName + " failed: " + e.getMessage(), e);
     }
 
 }

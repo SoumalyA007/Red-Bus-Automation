@@ -229,17 +229,6 @@ public class HomePageTest extends BaseClass {
         }
     }
 
-    private void logTestStart(String testName) {
-        log.info("Running " + testName + " ------ > ");
-    }
 
-    private void logTestPass(String testName) {
-        log.info(testName + " ------ > PASSED");
-    }
-
-    private void logTestFailure(String testName, Throwable e) {
-        log.error(testName + " ------ > FAILED. Exception: " + e.getMessage(), e);
-        Assert.fail(testName + " failed: " + e.getMessage(), e);
-    }
 
 }

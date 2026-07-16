@@ -41,16 +41,10 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//img[@title='Online Train Tickets Booking']")
     public WebElement trainTicketBookingOption;
 
-//    @FindBy(xpath="//input[@id='srcinput']")
-//    private WebElement journeyFrom;
 
-//    @FindBy(css="div[class='inputAndSwapWrapper___ed8f88'] div[class='srcDestWrapper___fe1a27 ']")
-//    private WebElement journeyFrom;
     @FindBy(xpath="(//div[contains(@class,'srcDestWrapper___')])[1]")
     public WebElement journeyFrom;
 
-//    @FindBy(css="body > div:nth-child(4) > main:nth-child(4) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > search:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(2)")
-//    private WebElement journeyTo;
     @FindBy(xpath = "(//div[contains(@class,'srcDestWrapper___')])[2]")
     public WebElement journeyTo;
 

@@ -15,6 +15,7 @@ import testBase.BaseClass;
 
 public class SourceDestinationTest extends BaseClass {
 
+
     @Test
     public void testSourceDestination(){
         HomePage homePage = new HomePage(driver);
@@ -47,5 +48,51 @@ public class SourceDestinationTest extends BaseClass {
             Assert.fail("Exception occurred while entering source and destination: " + e.getMessage());
         }
     }
+
+
+
+    @Test
+    public void TC_001_enter_source_city(){
+        String testName = "TC_001_enter_source_city";
+        HomePage homePage = new HomePage(driver);
+        
+        try{
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            WebElement journeyFromElement = wait.until(ExpectedConditions.visibilityOf(homePage.journeyFrom));
+            journeyFromElement.click();
+            wait.until(ExpectedConditions.visibilityOf(homePage.autoSuggestion));
+            WebElement focusedElement = driver.switchTo().activeElement();
+            focusedElement.sendKeys("Mumbai");
+
+    }catch(Exception e){
+            logTestFailure(testName, e);
+        }
+    }
+
+    @Test
+    public void TC_002_select_city_from_suggestions(){
+        String testName = "TC_002_select_city_from_suggestions";
+        HomePage homePage = new HomePage(driver);
+
+        try{
+            WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(30));
+            WebElement journeyFromElement = wait.until(ExpectedConditions.visibilityOf(homePage.journeyFrom));
+            journeyFromElement.click();
+            wait.until(ExpectedConditions.visibilityOf(homePage.autoSuggestion));
+            WebElement focusedElement = driver.switchTo().activeElement();
+            wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(By.xpath("//div[contains(@class ,'searchCategory___')]"), 1));
+            WebElement suggestion = wait.until(ExpectedConditions.visibilityOfElementLocated((By.xpath("//div[starts-with(@id,'suggestion-') and @aria-describedby=\":r0:\"][1]"))));
+            suggestion.click();
+            //suggestion.sendKeys(Keys.ENTER);
+
+
+            
+
+    }catch(Exception e){
+            logTestFailure(testName, e);
+        }
+    }
+
+
 
 }
