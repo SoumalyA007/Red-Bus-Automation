@@ -35,6 +35,7 @@ public class BaseClass {
     public static WebDriver driver;
     public Logger log;
     public Properties p;
+    public WebDriverWait wait;
 
     @SuppressWarnings("null")
     @BeforeClass
@@ -102,6 +103,7 @@ public class BaseClass {
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get(p.getProperty("uri"));
         driver.manage().window().maximize();
+        wait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
 
 

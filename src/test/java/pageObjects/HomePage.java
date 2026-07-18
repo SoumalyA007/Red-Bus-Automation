@@ -21,6 +21,7 @@ public class HomePage extends BasePage {
 
     private static final Duration PAGE_LOAD_TIMEOUT = Duration.ofSeconds(15);
     private static final Duration ELEMENT_CLICKABLE_TIMEOUT = Duration.ofSeconds(5);
+    WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
     public HomePage(WebDriver driver) {
         super(driver);
@@ -63,7 +64,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@class='footer']")
     public WebElement footer;
 
-    @FindBy(xpath = "//div[contains(@class,'suggestionsWrapper___')]")
+    @FindBy(xpath = "//div[contains(@class,'suggestionsWrapper___') and @aria-label='Search suggestions']")
     public WebElement autoSuggestion;
 
     @FindBy(xpath = "//div[contains(@class,'swapWrap__') and @role='button']")
@@ -106,6 +107,11 @@ public class HomePage extends BasePage {
         return value;
     }
 
+    public boolean isSuggestionsVisible() {
+        
+        WebElement suggestion = wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
+        return suggestion.isDisplayed();
+    }
 
     public void clickJourneyFrom() {
         journeyFrom.click();

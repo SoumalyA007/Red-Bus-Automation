@@ -1,20 +1,5 @@
-2026-07-17 01:38:03 INFO  SourceDestinationTest:50 - Running on Local Environment
-2026-07-17 01:38:03 INFO  SourceDestinationTest:51 - OS: windows
-2026-07-17 01:38:03 INFO  SourceDestinationTest:52 - Browser: chrome
-2026-07-17 01:38:08 INFO  SourceDestinationTest:205 - Suggestion found : Delhi
-2026-07-17 01:38:08 ERROR SourceDestinationTest:207 - TC_005_different_city_combinations
-2026-07-17 01:38:08 INFO  SourceDestinationTest:209 - CLICKING : Delhi
-2026-07-17 01:38:10 ERROR SourceDestinationTest:245 - TC_005_different_city_combinations
-2026-07-17 01:38:10 INFO  SourceDestinationTest:246 - Suggestion found : Mumbai
-2026-07-17 01:38:10 INFO  SourceDestinationTest:249 - CLICKING : Mumbai
-2026-07-17 01:38:10 INFO  SourceDestinationTest:257 - Expected source: Delhi, Current Source: New Delhi Railway Station, Delhi
-2026-07-17 01:38:10 INFO  SourceDestinationTest:263 - Expected destination: Mumbai, Current Destination: Andheri East, Mumbai
-2026-07-17 01:38:10 INFO  SourceDestinationTest:154 - TC_005_different_city_combinations ------ > PASSED
-2026-07-17 01:38:13 INFO  SourceDestinationTest:205 - Suggestion found : Kolkata
-2026-07-17 01:38:13 ERROR SourceDestinationTest:207 - TC_005_different_city_combinations
-2026-07-17 01:38:13 INFO  SourceDestinationTest:209 - CLICKING : Kolkata
-2026-07-17 01:38:15 ERROR SourceDestinationTest:245 - TC_005_different_city_combinations
-2026-07-17 01:38:15 INFO  SourceDestinationTest:246 - Suggestion found : Burdwan
-2026-07-17 01:38:15 INFO  SourceDestinationTest:249 - CLICKING : Burdwan
-2026-07-17 01:38:15 INFO  SourceDestinationTest:257 - Expected source: kolkata, Current Source: Babughat, Kolkata
-2026-07-17 01:38:15 INFO  SourceDestinationTest:263 - Expected destination: Burdwan, Current Destination: Andheri East, Mumbai
+2026-07-18 14:41:28 INFO  SourceDestinationTest:51 - Running on Local Environment
+2026-07-18 14:41:28 INFO  SourceDestinationTest:52 - OS: windows
+2026-07-18 14:41:28 INFO  SourceDestinationTest:53 - Browser: chrome
+2026-07-18 14:41:33 INFO  SourceDestinationTest:156 - TC_005_different_city_combinations ------ > PASSED
+2026-07-18 14:41:34 INFO  SourceDestinationTest:156 - TC_005_different_city_combinations ------ > PASSED
