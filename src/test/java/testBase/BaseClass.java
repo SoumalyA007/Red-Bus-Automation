@@ -29,6 +29,8 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+import pageObjects.HomePage;
+import utils.HelperFunctions;
 
 public class BaseClass {
 
@@ -36,6 +38,8 @@ public class BaseClass {
     public Logger log;
     public Properties p;
     public WebDriverWait wait;
+    public HomePage hp;
+    public HelperFunctions helper;
 
     @SuppressWarnings("null")
     @BeforeClass
@@ -104,6 +108,9 @@ public class BaseClass {
         driver.get(p.getProperty("uri"));
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
+        hp = new HomePage(driver);
+        helper = new HelperFunctions(driver, wait);
+
     }
 
 

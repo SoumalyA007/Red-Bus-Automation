@@ -76,6 +76,9 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//input[contains(@class,'inputField') and @id='destinput']")
     public WebElement currentDestination;
 
+    @FindBy(xpath = "//div[contains(@class,'snackbarprimary___66b04a') and contains(@class,'warning___a03877')]")
+    public WebElement emptySourcePopUpMessage;
+
 
     public void clickAccountButton() {
         accountButton.click();
@@ -211,6 +214,11 @@ public class HomePage extends BasePage {
         return nonClickableElements;
     }
 
+    public boolean isemptySourcePopUpMessageDisplayed(){
+        wait.until(ExpectedConditions.visibilityOf(emptySourcePopUpMessage));
+        return emptySourcePopUpMessage.isDisplayed();
+    }
+
     @SuppressWarnings("unchecked")
     public List<String> getBrokenImageSources() throws IOException {
 
@@ -275,5 +283,7 @@ public class HomePage extends BasePage {
 
         js.executeScript("window.scrollTo(0, 0);");
     }
+
+
 
 }

@@ -10,7 +10,7 @@
         <classes>
             <class name="testCases.SourceDestinationTest">
             <methods>
-                <include name="TC_005_different_city_combinations"/>
+                <include name="TC_006_empty_source"/>
             </methods>
             </class>
         </classes>

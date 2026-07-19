@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import org.testng.annotations.DataProvider;
 
-public class ExcelDataProvider {
+public class DataProviders {
 
 
     @DataProvider(name = "sourceDestinationData")
@@ -25,5 +25,6 @@ public class ExcelDataProvider {
         }
         return data;
     }
+
 
 }
