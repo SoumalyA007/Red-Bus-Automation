@@ -9,7 +9,7 @@ public class ExcelDataProvider {
 
     @DataProvider(name = "sourceDestinationData")
     public String[][] getSourceDestinationData() throws IOException{
-        String excelPath = "C:\\Software Testing\\Selenium\\redbus_automation\\testData\\RedBusExcelSheet.xlsx";
+        String excelPath = "/home/u-93/IdeaProjects/Red-Bus-Automation/testData/RedBusExcelSheet.xlsx";
         ExcelConnect excelConnect = new ExcelConnect(excelPath);
         String sheetName = "SourceDestination";
 

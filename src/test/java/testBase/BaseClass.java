@@ -41,7 +41,7 @@ public class BaseClass {
     @BeforeClass
     @Parameters({"OS", "browser"})
     public void setup(@Optional("windows") String OS, @Optional("chrome") String browser) throws FileNotFoundException, IOException{
-        FileReader file = new FileReader(System.getProperty("user.dir") + "\\src\\test\\resources\\config.properties");
+        FileReader file = new FileReader(System.getProperty("user.dir") + "/src/test/resources/config.properties");
         p = new Properties();
         p.load(file);
 
