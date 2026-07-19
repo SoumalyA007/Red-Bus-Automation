@@ -8,9 +8,9 @@
 
     <test name="Source and Destination Tests">
         <classes>
-            <class name="testCases.SourceDestinationTest">
+            <class name="testCases.AutoSuggestionTest">
             <methods>
-                <include name="TC_006_empty_source"/>
+                <include name="TC_002_suggestion_disappears_after_selection"/>
             </methods>
             </class>
         </classes>
