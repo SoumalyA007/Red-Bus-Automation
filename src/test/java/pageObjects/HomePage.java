@@ -50,7 +50,10 @@ public class HomePage extends BasePage {
     public WebElement journeyTo;
 
     @FindBy(xpath = "//div[@aria-label='Select date of journey']")
-    public WebElement journeyDate;
+    public WebElement calendarButton;
+
+    @FindBy(xpath = "//div")
+    public WebElement datePickerPopup;
 
     @FindBy(xpath = "//button[normalize-space()='Search buses']")
     public WebElement searchBusesButton;
@@ -125,7 +128,7 @@ public class HomePage extends BasePage {
     }
 
     public void clickJourneyDate() {
-        journeyDate.click();
+        calendarButton.click();
     }
 
     public void clickSearchBusesButton() {
@@ -152,13 +155,11 @@ public class HomePage extends BasePage {
         return journeyTo.isDisplayed();
     }
 
-    public boolean isCalendarVisible() {
-        return journeyDate.isDisplayed();
+    public boolean isCalendarButtonVisible() {
+        return calendarButton.isDisplayed();
     }
 
-    public boolean isCalenderVisible() {
-        return isCalendarVisible();
-    }
+    public void clickCalendarButton(){calendarButton.click();}
 
     public boolean isSearchButtonEnabled() {
         return searchBusesButton.isEnabled();
@@ -185,7 +186,7 @@ public class HomePage extends BasePage {
         return isLogoDisplayed()
                 && isJourneyFromDisplayed()
                 && isJourneyToDisplayed()
-                && isCalendarVisible()
+                && isCalendarButtonVisible()
                 && isSearchButtonEnabled()
                 && driver.getTitle() != null
                 && !driver.getTitle().isBlank();
@@ -267,7 +268,7 @@ public class HomePage extends BasePage {
         majorElements.put("train tickets option", trainTicketBookingOption);
         majorElements.put("journey from field", journeyFrom);
         majorElements.put("journey to field", journeyTo);
-        majorElements.put("journey date picker", journeyDate);
+        majorElements.put("journey date picker", calendarButton);
         majorElements.put("search buses button", searchBusesButton);
         majorElements.put("account button", accountButton);
         return majorElements;

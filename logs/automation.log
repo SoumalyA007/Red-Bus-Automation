@@ -1,3 +1,6 @@
-2026-07-20 02:45:03 INFO  AutoSuggestionTest:55 - Running on Local Environment
-2026-07-20 02:45:03 INFO  AutoSuggestionTest:56 - OS: windows
-2026-07-20 02:45:03 INFO  AutoSuggestionTest:57 - Browser: chrome
+2026-07-20 17:48:48 INFO  Utils:112 - [TestNG] Running:
+  /home/u-93/.cache/JetBrains/IntelliJIdea2026.2/temp-testng-customsuite.xml
+
+2026-07-20 17:48:48 INFO  DatePickerTest:55 - Running on Local Environment
+2026-07-20 17:48:48 INFO  DatePickerTest:56 - OS: windows
+2026-07-20 17:48:48 INFO  DatePickerTest:57 - Browser: chrome

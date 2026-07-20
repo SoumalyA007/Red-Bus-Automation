@@ -145,7 +145,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isCalendarVisible(), "Journey date calendar is not displayed");
+            Assert.assertTrue(homePage.isCalendarButtonVisible(), "Journey date calendar is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
