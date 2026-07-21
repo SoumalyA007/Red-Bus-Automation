@@ -49,7 +49,7 @@ public class AutoSuggestionTest extends BaseClass {
 
             Assert.assertEquals(suggestionElements.size(), 3);
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logTestFailure(testName, e);
         }
 
@@ -70,7 +70,7 @@ public class AutoSuggestionTest extends BaseClass {
 
             Assert.assertTrue(suggestions.isEmpty(), "Suggestions are still visible.");
             logTestPass(testName);
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logTestFailure(testName, e);
         }
 
@@ -103,7 +103,7 @@ public class AutoSuggestionTest extends BaseClass {
             Assert.assertEquals(hp.getCurrentSource(), "Mumbai");
             Assert.assertEquals(hp.getCurrentDestination(), "Kolkata");
 
-        } catch (Exception e) {
+        } catch (Throwable e) {
             logTestFailure(testName, e);
         }
     }

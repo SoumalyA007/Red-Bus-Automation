@@ -9,10 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -52,7 +49,7 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[@aria-label='Select date of journey']")
     public WebElement calendarButton;
 
-    @FindBy(xpath = "//div")
+    @FindBy(xpath = "//div[contains(@class,'dateHolder___')]")
     public WebElement datePickerPopup;
 
     @FindBy(xpath = "//button[normalize-space()='Search buses']")
@@ -82,6 +79,36 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'snackbarprimary___66b04a') and contains(@class,'warning___a03877')]")
     public WebElement emptySourcePopUpMessage;
 
+    @FindBy(xpath = "//p[contains(@class,'monthYear___')]")
+    public WebElement calenderMonthYear;
+
+    @FindBy(xpath = "//i[contains(@class,'icon-arrow') and contains(@class,'right___')]")
+    public WebElement dateProgressArrow;
+
+    @FindBy(xpath = "//span[contains(@class,'doj___')]")
+    public WebElement selectedDate;
+
+    @FindBy(xpath = "(//div[contains(@class,'searchCategory___')])[1]")
+    public WebElement suggestionCategory;
+    // HomePage.java
+    @FindBy(xpath = "//h3[normalize-space()='Can I book a Government bus ticket on redBus?']")
+    public WebElement faqSectionHeading;
+
+    public void scrollToFooter() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", faqSectionHeading);
+    }
+
+
+    public String getCalenderMonthYear(){
+        return calenderMonthYear.getText();
+    }
+
+    public String getSelectedDate(){
+        return selectedDate.getText();
+    }
+
+    public void clickDateProgressArrow(){dateProgressArrow.click();}
 
     public void clickAccountButton() {
         accountButton.click();
@@ -127,10 +154,6 @@ public class HomePage extends BasePage {
         journeyTo.click();
     }
 
-    public void clickJourneyDate() {
-        calendarButton.click();
-    }
-
     public void clickSearchBusesButton() {
         searchBusesButton.click();
     }
@@ -158,6 +181,16 @@ public class HomePage extends BasePage {
     public boolean isCalendarButtonVisible() {
         return calendarButton.isDisplayed();
     }
+
+    public void openCalendar() {
+        isCalendarButtonVisible();
+        clickCalendarButton();
+        wait.until(ExpectedConditions.visibilityOf(datePickerPopup));
+    }
+
+    public void clickCalenderDay(int day){driver.findElement(By.xpath(
+                    "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
+            .click();}
 
     public void clickCalendarButton(){calendarButton.click();}
 
@@ -218,6 +251,23 @@ public class HomePage extends BasePage {
     public boolean isemptySourcePopUpMessageDisplayed(){
         wait.until(ExpectedConditions.visibilityOf(emptySourcePopUpMessage));
         return emptySourcePopUpMessage.isDisplayed();
+    }
+
+    public void navigateCalendarTo(String targetMonth, int targetYear) {
+        while (true) {
+            String calendarMonthYear = getCalenderMonthYear();
+            String[] parts = calendarMonthYear.split(" ");
+            String currentMonth = parts[0];
+            int currentYear = Integer.parseInt(parts[1]);
+
+            if (currentMonth.equalsIgnoreCase(targetMonth) && currentYear == targetYear) {
+                break;
+            }
+
+            clickDateProgressArrow();
+            wait.until(ExpectedConditions.not(
+                    ExpectedConditions.textToBePresentInElement(calenderMonthYear, calendarMonthYear)));
+        }
     }
 
     @SuppressWarnings("unchecked")
@@ -283,6 +333,36 @@ public class HomePage extends BasePage {
         }
 
         js.executeScript("window.scrollTo(0, 0);");
+    }
+
+    public enum JourneyField { SOURCE, DESTINATION }
+
+    public void selectJourneyCity(JourneyField field, String city) {
+        if (field == JourneyField.SOURCE) {
+            clickJourneyFrom();
+        } else {
+            clickJourneyTo();
+        }
+
+        isSuggestionsVisible();
+
+        WebElement activeField = driver.switchTo().activeElement();
+        activeField.sendKeys(Keys.CONTROL + "a");
+        activeField.sendKeys(Keys.DELETE);
+        activeField.sendKeys(city);
+
+        wait.until(ExpectedConditions.visibilityOf(suggestionCategory));
+
+        WebElement cityOption = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath(
+                        "//div[contains(@class,'searchCategory___')]//div[contains(@class,'suggestion-item')]"
+                                + "[.//div[@role='heading' and "
+                                + "translate(normalize-space(.),"
+                                + "'ABCDEFGHIJKLMNOPQRSTUVWXYZ',"
+                                + "'abcdefghijklmnopqrstuvwxyz')='" + city.trim().toLowerCase() + "']]"
+                )));
+
+        cityOption.click();
     }
 
 

@@ -16,13 +16,6 @@ public class HomePageTest extends BaseClass {
 
     private static final long MAX_ACCEPTABLE_PAGE_LOAD_TIME_MS = 15000;
 
-    private HomePage homePage;
-
-    @BeforeClass
-    public void initializeHomePage() {
-        homePage = new HomePage(driver);
-    }
-
     // Functional Test: Verify page loads successfully
     @Test(priority = 1)
     public void TC_001_verify_page_loads_successfully() {
@@ -30,7 +23,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isPageLoadedSuccessfully(), "Home page did not load successfully");
+            Assert.assertTrue(hp.isPageLoadedSuccessfully(), "Home page did not load successfully");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -45,7 +38,7 @@ public class HomePageTest extends BaseClass {
 
         try {
             long pageLoadTime = getPageLoadTimeInMillis(p.getProperty("uri"));
-            homePage.waitForPageToLoad();
+            hp.waitForPageToLoad();
             log.info(testName + " ------ > Page load time: " + pageLoadTime + " ms");
 
             Assert.assertTrue(pageLoadTime > 0, "Page load time was not captured correctly");
@@ -65,7 +58,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            List<String> brokenImages = homePage.getBrokenImageSources();
+            List<String> brokenImages = hp.getBrokenImageSources();
             log.info(testName + " ------ > Broken image count: " + brokenImages.size());
 
             Assert.assertTrue(brokenImages.isEmpty(), "Broken images found on home page: " + brokenImages);
@@ -82,7 +75,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            List<String> nonClickableElements = homePage.getNonClickableMajorElements();
+            List<String> nonClickableElements = hp.getNonClickableMajorElements();
             log.info(testName + " ------ > Non-clickable major elements: " + nonClickableElements);
 
             Assert.assertTrue(nonClickableElements.isEmpty(), "Major home page elements are not clickable: " + nonClickableElements);
@@ -100,9 +93,9 @@ public class HomePageTest extends BaseClass {
 
         try {
             driver.navigate().refresh();
-            homePage.waitForPageToLoad();
+            hp.waitForPageToLoad();
 
-            Assert.assertTrue(homePage.isPageLoadedSuccessfully(), "Home page functionality was not retained after refresh");
+            Assert.assertTrue(hp.isPageLoadedSuccessfully(), "Home page functionality was not retained after refresh");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -116,7 +109,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isLogoDisplayed(), "redBus logo is not displayed");
+            Assert.assertTrue(hp.isLogoDisplayed(), "redBus logo is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -130,8 +123,8 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isJourneyFromDisplayed(), "Journey from field is not displayed");
-            Assert.assertTrue(homePage.isJourneyToDisplayed(), "Journey to field is not displayed");
+            Assert.assertTrue(hp.isJourneyFromDisplayed(), "Journey from field is not displayed");
+            Assert.assertTrue(hp.isJourneyToDisplayed(), "Journey to field is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -145,7 +138,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isCalendarButtonVisible(), "Journey date calendar is not displayed");
+            Assert.assertTrue(hp.isCalendarButtonVisible(), "Journey date calendar is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -159,7 +152,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isSearchButtonEnabled(), "Search buses button is not enabled");
+            Assert.assertTrue(hp.isSearchButtonEnabled(), "Search buses button is not enabled");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -190,11 +183,8 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            JavascriptExecutor js = (JavascriptExecutor) driver;
-            WebElement element = driver.findElement(By.xpath("//h3[normalize-space()='Can I book a Government bus ticket on redBus?']"));
-            js.executeScript("arguments[0].scrollIntoView(true);", element);
-
-            Assert.assertTrue(homePage.isFooterDisplayed(), "Footer is not displayed");
+            hp.scrollToFooter();
+            Assert.assertTrue(hp.isFooterDisplayed(), "Footer is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -207,7 +197,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            Assert.assertTrue(homePage.isAccountButtonDisplayed(), "Account button is not displayed");
+            Assert.assertTrue(hp.isAccountButtonDisplayed(), "Account button is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -220,9 +210,9 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            homePage.clickAccountButton();
+            hp.clickAccountButton();
 
-            Assert.assertTrue(homePage.isLoginButtonDisplayed(), "Login button is not displayed");
+            Assert.assertTrue(hp.isLoginButtonDisplayed(), "Login button is not displayed");
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
