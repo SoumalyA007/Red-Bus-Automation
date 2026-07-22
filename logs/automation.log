@@ -1,0 +1,6 @@
+2026-07-22 16:49:50 INFO  Utils:112 - [TestNG] Running:
+  /home/u-93/.cache/JetBrains/IntelliJIdea2026.2/temp-testng-customsuite.xml
+
+2026-07-22 16:49:50 INFO  DatePickerTest:55 - Running on Local Environment
+2026-07-22 16:49:50 INFO  DatePickerTest:56 - OS: windows
+2026-07-22 16:49:50 INFO  DatePickerTest:57 - Browser: chrome
