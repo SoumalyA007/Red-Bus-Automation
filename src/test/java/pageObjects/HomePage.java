@@ -9,7 +9,11 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.openqa.selenium.*;
+import org.openqa.selenium.By;
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.Keys;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -90,9 +94,20 @@ public class HomePage extends BasePage {
 
     @FindBy(xpath = "(//div[contains(@class,'searchCategory___')])[1]")
     public WebElement suggestionCategory;
-    // HomePage.java
+    
     @FindBy(xpath = "//h3[normalize-space()='Can I book a Government bus ticket on redBus?']")
     public WebElement faqSectionHeading;
+
+    @FindBy(xpath = "//i[contains(@aria-label,'Previous month,\")]")
+    public WebElement dateBackArrow;
+
+    public void clickDateBackArrow() {
+        dateBackArrow.click();
+    }
+
+    public boolean isDateBackArrowEnabled(){
+        return dateBackArrow.isEnabled();
+    }
 
     public void scrollToFooter() {
         JavascriptExecutor js = (JavascriptExecutor) driver;
@@ -190,7 +205,17 @@ public class HomePage extends BasePage {
 
     public void clickCalenderDay(int day){driver.findElement(By.xpath(
                     "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
-            .click();}
+            .click();
+    }
+
+    public boolean isDateEnabled(int day){
+        WebElement dateElement = driver.findElement(By.xpath(
+                "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"));
+        
+        return dateElement.isEnabled();
+    }
+
+    
 
     public void clickCalendarButton(){calendarButton.click();}
 

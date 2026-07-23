@@ -8,9 +8,9 @@
 
     <test name="Source and Destination Tests">
         <classes>
-            <class name="testCases.AutoSuggestionTest">
+            <class name="testCases.DatePickerTest">
             <methods>
-                <include name="TC_002_suggestion_disappears_after_selection"/>
+                <include name="TC_006_select_today"/>
             </methods>
             </class>
         </classes>

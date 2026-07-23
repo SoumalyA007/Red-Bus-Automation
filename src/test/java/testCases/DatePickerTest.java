@@ -1,15 +1,12 @@
 package testCases;
 
-import net.bytebuddy.implementation.bytecode.Throw;
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-import testBase.BaseClass;
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Locale;
+
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import testBase.BaseClass;
 
 public class DatePickerTest extends BaseClass {
 
@@ -19,7 +16,8 @@ public class DatePickerTest extends BaseClass {
         try {
             LocalDate tomorrow = LocalDate.now().plusDays(1);
             String expectedDate = tomorrow.format(DateTimeFormatter.ofPattern("d MMM, yyyy"));
-            String actualDate = helper.selectCalendarDate(tomorrow);
+            helper.selectCalendarDate(tomorrow);
+            String actualDate = hp.getSelectedDate();
             Assert.assertEquals(actualDate, expectedDate, "Selected journey date is incorrect.");
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -31,7 +29,8 @@ public class DatePickerTest extends BaseClass {
         String testName = "TC_002_select_future_date";
         try {
             LocalDate targetDate = LocalDate.of(2026, 11, 26);
-            String actualDate = helper.selectCalendarDate(targetDate);
+            helper.selectCalendarDate(targetDate);
+            String actualDate = hp.getSelectedDate();
             Assert.assertEquals(actualDate, "26 Nov, 2026", "Selected journey date is incorrect.");
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -39,64 +38,142 @@ public class DatePickerTest extends BaseClass {
     }
 
     @Test
-    public void TC_003_select_next_month(){
+    public void TC_003_select_next_month() {
         String testName = "TC_003_select_next_month";
-        try{
-            LocalDate nextMonth = LocalDate.now().plusMonths(1);
-            String nextMonthValue = nextMonth.format(DateTimeFormatter.ofPattern("MMMM"));
+
+        try {
+
+            LocalDate targetDate = LocalDate.now()
+                    .plusMonths(1)
+                    .withDayOfMonth(15);
+
+            String expectedMonth = targetDate.format(DateTimeFormatter.ofPattern("MMMM"));
+
             hp.openCalendar();
+
+            // Navigate to next month
             hp.clickDateProgressArrow();
-            String calenderMonthYear=hp.getCalenderMonthYear();
-            String[] parts = calenderMonthYear.split(" ");
-            Assert.assertEquals(nextMonthValue,parts[0],"Expected next month value did not match");
+
+            // Verify month has changed
+            String calendarMonthYear = hp.getCalenderMonthYear();
+            String actualMonth = calendarMonthYear.split(" ")[0];
+
+            Assert.assertEquals(actualMonth,
+                    expectedMonth,
+                    "Next month was not displayed.");
+
+            // Select a date from next month
+            hp.clickCalenderDay(targetDate.getDayOfMonth());
+
+            // Verify selected journey date
+            String expectedDate
+                    = targetDate.format(DateTimeFormatter.ofPattern("dd MMM, yyyy"));
+
+            Assert.assertEquals(
+                    hp.getSelectedDate(),
+                    expectedDate,
+                    "Incorrect date selected."
+            );
+
+            logTestPass(testName);
+
         } catch (Throwable e) {
-            logTestFailure(testName,e);
+            logTestFailure(testName, e);
         }
     }
 
     @Test
-    public void TC_004_select_next_year(){
+    public void TC_004_select_next_year() {
         String testName = "TC_004_select_next_year";
-        try{
-            LocalDate nextYear = LocalDate.now().plusYears(1);
-            String nextYearValue = nextYear.format(DateTimeFormatter.ofPattern("yyyy"));
+
+        try {
+
+            // Example: Select 15th of the current month in the next year
+            LocalDate targetDate = LocalDate.now()
+                    .plusYears(1)
+                    .withMonth(1)
+                    .withDayOfMonth(1);
+
+            String expectedYear = String.valueOf(targetDate.getYear());
+
             hp.openCalendar();
-            while(true){
-                hp.clickDateProgressArrow();
-                String calenderMonthYear=hp.getCalenderMonthYear();
-                String[] parts = calenderMonthYear.split(" ");
-                String currentYear = parts[1];
-                if(currentYear.equalsIgnoreCase(nextYearValue)){
+
+            // Navigate until the required year is reached
+            while (true) {
+
+                String[] parts = hp.getCalenderMonthYear().split(" ");
+
+                if (parts[1].equals(expectedYear)) {
                     break;
                 }
+
+                hp.clickDateProgressArrow();
             }
-            String[] parts = hp.getCalenderMonthYear().split(" ");
-            String currentSelectedYear = parts[1];
-            Assert.assertEquals(nextYearValue,currentSelectedYear,"Expected next year value did not match");
+
+            // Verify the year displayed
+            String displayedYear = hp.getCalenderMonthYear().split(" ")[1];
+
+            Assert.assertEquals(
+                    displayedYear,
+                    expectedYear,
+                    "Expected next year was not displayed."
+            );
+
+            // Select a date in that year
+            hp.clickCalenderDay(targetDate.getDayOfMonth());
+
+            // Verify the selected journey date
+            String expectedDate = targetDate.format(
+                    DateTimeFormatter.ofPattern("dd MMM, yyyy")
+            );
+
+            Assert.assertEquals(
+                    hp.getSelectedDate(),
+                    expectedDate,
+                    "Incorrect journey date selected."
+            );
+
+            logTestPass(testName);
+
         } catch (Throwable e) {
-            logTestFailure(testName,e);
+            logTestFailure(testName, e);
         }
     }
 
     @Test
-    public void TC_005_past_date_disabled(){
+    public void TC_005_past_date_disabled() {
         String testName = "TC_005_past_date_disabled";
-        try{
+        try {
             LocalDate currentDateMonthYear = LocalDate.now();
             String currentDate = currentDateMonthYear.format(DateTimeFormatter.ofPattern("dd"));
-
-            if(currentDate.equals(1)){
-
+            hp.clickCalendarButton();
+            if (currentDate.equals("1")) {
+                boolean isEnabled = hp.isDateBackArrowEnabled();
+                Assert.assertFalse(isEnabled, "Back arrow should be disabled for the previous month.");
+            } else {
+                String toBeSelectedDate = currentDateMonthYear.minusDays(1).format(DateTimeFormatter.ofPattern("dd"));
+                int day = Integer.parseInt(toBeSelectedDate);
+                boolean isEnabled = hp.isDateEnabled(day);
+                Assert.assertTrue(isEnabled, "Back arrow should be enabled for the previous month.");
             }
-
-
-
-        } catch (Exception e) {
-            logTestFailure(testName,e);
+        } catch (Throwable e) {
+            logTestFailure(testName, e);
         }
     }
 
+    @Test
+    public void TC_006_select_today() {
+        String testName = "TC_006_select_today";
+        try {
+            hp.openCalendar();
+            int todaysDate = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("dd")));
+            hp.clickCalenderDay(todaysDate);
+            String selectedDate = hp.getSelectedDate();
+            String toBeSelectedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM, YYYY"));
+            Assert.assertEquals(selectedDate, toBeSelectedDate, "today's date not selected");
 
+        } catch (Throwable e) {
+            logTestFailure(testName, e);
+        }
+    }
 }
-
-

@@ -1,14 +1,14 @@
 package utils;
 
+import java.time.LocalDate;
+import java.time.format.TextStyle;
+import java.util.Locale;
+
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import pageObjects.HomePage;
 import pageObjects.HomePage.JourneyField;
-
-import java.time.LocalDate;
-import java.time.format.TextStyle;
-import java.util.Locale;
 
 public class HelperFunctions {
 
@@ -26,13 +26,12 @@ public class HelperFunctions {
         hp.selectJourneyCity(JourneyField.DESTINATION, destination);
     }
 
-    public String selectCalendarDate(LocalDate targetDate) {
+    public void selectCalendarDate(LocalDate targetDate) {
         hp.openCalendar();
 
         String targetMonth = targetDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
         hp.navigateCalendarTo(targetMonth, targetDate.getYear());
         hp.clickCalenderDay(targetDate.getDayOfMonth());
 
-        return hp.getSelectedDate();
     }
 }
