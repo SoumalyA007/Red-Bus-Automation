@@ -28,6 +28,9 @@ public class HomePage extends BasePage {
         super(driver);
     }
 
+    // ===========================
+    // Header Locators
+    // ===========================
     @FindBy(xpath = "//button[normalize-space()='Account']")
     public WebElement accountButton;
 
@@ -37,42 +40,26 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//button[normalize-space()='Log in']")
     public WebElement loginButton;
 
+    @FindBy(xpath = "//img[@title='redBus']")
+    public WebElement redBusLogo;
+
+    // ===========================
+    // Booking Locators
+    // ===========================
     @FindBy(xpath = "//img[@title='Online Bus Tickets Booking']")
     public WebElement busTicketBookingOption;
 
     @FindBy(xpath = "//img[@title='Online Train Tickets Booking']")
     public WebElement trainTicketBookingOption;
 
-
-    @FindBy(xpath="(//div[contains(@class,'srcDestWrapper___')])[1]")
+    // ===========================
+    // Journey Locators
+    // ===========================
+    @FindBy(xpath = "(//div[contains(@class,'srcDestWrapper___')])[1]")
     public WebElement journeyFrom;
 
     @FindBy(xpath = "(//div[contains(@class,'srcDestWrapper___')])[2]")
     public WebElement journeyTo;
-
-    @FindBy(xpath = "//div[@aria-label='Select date of journey']")
-    public WebElement calendarButton;
-
-    @FindBy(xpath = "//div[contains(@class,'dateHolder___')]")
-    public WebElement datePickerPopup;
-
-    @FindBy(xpath = "//button[normalize-space()='Search buses']")
-    public WebElement searchBusesButton;
-
-    @FindBy(xpath = "//button[normalize-space()='Book now']")
-    public WebElement bookNowButton;
-
-    @FindBy(xpath = "//img[@title='redBus']")
-    public WebElement redBusLogo;
-
-    @FindBy(xpath = "//div[@class='footer']")
-    public WebElement footer;
-
-    @FindBy(xpath = "//div[contains(@class,'suggestionsWrapper___') and @aria-label='Search suggestions']")
-    public WebElement autoSuggestion;
-
-    @FindBy(xpath = "//div[contains(@class,'swapWrap__') and @role='button']")
-    public WebElement swapButton;
 
     @FindBy(xpath = "//input[contains(@class,'inputField') and @id='srcinput']")
     public WebElement currentSource;
@@ -80,8 +67,23 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//input[contains(@class,'inputField') and @id='destinput']")
     public WebElement currentDestination;
 
-    @FindBy(xpath = "//div[contains(@class,'snackbarprimary___66b04a') and contains(@class,'warning___a03877')]")
-    public WebElement emptySourcePopUpMessage;
+    @FindBy(xpath = "//div[contains(@class,'suggestionsWrapper___') and @aria-label='Search suggestions']")
+    public WebElement autoSuggestion;
+
+    @FindBy(xpath = "//div[contains(@class,'swapWrap__') and @role='button']")
+    public WebElement swapButton;
+
+    @FindBy(xpath = "(//div[contains(@class,'searchCategory___')])[1]")
+    public WebElement suggestionCategory;
+
+    // ===========================
+    // Calendar Locators
+    // ===========================
+    @FindBy(xpath = "//div[@aria-label='Select date of journey']")
+    public WebElement calendarButton;
+
+    @FindBy(xpath = "//div[contains(@class,'dateHolder___')]")
+    public WebElement datePickerPopup;
 
     @FindBy(xpath = "//p[contains(@class,'monthYear___')]")
     public WebElement calenderMonthYear;
@@ -92,151 +94,41 @@ public class HomePage extends BasePage {
     @FindBy(xpath = "//span[contains(@class,'doj___')]")
     public WebElement selectedDate;
 
-    @FindBy(xpath = "(//div[contains(@class,'searchCategory___')])[1]")
-    public WebElement suggestionCategory;
-    
-    @FindBy(xpath = "//h3[normalize-space()='Can I book a Government bus ticket on redBus?']")
-    public WebElement faqSectionHeading;
-
     @FindBy(xpath = "//i[contains(@aria-label,'Previous month,\")]")
     public WebElement dateBackArrow;
 
-    public void clickDateBackArrow() {
-        dateBackArrow.click();
-    }
+    // ===========================
+    // Search Locators
+    // ===========================
+    @FindBy(xpath = "//button[normalize-space()='Search buses']")
+    public WebElement searchBusesButton;
 
-    public boolean isDateBackArrowEnabled(){
-        return dateBackArrow.isEnabled();
-    }
+    @FindBy(xpath = "//button[normalize-space()='Book now']")
+    public WebElement bookNowButton;
 
-    public void scrollToFooter() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView(true);", faqSectionHeading);
-    }
+    // ===========================
+    // Message Locators
+    // ===========================
+    @FindBy(xpath = "//div[contains(@class,'snackbarprimary___66b04a') and contains(@class,'warning___a03877')]")
+    public WebElement emptySourcePopUpMessage;
 
+    // ===========================
+    // Footer Locators
+    // ===========================
+    @FindBy(xpath = "//div[@class='footer']")
+    public WebElement footer;
 
-    public String getCalenderMonthYear(){
-        return calenderMonthYear.getText();
-    }
+    @FindBy(xpath = "//h3[normalize-space()='Can I book a Government bus ticket on redBus?']")
+    public WebElement faqSectionHeading;
 
-    public String getSelectedDate(){
-        return selectedDate.getText();
-    }
-
-    public void clickDateProgressArrow(){dateProgressArrow.click();}
-
-    public void clickAccountButton() {
-        accountButton.click();
-    }
-
-    public void clickSignInSignUpButton() {
-        signInSignUpButton.click();
-    }
-
-    public void clickLoginButton() {
-        loginButton.click();
-    }
-
-    public void clickBusTicketBookingOption() {
-        busTicketBookingOption.click();
-    }
-
-    public void clickTrainTicketBookingOption() {
-        trainTicketBookingOption.click();
-    }
-
-    public String getCurrentSource(){
-        String value = currentSource.getAttribute("value");
-        return value;
-    }
-
-    public String getCurrentDestination(){
-        String value = currentDestination.getAttribute("value");
-        return value;
-    }
-
-    public boolean isSuggestionsVisible() {
-        
-        WebElement suggestion = wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
-        return suggestion.isDisplayed();
-    }
-
-    public void clickJourneyFrom() {
-        journeyFrom.click();
-    }
-
-    public void clickJourneyTo() {
-        journeyTo.click();
-    }
-
-    public void clickSearchBusesButton() {
-        searchBusesButton.click();
-    }
-
-    public void clickBookNowButton() {
-        bookNowButton.click();
-    }
-
-    public void clickRedBusLogo() {
-        redBusLogo.click();
-    }
-
-    public boolean isLogoDisplayed() {
-        return redBusLogo.isDisplayed();
-    }
-
-    public boolean isJourneyFromDisplayed() {
-        return journeyFrom.isDisplayed();
-    }
-
-    public boolean isJourneyToDisplayed() {
-        return journeyTo.isDisplayed();
-    }
-
-    public boolean isCalendarButtonVisible() {
-        return calendarButton.isDisplayed();
-    }
-
-    public void openCalendar() {
-        isCalendarButtonVisible();
-        clickCalendarButton();
-        wait.until(ExpectedConditions.visibilityOf(datePickerPopup));
-    }
-
-    public void clickCalenderDay(int day){driver.findElement(By.xpath(
-                    "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
-            .click();
-    }
-
-    public boolean isDateEnabled(int day){
-        WebElement dateElement = driver.findElement(By.xpath(
-                "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"));
-        
-        return dateElement.isEnabled();
-    }
-
-    
-
-    public void clickCalendarButton(){calendarButton.click();}
-
-    public boolean isSearchButtonEnabled() {
-        return searchBusesButton.isEnabled();
-    }
-
-    public boolean isFooterDisplayed() {
-        return footer.isDisplayed();
-    }
-
-    public boolean isLoginButtonDisplayed() {
-        return loginButton.isDisplayed();
-    }
-
-    public boolean isAccountButtonDisplayed() {
-        return accountButton.isDisplayed();
-    }
-
-    public void clickSwapButton(){
-        swapButton.click();
+    // ===========================
+    // Page Load Methods
+    // ===========================
+    public void waitForPageToLoad() {
+        WebDriverWait wait = new WebDriverWait(driver, PAGE_LOAD_TIMEOUT);
+        wait.until(webDriver -> "complete".equals(
+                ((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
+        wait.until(ExpectedConditions.visibilityOf(redBusLogo));
     }
 
     public boolean isPageLoadedSuccessfully() {
@@ -250,32 +142,127 @@ public class HomePage extends BasePage {
                 && !driver.getTitle().isBlank();
     }
 
-    public void waitForPageToLoad() {
-        WebDriverWait wait = new WebDriverWait(driver, PAGE_LOAD_TIMEOUT);
-        wait.until(webDriver -> "complete".equals(
-                ((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
-        wait.until(ExpectedConditions.visibilityOf(redBusLogo));
+    public void scrollToFooter() {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].scrollIntoView(true);", faqSectionHeading);
     }
 
-    public List<String> getNonClickableMajorElements() {
-        Map<String, WebElement> majorElements = getMajorHomepageElements();
-        List<String> nonClickableElements = new ArrayList<>();
-        WebDriverWait wait = new WebDriverWait(driver, ELEMENT_CLICKABLE_TIMEOUT);
+    // ===========================
+    // Header Methods
+    // ===========================
+    public void clickAccountButton() {
+        accountButton.click();
+    }
 
-        for (Map.Entry<String, WebElement> entry : majorElements.entrySet()) {
-            try {
-                wait.until(ExpectedConditions.elementToBeClickable(entry.getValue()));
-            } catch (Exception e) {
-                nonClickableElements.add(entry.getKey());
-            }
+    public void clickSignInSignUpButton() {
+        signInSignUpButton.click();
+    }
+
+    public void clickLoginButton() {
+        loginButton.click();
+    }
+
+    public void clickRedBusLogo() {
+        redBusLogo.click();
+    }
+
+    // ===========================
+    // Booking Methods
+    // ===========================
+    public void clickBusTicketBookingOption() {
+        busTicketBookingOption.click();
+    }
+
+    public void clickTrainTicketBookingOption() {
+        trainTicketBookingOption.click();
+    }
+
+    // ===========================
+    // Journey Methods
+    // ===========================
+    public void clickJourneyFrom() {
+        journeyFrom.click();
+    }
+
+    public void clickJourneyTo() {
+        journeyTo.click();
+    }
+
+    public void selectJourneyCity(JourneyField field, String city) {
+        if (field == JourneyField.SOURCE) {
+            clickJourneyFrom();
+        } else {
+            clickJourneyTo();
         }
 
-        return nonClickableElements;
+        isSuggestionsVisible();
+
+        WebElement activeField = driver.switchTo().activeElement();
+        activeField.sendKeys(Keys.CONTROL + "a");
+        activeField.sendKeys(Keys.DELETE);
+        activeField.sendKeys(city);
+
+        wait.until(ExpectedConditions.visibilityOf(suggestionCategory));
+
+        WebElement cityOption = wait.until(ExpectedConditions.elementToBeClickable(
+                By.xpath(
+                        "//div[contains(@class,'searchCategory___')]//div[contains(@class,'suggestion-item')]"
+                        + "[.//div[@role='heading' and "
+                        + "translate(normalize-space(.),"
+                        + "'ABCDEFGHIJKLMNOPQRSTUVWXYZ',"
+                        + "'abcdefghijklmnopqrstuvwxyz')='" + city.trim().toLowerCase() + "']]"
+                )));
+
+        cityOption.click();
     }
 
-    public boolean isemptySourcePopUpMessageDisplayed(){
-        wait.until(ExpectedConditions.visibilityOf(emptySourcePopUpMessage));
-        return emptySourcePopUpMessage.isDisplayed();
+    public void clickSwapButton() {
+        swapButton.click();
+    }
+
+    public String getCurrentSource() {
+        String value = currentSource.getAttribute("value");
+        return value;
+    }
+
+    public String getCurrentDestination() {
+        String value = currentDestination.getAttribute("value");
+        return value;
+    }
+
+    // ===========================
+    // Calendar Methods
+    // ===========================
+    public void openCalendar() {
+        isCalendarButtonVisible();
+        clickCalendarButton();
+        wait.until(ExpectedConditions.visibilityOf(datePickerPopup));
+    }
+
+    public void clickCalenderDay(int day) {
+        driver.findElement(By.xpath(
+                "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
+                .click();
+    }
+
+    public void clickCalendarButton() {
+        calendarButton.click();
+    }
+
+    public void clickDateProgressArrow() {
+        dateProgressArrow.click();
+    }
+
+    public void clickDateBackArrow() {
+        dateBackArrow.click();
+    }
+
+    public boolean isDateBackArrowEnabled() {
+        return dateBackArrow.isEnabled();
+    }
+
+    public String getCalenderMonthYear() {
+        return calenderMonthYear.getText();
     }
 
     public void navigateCalendarTo(String targetMonth, int targetYear) {
@@ -295,47 +282,140 @@ public class HomePage extends BasePage {
         }
     }
 
+    public boolean isDateEnabled(int day) {
+        WebElement dateElement = driver.findElement(By.xpath(
+                "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"));
+
+        return dateElement.isEnabled();
+    }
+
+    public String getSelectedDate() {
+        return selectedDate.getText();
+    }
+
+    // ===========================
+    // Search Methods
+    // ===========================
+    public void isSearchButtonClickable(){
+        wait.until(ExpectedConditions.elementToBeClickable(searchBusesButton));
+    }
+    public void clickSearchBusesButton() {
+        searchBusesButton.click();
+    }
+
+    public void clickBookNowButton() {
+        bookNowButton.click();
+    }
+
+    // ===========================
+    // Validation Methods
+    // ===========================
+    public boolean isSuggestionsVisible() {
+
+        WebElement suggestion = wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
+        return suggestion.isDisplayed();
+    }
+
+    public boolean isLogoDisplayed() {
+        wait.until(ExpectedConditions.visibilityOf(redBusLogo));
+        return redBusLogo.isDisplayed();
+    }
+
+    public boolean isJourneyFromDisplayed() {
+        return journeyFrom.isDisplayed();
+    }
+
+    public boolean isJourneyToDisplayed() {
+        return journeyTo.isDisplayed();
+    }
+
+    public boolean isCalendarButtonVisible() {
+        return calendarButton.isDisplayed();
+    }
+
+    public boolean isSearchButtonEnabled() {
+        return searchBusesButton.isEnabled();
+    }
+
+    public boolean isFooterDisplayed() {
+        return footer.isDisplayed();
+    }
+
+    public boolean isLoginButtonDisplayed() {
+        return loginButton.isDisplayed();
+    }
+
+    public boolean isAccountButtonDisplayed() {
+        return accountButton.isDisplayed();
+    }
+
+    public boolean isemptySourcePopUpMessageDisplayed() {
+        wait.until(ExpectedConditions.visibilityOf(emptySourcePopUpMessage));
+        return emptySourcePopUpMessage.isDisplayed();
+    }
+
+    // ===========================
+    // Utility Methods
+    // ===========================
+    public List<String> getNonClickableMajorElements() {
+        Map<String, WebElement> majorElements = getMajorHomepageElements();
+        List<String> nonClickableElements = new ArrayList<>();
+        WebDriverWait wait = new WebDriverWait(driver, ELEMENT_CLICKABLE_TIMEOUT);
+
+        for (Map.Entry<String, WebElement> entry : majorElements.entrySet()) {
+            try {
+                wait.until(ExpectedConditions.elementToBeClickable(entry.getValue()));
+            } catch (Exception e) {
+                nonClickableElements.add(entry.getKey());
+            }
+        }
+
+        return nonClickableElements;
+    }
+
     @SuppressWarnings("unchecked")
     public List<String> getBrokenImageSources() throws IOException {
 
-    scrollThroughPageToLoadLazyImages();
+        scrollThroughPageToLoadLazyImages();
 
-    List<WebElement> images = driver.findElements(By.tagName("img"));
-    List<String> brokenImages = new ArrayList<>();
+        List<WebElement> images = driver.findElements(By.tagName("img"));
+        List<String> brokenImages = new ArrayList<>();
 
-    for (WebElement image : images) {
+        for (WebElement image : images) {
 
-        String src = image.getAttribute("src");
+            String src = image.getAttribute("src");
 
-        if (src == null || src.isBlank()) {
-            continue;
+            if (src == null || src.isBlank()) {
+                continue;
+            }
+
+            // Ignore embedded/local images
+            if (!src.startsWith("http")) {
+                continue;
+            }
+
+            HttpURLConnection connection
+                    = (HttpURLConnection) new URL(src).openConnection();
+
+            connection.setRequestMethod("HEAD");
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(5000);
+
+            int responseCode = connection.getResponseCode();
+
+            if (responseCode >= 400) {
+                brokenImages.add(src + " (HTTP " + responseCode + ")");
+            }
+
+            connection.disconnect();
         }
 
-        // Ignore embedded/local images
-        if (!src.startsWith("http")) {
-            continue;
-        }
-
-        HttpURLConnection connection =
-                (HttpURLConnection) new URL(src).openConnection();
-
-        connection.setRequestMethod("HEAD");
-        connection.setConnectTimeout(5000);
-        connection.setReadTimeout(5000);
-
-        int responseCode = connection.getResponseCode();
-
-        if (responseCode >= 400) {
-            brokenImages.add(src + " (HTTP " + responseCode + ")");
-        }
-
-        connection.disconnect();
+        return brokenImages;
     }
 
-    return brokenImages;
-}
-
-
+    // ===========================
+    // Private Helpers
+    // ===========================
     private Map<String, WebElement> getMajorHomepageElements() {
         Map<String, WebElement> majorElements = new LinkedHashMap<>();
         majorElements.put("redBus logo", redBusLogo);
@@ -360,36 +440,11 @@ public class HomePage extends BasePage {
         js.executeScript("window.scrollTo(0, 0);");
     }
 
-    public enum JourneyField { SOURCE, DESTINATION }
-
-    public void selectJourneyCity(JourneyField field, String city) {
-        if (field == JourneyField.SOURCE) {
-            clickJourneyFrom();
-        } else {
-            clickJourneyTo();
-        }
-
-        isSuggestionsVisible();
-
-        WebElement activeField = driver.switchTo().activeElement();
-        activeField.sendKeys(Keys.CONTROL + "a");
-        activeField.sendKeys(Keys.DELETE);
-        activeField.sendKeys(city);
-
-        wait.until(ExpectedConditions.visibilityOf(suggestionCategory));
-
-        WebElement cityOption = wait.until(ExpectedConditions.elementToBeClickable(
-                By.xpath(
-                        "//div[contains(@class,'searchCategory___')]//div[contains(@class,'suggestion-item')]"
-                                + "[.//div[@role='heading' and "
-                                + "translate(normalize-space(.),"
-                                + "'ABCDEFGHIJKLMNOPQRSTUVWXYZ',"
-                                + "'abcdefghijklmnopqrstuvwxyz')='" + city.trim().toLowerCase() + "']]"
-                )));
-
-        cityOption.click();
+    // ===========================
+    // Enum
+    // ===========================
+    public enum JourneyField {
+        SOURCE, DESTINATION
     }
-
-
 
 }

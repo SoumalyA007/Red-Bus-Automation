@@ -25,7 +25,7 @@
       <span class="top-banner-title-font">Test results</span>
       <button id="button" class="button">Switch Retro Theme</button> <!-- button -->
       <br/>
-      <span class="top-banner-font-1">1 suite</span>
+      <span class="top-banner-font-1">1 suite, 1 failed test</span>
     </div> <!-- top-banner-root -->
     <div class="navigator-root">
       <div class="navigator-suite-header">
@@ -39,7 +39,7 @@
         <div class="rounded-window">
           <div class="suite-header light-rounded-window-top">
             <a href="#" panel-name="suite-RedBus_Automation_Suite" class="navigator-link">
-              <span class="suite-name border-passed">RedBus Automation Suite</span>
+              <span class="suite-name border-failed">RedBus Automation Suite</span>
             </a> <!-- navigator-link -->
           </div> <!-- suite-header light-rounded-window-top -->
           <div class="navigator-suite-content">
@@ -92,21 +92,21 @@
               <div class="suite-section-content">
                 <ul>
                   <li>
-                    <span class="method-stats">1 method,   1 passed</span>
+                    <span class="method-stats">1 method, 1 failed,   </span>
                   </li>
                   <li>
-                    <span class="method-list-title passed">Passed methods</span>
-                    <span class="show-or-hide-methods passed">
-                      <a href="#" panel-name="suite-RedBus_Automation_Suite" class="hide-methods passed suite-RedBus_Automation_Suite"> (hide)</a> <!-- hide-methods passed suite-RedBus_Automation_Suite -->
-                      <a href="#" panel-name="suite-RedBus_Automation_Suite" class="show-methods passed suite-RedBus_Automation_Suite"> (show)</a> <!-- show-methods passed suite-RedBus_Automation_Suite -->
+                    <span class="method-list-title failed">Failed methods</span>
+                    <span class="show-or-hide-methods failed">
+                      <a href="#" panel-name="suite-RedBus_Automation_Suite" class="hide-methods failed suite-RedBus_Automation_Suite"> (hide)</a> <!-- hide-methods failed suite-RedBus_Automation_Suite -->
+                      <a href="#" panel-name="suite-RedBus_Automation_Suite" class="show-methods failed suite-RedBus_Automation_Suite"> (show)</a> <!-- show-methods failed suite-RedBus_Automation_Suite -->
                     </span>
-                    <div class="method-list-content passed suite-RedBus_Automation_Suite">
+                    <div class="method-list-content failed suite-RedBus_Automation_Suite">
                       <span>
-                        <img src="passed.png" width="3%"/>
-                        <a href="#" panel-name="suite-RedBus_Automation_Suite" title="testCases.DatePickerTest" class="method navigator-link" hash-for-method="TC_006_select_today">TC_006_select_today</a> <!-- method navigator-link -->
+                        <img src="failed.png" width="3%"/>
+                        <a href="#" panel-name="suite-RedBus_Automation_Suite" title="testCases.BusSearchTest" class="method navigator-link" hash-for-method="TC_001_check_route">TC_001_check_route</a> <!-- method navigator-link -->
                       </span>
                       <br/>
-                    </div> <!-- method-list-content passed suite-RedBus_Automation_Suite -->
+                    </div> <!-- method-list-content failed suite-RedBus_Automation_Suite -->
                   </li>
                 </ul>
               </div> <!-- suite-section-content -->
@@ -118,21 +118,26 @@
     <div class="wrapper">
       <div class="main-panel-root">
         <div panel-name="suite-RedBus_Automation_Suite" class="panel RedBus_Automation_Suite">
-          <div class="suite-RedBus_Automation_Suite-class-passed">
+          <div class="suite-RedBus_Automation_Suite-class-failed">
             <div class="main-panel-header rounded-window-top">
-              <img src="passed.png"/>
-              <span class="class-name">testCases.DatePickerTest</span>
+              <img src="failed.png"/>
+              <span class="class-name">testCases.BusSearchTest</span>
             </div> <!-- main-panel-header rounded-window-top -->
             <div class="main-panel-content rounded-window-bottom">
               <div class="method">
                 <div class="method-content">
-                  <a name="TC_006_select_today">
-                  </a> <!-- TC_006_select_today -->
-                  <span class="method-name">TC_006_select_today</span>
+                  <a name="TC_001_check_route">
+                  </a> <!-- TC_001_check_route -->
+                  <span class="method-name">TC_001_check_route</span>
+                  <div class="stack-trace">java.lang.AssertionError: Your source is not correct expected [Delhi] but found [Delhis]
+	at testCases.BusSearchTest.TC_001_check_route(BusSearchTest.java:20)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1612)
+... Removed 34 stack frames
+</div> <!-- stack-trace -->
                 </div> <!-- method-content -->
               </div> <!-- method -->
             </div> <!-- main-panel-content rounded-window-bottom -->
-          </div> <!-- suite-RedBus_Automation_Suite-class-passed -->
+          </div> <!-- suite-RedBus_Automation_Suite-class-failed -->
         </div> <!-- panel RedBus_Automation_Suite -->
         <div panel-name="test-xml-RedBus_Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
@@ -147,11 +152,11 @@
   &lt;parameter name=&quot;browser&quot; value=&quot;chrome&quot;/&gt;
   &lt;test thread-count=&quot;5&quot; name=&quot;Source and Destination Tests&quot; verbose=&quot;0&quot;&gt;
     &lt;classes&gt;
-      &lt;class name=&quot;testCases.DatePickerTest&quot;&gt;
+      &lt;class name=&quot;testCases.BusSearchTest&quot;&gt;
         &lt;methods&gt;
-          &lt;include name=&quot;TC_006_select_today&quot;/&gt;
+          &lt;include name=&quot;TC_001_check_route&quot;/&gt;
         &lt;/methods&gt;
-      &lt;/class&gt; &lt;!-- testCases.DatePickerTest --&gt;
+      &lt;/class&gt; &lt;!-- testCases.BusSearchTest --&gt;
     &lt;/classes&gt;
   &lt;/test&gt; &lt;!-- Source and Destination Tests --&gt;
 &lt;/suite&gt; &lt;!-- RedBus Automation Suite --&gt;
@@ -193,14 +198,14 @@ data.addColumn('string', 'Class');
 data.addColumn('number', 'Time (ms)');
 data.addRows(1);
 data.setCell(0, 0, 0)
-data.setCell(0, 1, 'TC_006_select_today')
-data.setCell(0, 2, 'testCases.DatePickerTest')
-data.setCell(0, 3, 265);
+data.setCell(0, 1, 'TC_001_check_route')
+data.setCell(0, 2, 'testCases.BusSearchTest')
+data.setCell(0, 3, 3188);
 window.suiteTableData['RedBus_Automation_Suite']= { tableData: data, tableDiv: 'times-div-RedBus_Automation_Suite'}
 return data;
 }
               </script>
-              <span class="suite-total-time">Total running time: 265 ms</span>
+              <span class="suite-total-time">Total running time: 3 seconds</span>
               <div id="times-div-RedBus_Automation_Suite">
               </div> <!-- times-div-RedBus_Automation_Suite -->
             </div> <!-- times-div -->
@@ -215,24 +220,9 @@ return data;
         </div> <!-- panel -->
         <div panel-name="ignored-methods-RedBus_Automation_Suite" class="panel">
           <div class="main-panel-header rounded-window-top">
-            <span class="header-content">5 ignored methods</span>
+            <span class="header-content">0 ignored methods</span>
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
-            <div class="ignored-class-div">
-              <span class="ignored-class-name">testCases.DatePickerTest</span>
-              <div class="ignored-methods-div">
-                <span class="ignored-method-name">TC_004_select_next_year</span>
-                <br/>
-                <span class="ignored-method-name">TC_001_select_tomorrow</span>
-                <br/>
-                <span class="ignored-method-name">TC_005_past_date_disabled</span>
-                <br/>
-                <span class="ignored-method-name">TC_003_select_next_month</span>
-                <br/>
-                <span class="ignored-method-name">TC_002_select_future_date</span>
-                <br/>
-              </div> <!-- ignored-methods-div -->
-            </div> <!-- ignored-class-div -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->
         <div panel-name="chronological-RedBus_Automation_Suite" class="panel">
@@ -241,14 +231,16 @@ return data;
           </div> <!-- main-panel-header rounded-window-top -->
           <div class="main-panel-content rounded-window-bottom">
             <div class="chronological-class">
-              <div class="chronological-class-name">testCases.DatePickerTest</div> <!-- chronological-class-name -->
+              <div class="chronological-class-name">testCases.BusSearchTest</div> <!-- chronological-class-name -->
               <div class="configuration-class before">
                 <span class="method-name">setup(windows, chrome)</span>
                 <span class="method-start">0 ms</span>
               </div> <!-- configuration-class before -->
               <div class="test-method">
-                <span class="method-name">TC_006_select_today</span>
-                <span class="method-start">1539 ms</span>
+                <img src="failed.png">
+                </img>
+                <span class="method-name">TC_001_check_route</span>
+                <span class="method-start">1871 ms</span>
               </div> <!-- test-method -->
           </div> <!-- main-panel-content rounded-window-bottom -->
         </div> <!-- panel -->

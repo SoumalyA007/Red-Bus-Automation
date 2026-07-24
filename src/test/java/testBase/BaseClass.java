@@ -29,7 +29,9 @@ import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
+
 import pageObjects.HomePage;
+import pageObjects.SearchPage;
 import utils.HelperFunctions;
 
 public class BaseClass {
@@ -40,6 +42,7 @@ public class BaseClass {
     public WebDriverWait wait;
     public HomePage hp;
     public HelperFunctions helper;
+    public SearchPage sp;
 
     @SuppressWarnings("null")
     @BeforeClass
@@ -110,6 +113,7 @@ public class BaseClass {
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         hp = new HomePage(driver);
         helper = new HelperFunctions(driver, wait);
+        sp = new SearchPage(driver);
 
     }
 

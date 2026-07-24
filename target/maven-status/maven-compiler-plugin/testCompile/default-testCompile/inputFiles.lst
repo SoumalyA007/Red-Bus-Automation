@@ -1,7 +1,9 @@
 C:\Software Testing\Selenium\redbus_automation\src\test\java\pageObjects\BasePage.java
 C:\Software Testing\Selenium\redbus_automation\src\test\java\pageObjects\HomePage.java
+C:\Software Testing\Selenium\redbus_automation\src\test\java\pageObjects\SearchPage.java
 C:\Software Testing\Selenium\redbus_automation\src\test\java\testBase\BaseClass.java
 C:\Software Testing\Selenium\redbus_automation\src\test\java\testCases\AutoSuggestionTest.java
+C:\Software Testing\Selenium\redbus_automation\src\test\java\testCases\BusSearchTest.java
 C:\Software Testing\Selenium\redbus_automation\src\test\java\testCases\DatePickerTest.java
 C:\Software Testing\Selenium\redbus_automation\src\test\java\testCases\HomePageTest.java
 C:\Software Testing\Selenium\redbus_automation\src\test\java\testCases\SourceDestinationTest.java

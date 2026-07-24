@@ -1,5 +1,7 @@
 package testCases;
 
+import java.time.Duration;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -7,16 +9,22 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
-
-import java.time.Duration;
 
 public class testFile {
 
+    WebDriver driver;
+
+    @BeforeClass
+    public void setup() {
+        driver = new ChromeDriver();
+        driver.get("https://www.redbus.in/search?fromCityName=Delhi&fromCityId=733&srcCountry=undefined&fromCityType=CITY&toCityName=Burdwan&toCityId=74678&destCountry=IND&toCityType=CITY&onward=24-Jul-2026&doj=24-Jul-2026&ref=home");
+    }
+
     @Test
-    public void testFile(){
-        WebDriver driver = new ChromeDriver();
-        driver.get("https://www.redbus.in/");
+    public void testFile() {
+
         driver.manage().window().maximize();
         WebDriverWait wait = new WebDriverWait(driver, Duration.ofSeconds(10));
 
@@ -52,11 +60,17 @@ public class testFile {
         cityOption.click();
 
         //Destination
-
-
-
-
     }
 
+    @Test
+    public void test() {
+        WebElement route = driver.findElement(
+                By.xpath("//span[@role='text']")
+        );
+
+        String routeText = route.getText(); // "Delhi to Burdwan"
+
+        System.out.println(routeText);
+    }
 
 }

@@ -5,12 +5,12 @@
   <parameter name="browser" value="chrome"/>
   <test thread-count="5" name="Source and Destination Tests(failed)" verbose="0">
     <classes>
-      <class name="testCases.DatePickerTest">
+      <class name="testCases.BusSearchTest">
         <methods>
           <include name="setup"/>
-          <include name="TC_006_select_today"/>
+          <include name="TC_001_check_route"/>
         </methods>
-      </class> <!-- testCases.DatePickerTest -->
+      </class> <!-- testCases.BusSearchTest -->
     </classes>
   </test> <!-- Source and Destination Tests(failed) -->
 </suite> <!-- Failed suite [RedBus Automation Suite] -->

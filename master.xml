@@ -8,9 +8,9 @@
 
     <test name="Source and Destination Tests">
         <classes>
-            <class name="testCases.DatePickerTest">
+            <class name="testCases.BusSearchTest">
             <methods>
-                <include name="TC_006_select_today"/>
+                <include name="TC_001_check_route"/>
             </methods>
             </class>
         </classes>
