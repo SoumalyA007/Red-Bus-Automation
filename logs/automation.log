@@ -1,0 +1,7 @@
+2026-07-24 17:34:48 INFO  Utils:112 - [TestNG] Running:
+  /home/u-93/.cache/JetBrains/IntelliJIdea2026.2/temp-testng-customsuite.xml
+
+2026-07-24 17:34:48 INFO  BusSearchTest:58 - Running on Local Environment
+2026-07-24 17:34:48 INFO  BusSearchTest:59 - OS: windows
+2026-07-24 17:34:48 INFO  BusSearchTest:60 - Browser: chrome
+2026-07-24 17:34:55 INFO  BusSearchTest:37 - Number of card displayer 10
