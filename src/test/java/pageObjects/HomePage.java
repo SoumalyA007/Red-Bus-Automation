@@ -11,20 +11,27 @@ import java.util.Map;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import components.SearchBarComponents;
+
 public class HomePage extends BasePage {
 
     private static final Duration PAGE_LOAD_TIMEOUT = Duration.ofSeconds(15);
     private static final Duration ELEMENT_CLICKABLE_TIMEOUT = Duration.ofSeconds(5);
 
+    // Composition: HomePage owns one search bar instance instead of
+    // redeclaring/inheriting its locators (avoids the old circular
+    // HomePage <-> SearchBarComponents dependency).
+    public final SearchBarComponents searchBar;
+
     public HomePage(WebDriver driver) {
         super(driver);
+        this.searchBar = new SearchBarComponents(driver);
     }
 
     // ===========================
@@ -79,10 +86,10 @@ public class HomePage extends BasePage {
     public boolean isPageLoadedSuccessfully() {
         waitForPageToLoad();
         return isLogoDisplayed()
-                && isJourneyFromDisplayed()
-                && isJourneyToDisplayed()
-                && isCalendarButtonVisible()
-                && isSearchButtonEnabled()
+                && searchBar.isJourneyFromDisplayed()
+                && searchBar.isJourneyToDisplayed()
+                && searchBar.isCalendarButtonVisible()
+                && searchBar.isSearchButtonEnabled()
                 && driver.getTitle() != null
                 && !driver.getTitle().isBlank();
     }
@@ -122,19 +129,15 @@ public class HomePage extends BasePage {
         trainTicketBookingOption.click();
     }
 
-
-
     public void clickBookNowButton() {
-        bookNowButton.click();
+        searchBar.clickBookNowButton();
     }
 
     // ===========================
     // Validation Methods
     // ===========================
     public boolean isSuggestionsVisible() {
-
-        WebElement suggestion = wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
-        return suggestion.isDisplayed();
+        return searchBar.isSuggestionsVisible();
     }
 
     public boolean isLogoDisplayed() {
@@ -143,19 +146,19 @@ public class HomePage extends BasePage {
     }
 
     public boolean isJourneyFromDisplayed() {
-        return journeyFrom.isDisplayed();
+        return searchBar.isJourneyFromDisplayed();
     }
 
     public boolean isJourneyToDisplayed() {
-        return journeyTo.isDisplayed();
+        return searchBar.isJourneyToDisplayed();
     }
 
     public boolean isCalendarButtonVisible() {
-        return calendarButton.isDisplayed();
+        return searchBar.isCalendarButtonVisible();
     }
 
     public boolean isSearchButtonEnabled() {
-        return searchBusesButton.isEnabled();
+        return searchBar.isSearchButtonEnabled();
     }
 
     public boolean isFooterDisplayed() {
@@ -242,10 +245,10 @@ public class HomePage extends BasePage {
         majorElements.put("redBus logo", redBusLogo);
         majorElements.put("bus tickets option", busTicketBookingOption);
         majorElements.put("train tickets option", trainTicketBookingOption);
-        majorElements.put("journey from field", journeyFrom);
-        majorElements.put("journey to field", journeyTo);
-        majorElements.put("journey date picker", calendarButton);
-        majorElements.put("search buses button", searchBusesButton);
+        majorElements.put("journey from field", searchBar.journeyFrom);
+        majorElements.put("journey to field", searchBar.journeyTo);
+        majorElements.put("journey date picker", searchBar.calendarButton);
+        majorElements.put("search buses button", searchBar.searchBusesButton);
         majorElements.put("account button", accountButton);
         return majorElements;
     }

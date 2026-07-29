@@ -3,6 +3,7 @@ package testCases;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import components.SearchBarComponents;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -17,7 +18,7 @@ public class DatePickerTest extends BaseClass {
             LocalDate tomorrow = LocalDate.now().plusDays(1);
             String expectedDate = tomorrow.format(DateTimeFormatter.ofPattern("d MMM, yyyy"));
             helper.selectCalendarDate(tomorrow);
-            String actualDate = hp.getSelectedDate();
+            String actualDate = searchbarcomponents.getSelectedDate();
             Assert.assertEquals(actualDate, expectedDate, "Selected journey date is incorrect.");
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -30,7 +31,7 @@ public class DatePickerTest extends BaseClass {
         try {
             LocalDate targetDate = LocalDate.of(2026, 11, 26);
             helper.selectCalendarDate(targetDate);
-            String actualDate = hp.getSelectedDate();
+            String actualDate = searchbarcomponents.getSelectedDate();
             Assert.assertEquals(actualDate, "26 Nov, 2026", "Selected journey date is incorrect.");
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -49,13 +50,13 @@ public class DatePickerTest extends BaseClass {
 
             String expectedMonth = targetDate.format(DateTimeFormatter.ofPattern("MMMM"));
 
-            hp.openCalendar();
+            searchbarcomponents.openCalendar();
 
             // Navigate to next month
-            hp.clickDateProgressArrow();
+            searchbarcomponents.clickDateProgressArrow();
 
             // Verify month has changed
-            String calendarMonthYear = hp.getCalenderMonthYear();
+            String calendarMonthYear = searchbarcomponents.getCalenderMonthYear();
             String actualMonth = calendarMonthYear.split(" ")[0];
 
             Assert.assertEquals(actualMonth,
@@ -63,14 +64,14 @@ public class DatePickerTest extends BaseClass {
                     "Next month was not displayed.");
 
             // Select a date from next month
-            hp.clickCalenderDay(targetDate.getDayOfMonth());
+            searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
 
             // Verify selected journey date
             String expectedDate
                     = targetDate.format(DateTimeFormatter.ofPattern("dd MMM, yyyy"));
 
             Assert.assertEquals(
-                    hp.getSelectedDate(),
+                    searchbarcomponents.getSelectedDate(),
                     expectedDate,
                     "Incorrect date selected."
             );
@@ -96,22 +97,22 @@ public class DatePickerTest extends BaseClass {
 
             String expectedYear = String.valueOf(targetDate.getYear());
 
-            hp.openCalendar();
+            searchbarcomponents.openCalendar();
 
             // Navigate until the required year is reached
             while (true) {
 
-                String[] parts = hp.getCalenderMonthYear().split(" ");
+                String[] parts = searchbarcomponents.getCalenderMonthYear().split(" ");
 
                 if (parts[1].equals(expectedYear)) {
                     break;
                 }
 
-                hp.clickDateProgressArrow();
+                searchbarcomponents.clickDateProgressArrow();
             }
 
             // Verify the year displayed
-            String displayedYear = hp.getCalenderMonthYear().split(" ")[1];
+            String displayedYear = searchbarcomponents.getCalenderMonthYear().split(" ")[1];
 
             Assert.assertEquals(
                     displayedYear,
@@ -120,7 +121,7 @@ public class DatePickerTest extends BaseClass {
             );
 
             // Select a date in that year
-            hp.clickCalenderDay(targetDate.getDayOfMonth());
+            searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
 
             // Verify the selected journey date
             String expectedDate = targetDate.format(
@@ -128,7 +129,7 @@ public class DatePickerTest extends BaseClass {
             );
 
             Assert.assertEquals(
-                    hp.getSelectedDate(),
+                    searchbarcomponents.getSelectedDate(),
                     expectedDate,
                     "Incorrect journey date selected."
             );
@@ -146,14 +147,14 @@ public class DatePickerTest extends BaseClass {
         try {
             LocalDate currentDateMonthYear = LocalDate.now();
             String currentDate = currentDateMonthYear.format(DateTimeFormatter.ofPattern("dd"));
-            hp.clickCalendarButton();
+            searchbarcomponents.clickCalendarButton();
             if (currentDate.equals("1")) {
-                boolean isEnabled = hp.isDateBackArrowEnabled();
+                boolean isEnabled = searchbarcomponents.isDateBackArrowEnabled();
                 Assert.assertFalse(isEnabled, "Back arrow should be disabled for the previous month.");
             } else {
                 String toBeSelectedDate = currentDateMonthYear.minusDays(1).format(DateTimeFormatter.ofPattern("dd"));
                 int day = Integer.parseInt(toBeSelectedDate);
-                boolean isEnabled = hp.isDateEnabled(day);
+                boolean isEnabled = searchbarcomponents.isDateEnabled(day);
                 Assert.assertTrue(isEnabled, "Back arrow should be enabled for the previous month.");
             }
         } catch (Throwable e) {
@@ -165,10 +166,10 @@ public class DatePickerTest extends BaseClass {
     public void TC_006_select_today() {
         String testName = "TC_006_select_today";
         try {
-            hp.openCalendar();
+            searchbarcomponents.openCalendar();
             int todaysDate = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("dd")));
-            hp.clickCalenderDay(todaysDate);
-            String selectedDate = hp.getSelectedDate();
+            searchbarcomponents.clickCalenderDay(todaysDate);
+            String selectedDate = searchbarcomponents.getSelectedDate();
             String toBeSelectedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM, YYYY"));
             Assert.assertEquals(selectedDate, toBeSelectedDate, "today's date not selected");
 

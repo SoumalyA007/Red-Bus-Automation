@@ -1,5 +1,9 @@
 package components;
 
+import java.time.Duration;
+import java.util.List;
+import java.util.NoSuchElementException;
+
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
@@ -8,23 +12,22 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObjects.HomePage;
-
-import java.time.Duration;
-
 
 public class SearchBarComponents {
-    private  WebDriver driver;
-    private  WebDriverWait wait;
+
+    private final WebDriver driver;
+    private final WebDriverWait wait;
+
     public SearchBarComponents(WebDriver driver) {
         this.driver = driver;
         this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
         PageFactory.initElements(driver, this);
     }
 
-    HomePage hp = new HomePage(driver);
+    public enum JourneyField {
+        SOURCE, DESTINATION
+    }
 
-    public enum JourneyField { SOURCE, DESTINATION }
     // ===========================
     // Journey Locators
     // ===========================
@@ -67,20 +70,17 @@ public class SearchBarComponents {
     @FindBy(xpath = "//span[contains(@class,'doj___')]")
     public WebElement selectedDate;
 
-    @FindBy(xpath = "//i[contains(@aria-label,'Previous month,\")]")
+    @FindBy(xpath = "//i[contains(@aria-label,'Previous month')]")
     public WebElement dateBackArrow;
 
     // ===========================
-    // Search Locators
+    // Search / Book Locators
     // ===========================
     @FindBy(xpath = "//button[normalize-space()='Search buses']")
     public WebElement searchBusesButton;
 
     @FindBy(xpath = "//button[normalize-space()='Book now']")
     public WebElement bookNowButton;
-
-
-
 
     // ===========================
     // Journey Methods
@@ -93,14 +93,19 @@ public class SearchBarComponents {
         journeyTo.click();
     }
 
-    public void selectJourneyCity(SearchBarComponents.JourneyField field, String city) {
-        if (field == SearchBarComponents.JourneyField.SOURCE) {
+    public boolean isSuggestionsVisible() {
+        WebElement suggestion = wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
+        return suggestion.isDisplayed();
+    }
+
+    public void selectJourneyCity(JourneyField field, String city) {
+        if (field == JourneyField.SOURCE) {
             clickJourneyFrom();
         } else {
             clickJourneyTo();
         }
 
-        hp.isSuggestionsVisible();
+        isSuggestionsVisible();
 
         WebElement activeField = driver.switchTo().activeElement();
         activeField.sendKeys(Keys.CONTROL + "a");
@@ -126,20 +131,30 @@ public class SearchBarComponents {
     }
 
     public String getCurrentSource() {
-        String value = currentSource.getAttribute("value");
-        return value;
+        return currentSource.getAttribute("value");
     }
 
     public String getCurrentDestination() {
-        String value = currentDestination.getAttribute("value");
-        return value;
+        return currentDestination.getAttribute("value");
+    }
+
+    public boolean isJourneyFromDisplayed() {
+        return journeyFrom.isDisplayed();
+    }
+
+    public boolean isJourneyToDisplayed() {
+        return journeyTo.isDisplayed();
     }
 
     // ===========================
     // Calendar Methods
     // ===========================
+    public boolean isCalendarButtonVisible() {
+        return calendarButton.isDisplayed();
+    }
+
     public void openCalendar() {
-        hp.isCalendarButtonVisible();
+        isCalendarButtonVisible();
         clickCalendarButton();
         wait.until(ExpectedConditions.visibilityOf(datePickerPopup));
     }
@@ -190,7 +205,6 @@ public class SearchBarComponents {
     public boolean isDateEnabled(int day) {
         WebElement dateElement = driver.findElement(By.xpath(
                 "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"));
-
         return dateElement.isEnabled();
     }
 
@@ -199,16 +213,58 @@ public class SearchBarComponents {
     }
 
     // ===========================
-    // Search Methods
+    // Search / Book Methods
     // ===========================
-    public void isSearchButtonClickable(){
+    public boolean isSearchButtonEnabled() {
+        return searchBusesButton.isEnabled();
+    }
+
+    public void isSearchButtonClickable() {
         wait.until(ExpectedConditions.elementToBeClickable(searchBusesButton));
     }
+
     public void clickSearchBusesButton() {
         searchBusesButton.click();
     }
 
+    public void clickBookNowButton() {
+        bookNowButton.click();
+    }
 
+    public void typeCity(String city) {
+        WebElement activeField = driver.switchTo().activeElement();
+        activeField.sendKeys(Keys.CONTROL + "a");
+        activeField.sendKeys(Keys.DELETE);
+        activeField.sendKeys(city);
+    }
 
+    public List<WebElement> waitForSuggestions(int minCount) {
+        wait.until(ExpectedConditions.numberOfElementsToBeMoreThan(
+                By.xpath("//div[contains(@class,'searchCategory___')]"), minCount));
+        return wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(
+                By.xpath("//div[starts-with(@id,'suggestion-')]")));
+    }
 
+    public void selectSuggestionByText(String city) {
+        List<WebElement> suggestions = waitForSuggestions(2);
+        for (WebElement suggestion : suggestions) {
+            WebElement cityElement = suggestion.findElement(
+                    By.xpath(".//div[contains(@class,'listHeader___') and @role='heading']"));
+            if (cityElement.getText().trim().equalsIgnoreCase(city)) {
+                suggestion.click();
+                return;
+            }
+        }
+        throw new NoSuchElementException("No suggestion found matching: " + city);
+    }
+
+    public void selectFirstSuggestion() {
+        waitForSuggestions(1).get(0).click();
+    }
+
+    public String getNoResultsMessage() {
+        wait.until(ExpectedConditions.visibilityOfElementLocated(
+                By.xpath("//div[contains(@class,'noResultsFound___')]")));
+        return driver.findElement(By.xpath("//div[contains(@class,'noResultsHeader___')]")).getText();
+    }
 }

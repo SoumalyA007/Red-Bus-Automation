@@ -29,7 +29,7 @@ public class AutoSuggestionTest extends BaseClass {
                     .ignoring(StaleElementReferenceException.class);
             //clicked on the source box
 
-            hp.clickJourneyFrom();
+            searchbarcomponents.clickJourneyFrom();
             //need to wait for suggestion box to appear
             hp.isSuggestionsVisible();
             //after waiting for suggestion box to appear we need to move the focus to the current element
@@ -80,7 +80,7 @@ public class AutoSuggestionTest extends BaseClass {
     public void TC_OO3_Keyboard_navigation() {
         String testName = "TC_OO3_Keyboard_navigation";
         try {
-            hp.clickJourneyFrom();
+            searchbarcomponents.clickJourneyFrom();
             //need to wait for suggestion box to appear
             hp.isSuggestionsVisible();
             //after waiting for suggestion box to appear we need to move the focus to the current element
@@ -90,7 +90,7 @@ public class AutoSuggestionTest extends BaseClass {
             currentFocusedSourceElement.sendKeys(Keys.ARROW_DOWN);
             currentFocusedSourceElement.sendKeys(Keys.ENTER);
 
-            hp.clickJourneyTo();
+            searchbarcomponents.clickJourneyTo();
             //need to wait for suggestion box to appear
             hp.isSuggestionsVisible();
             //after waiting for suggestion box to appear we need to move the focus to the current element
@@ -100,8 +100,8 @@ public class AutoSuggestionTest extends BaseClass {
             currentFocusedSourceElement.sendKeys(Keys.ARROW_DOWN);
             currentFocusedSourceElement.sendKeys(Keys.ENTER);
 
-            Assert.assertEquals(hp.getCurrentSource(), "Mumbai");
-            Assert.assertEquals(hp.getCurrentDestination(), "Kolkata");
+            Assert.assertEquals(searchbarcomponents.getCurrentSource(), "Mumbai");
+            Assert.assertEquals(searchbarcomponents.getCurrentDestination(), "Kolkata");
 
         } catch (Throwable e) {
             logTestFailure(testName, e);

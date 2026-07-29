@@ -1,54 +1,55 @@
 package testCases;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import org.testng.internal.thread.ThreadTimeoutException;
 import testBase.BaseClass;
 
 public class BusSearchTest extends BaseClass {
 
     @Test
-    public void TC_001_verify_route_displayed_correctly(){
-        String testName = "TC_001_check_route";
-
-        try{
-            helper.searchBuses("Delhi", "Burdwan", LocalDate.now().plusDays(10));
+    public void TC_001_verify_search_results_displayed_correctly() {
+        String testName = "TC_001_verify_search_results_displayed_correctly";
+        try {
+            LocalDate journeyDate = LocalDate.now().plusDays(10);
+            helper.searchBuses("Kolkata", "Burdwan", journeyDate);
             hp.isLogoDisplayed();
 
+            // Route
             String[] routes = sp.getRoute();
-            Assert.assertEquals("Delhi", routes[0], "Your source is not correct");
-            Assert.assertEquals("Burdwan", routes[1], "Your destination is not correct");
-        }catch (Throwable e){
+            Assert.assertEquals(routes[0], "Kolkata", "Your source is not correct");
+            Assert.assertEquals(routes[1], "Burdwan", "Your destination is not correct");
 
-        }
+            // Bus cards
+            Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
+            Assert.assertTrue(sp.getBusCardsCount() > 0, "No bus card found");
+            log.info("Number of cards displayed: {}", sp.getBusCardsCount());
+            Assert.assertTrue(sp.areBusCardsDisplayed(), "All bus cards not displayed");
 
-    }
+            // Date
+            String expectedDate = journeyDate.format(DateTimeFormatter.ofPattern("dd MMM, yyyy"));
+            Assert.assertEquals(searchbarcomponents.getSelectedDate(), expectedDate, "Journey date is not correct");
 
-    @Test
-    public void TC_002_bus_cards_displayed(){
-        String testName = "TC_002_bus_cards_displayed";
-        try{
-            helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(10));
-            hp.isLogoDisplayed();
-            Assert.assertTrue(sp.waitForBusCardsToLoad(),"Cards did not load");
-            Assert.assertTrue(sp.getBusCardsCount()>0,"No bus card found");
-            log.info("Number of card displayed {}",sp.getBusCardsCount());
-            Assert.assertTrue(sp.areBusCardsDisplayed(),"All Bus Cards not displayed");
-        }catch(Throwable e){
-            logTestFailure(testName,e);
+            logTestPass(testName);
+        } catch (Throwable e) {
+            logTestFailure(testName, e);
         }
     }
 
     @Test
-    public void TC_003_date_displayed_correctly(){
-        String testName = "TC_003_date_displayed_correctly";
+    public void TC_002_verify_invalid_search_results_displayed_no_data(){
+        String testName = "TC_002_verify_invalid_search_results_displayed_no_data";
         try{
-
+            LocalDate date = LocalDate.now().plusDays(5);
+            helper.searchBuses("Burdwan","Bikaner",date);
+            Assert.assertTrue(sp.isNoRouteMessageDisplayed(),"No Route Message is not displayed");
+            Assert.assertTrue(sp.getBusCardsCount()==0,"Multiple cards displayed in no routes");
         }catch (Throwable e){
             logTestFailure(testName,e);
         }
+
     }
 }

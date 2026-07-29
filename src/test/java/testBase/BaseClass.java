@@ -10,6 +10,7 @@ import java.time.Duration;
 import java.util.Date;
 import java.util.Properties;
 
+import components.SearchBarComponents;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.JavascriptExecutor;
@@ -43,6 +44,7 @@ public class BaseClass {
     public HomePage hp;
     public HelperFunctions helper;
     public SearchPage sp;
+    public SearchBarComponents searchbarcomponents;
 
     @SuppressWarnings("null")
     @BeforeClass
@@ -114,6 +116,7 @@ public class BaseClass {
         hp = new HomePage(driver);
         helper = new HelperFunctions(driver, wait);
         sp = new SearchPage(driver);
+        searchbarcomponents = new SearchBarComponents(driver);
 
     }
 
