@@ -1,5 +1,7 @@
 package pageObjects;
 
+import models.BusCard;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -9,6 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.security.cert.X509Certificate;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SearchPage extends BasePage {
@@ -34,7 +37,7 @@ public class SearchPage extends BasePage {
     // ===========================
     // Bus Card Locators
 
-    @FindBy(xpath = "//li[contains(@class,'srpList__ind-search-styles-module-')]")
+    @FindBy(xpath = "//div[@data-autoid='inv-wrap']")
     WebElement parentBusCard;
 
     @FindBy(xpath = "//li[contains(@class,'tupleWrapper')]")
@@ -62,6 +65,33 @@ public class SearchPage extends BasePage {
         } catch (TimeoutException e) {
             return false;
         }
+    }
+
+    public BusCard extractCardDetails(WebElement card) {
+        String operator = card.findElement(By.xpath(".//div[contains(@class,'travelsName___')]")).getText().trim();
+        String boardingTime = card.findElement(By.xpath(".//p[contains(@class,'boardingTime___')]")).getText().trim();
+        String droppingTime = card.findElement(By.xpath(".//p[contains(@class,'droppingTime___')]")).getText().trim();
+        String duration = card.findElement(By.xpath(".//p[contains(@class,'duration___')]")).getText().trim();
+        String busType = card.findElement(By.xpath(".//p[contains(@class,'busType___')]")).getText().trim();
+
+        String seatsText = card.findElement(By.xpath(".//p[contains(@class,'totalSeats___')]")).getText();
+        int totalSeats = Integer.parseInt(seatsText.replaceAll("[^0-9]", ""));
+
+        String priceText = card.findElement(By.xpath(".//p[contains(@class,'finalFare___')]")).getText();
+        double price = Double.parseDouble(priceText.replaceAll("[^0-9.]", ""));
+
+        List<WebElement> ratingEls = card.findElements(By.xpath(".//div[contains(@class,'rating___')]"));
+        double rating = ratingEls.isEmpty() ? -1 : Double.parseDouble(ratingEls.get(0).getText().trim());
+
+        return new BusCard(operator, boardingTime, droppingTime, duration, totalSeats, price, rating, busType);
+    }
+
+    public List<BusCard> getAllBusCardDetails() {
+        List<BusCard> result = new ArrayList<>();
+        for (WebElement card : busCards) {
+            result.add(extractCardDetails(card));
+        }
+        return result;
     }
 
 

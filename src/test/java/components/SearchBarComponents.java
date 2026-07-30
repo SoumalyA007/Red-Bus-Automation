@@ -4,10 +4,7 @@ import java.time.Duration;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -160,8 +157,8 @@ public class SearchBarComponents {
     }
 
     public void clickCalenderDay(int day) {
-        driver.findElement(By.xpath(
-                        "//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
+        datePickerPopup.findElement(By.xpath(
+                        ".//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
                 .click();
     }
 
@@ -170,11 +167,12 @@ public class SearchBarComponents {
     }
 
     public void clickDateProgressArrow() {
+//        wait.until(ExpectedConditions.elementToBeClickable(dateProgressArrow)).click();
         dateProgressArrow.click();
     }
 
     public void clickDateBackArrow() {
-        dateBackArrow.click();
+        wait.until(ExpectedConditions.elementToBeClickable(dateBackArrow)).click();
     }
 
     public boolean isDateBackArrowEnabled() {
@@ -195,6 +193,10 @@ public class SearchBarComponents {
             if (currentMonth.equalsIgnoreCase(targetMonth) && currentYear == targetYear) {
                 break;
             }
+
+            wait.until(driver ->
+                    dateProgressArrow.isDisplayed()
+                            && dateProgressArrow.isEnabled());
 
             clickDateProgressArrow();
             wait.until(ExpectedConditions.not(

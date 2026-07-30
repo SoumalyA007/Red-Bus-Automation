@@ -42,7 +42,7 @@ public class HelperFunctions {
 
     }
 
-    public void searchBuses(String source,String destination,LocalDate date) throws InterruptedException{
+    public void searchBuses(String source,String destination,LocalDate date){
 
         enter_source(source);
         enter_destination(destination);
