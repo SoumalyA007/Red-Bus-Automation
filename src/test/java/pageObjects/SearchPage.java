@@ -112,6 +112,31 @@ public class SearchPage extends BasePage {
 
     }
 
+//    // SearchPage.java — add these
+//    public boolean allCardsMatchBusType(String expectedType) {
+//        return getAllBusCardDetails().stream()
+//                .allMatch(bus -> bus.getBusType().equalsIgnoreCase(expectedType));
+//    }
+//
+//    public boolean allCardsMatchDepartureWindow(int startHour, int endHour) {
+//        return getAllBusCardDetails().stream()
+//                .allMatch(bus -> {
+//                    int hour = Integer.parseInt(bus.getDepartureTime().split(":")[0]);
+//                    return hour >= startHour && hour < endHour;
+//                });
+//    }
+//
+//    public boolean allCardsMeetMinRating(double minRating) {
+//        return getAllBusCardDetails().stream()
+//                .filter(bus -> bus.getRating() >= 0)   // skip cards with no rating yet
+//                .allMatch(bus -> bus.getRating() >= minRating);
+//    }
+//
+//    public boolean allCardsWithinPriceRange(double min, double max) {
+//        return getAllBusCardDetails().stream()
+//                .allMatch(bus -> bus.getPrice() >= min && bus.getPrice() <= max);
+//    }
+
 
     // ===========================
     // Message Methods

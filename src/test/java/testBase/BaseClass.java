@@ -33,6 +33,7 @@ import org.testng.annotations.Parameters;
 
 import pageObjects.HomePage;
 import pageObjects.SearchPage;
+import pageObjects.SearchResultsFilterPage;
 import utils.HelperFunctions;
 
 public class BaseClass {
@@ -45,6 +46,7 @@ public class BaseClass {
     public HelperFunctions helper;
     public SearchPage sp;
     public SearchBarComponents searchbarcomponents;
+    public SearchResultsFilterPage searchresultsfilterpage;
 
     @SuppressWarnings("null")
     @BeforeClass
@@ -117,6 +119,7 @@ public class BaseClass {
         helper = new HelperFunctions(driver, wait);
         sp = new SearchPage(driver);
         searchbarcomponents = new SearchBarComponents(driver);
+        searchresultsfilterpage = new SearchResultsFilterPage(driver);
 
     }
 
