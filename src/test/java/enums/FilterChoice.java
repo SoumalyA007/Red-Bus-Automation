@@ -10,7 +10,7 @@ public enum FilterChoice {
     VOLVO_BUS("Volvo Buses"),
 
     //........SINGLE_WINDOW_SEATER_SLEEPER........//
-    SINGLE_SEAT("Single Seat"),
+    SINGLE_SEATS("Single Seats"),
 
     //........DEPARTURE_TIME........//
     //........DROPOFF_TIME........//

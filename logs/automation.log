@@ -1,38 +1,6 @@
-2026-08-02 15:49:11 INFO  Utils:112 - [TestNG] Running:
-  /home/u-93/.cache/JetBrains/IntelliJIdea2026.2/temp-testng-customsuite.xml
+2026-08-03 01:02:21 INFO  Utils:112 - [TestNG] Running:
+  C:\Users\Souma\AppData\Local\JetBrains\IntelliJIdea2026.1\temp-testng-customsuite.xml
 
-2026-08-02 15:49:11 INFO  FilterTest:62 - Running on Local Environment
-2026-08-02 15:49:11 INFO  FilterTest:63 - OS: windows
-2026-08-02 15:49:11 INFO  FilterTest:64 - Browser: chrome
-2026-08-02 15:49:26 ERROR FilterTest:177 - TC_001_bus_type_filter_AC ------ > FAILED. Exception: Filter not found in dropdown: AC
-java.util.NoSuchElementException: Filter not found in dropdown: AC
-	at pageObjects.SearchResultsFilterPage.lambda$getFilterFromDropdown$4(SearchResultsFilterPage.java:77)
-	at java.base/java.util.Optional.orElseThrow(Optional.java:403)
-	at pageObjects.SearchResultsFilterPage.getFilterFromDropdown(SearchResultsFilterPage.java:75)
-	at pageObjects.SearchResultsFilterPage.selectFilterOption(SearchResultsFilterPage.java:84)
-	at testCases.FilterTest.TC_001_bus_type_filter_AC(FilterTest.java:20)
-	at java.base/jdk.internal.reflect.DirectMethodHandleAccessor.invoke(DirectMethodHandleAccessor.java:103)
-	at java.base/java.lang.reflect.Method.invoke(Method.java:580)
-	at org.testng.internal.invokers.MethodInvocationHelper.invokeMethod(MethodInvocationHelper.java:141)
-	at org.testng.internal.invokers.TestInvoker.invokeMethod(TestInvoker.java:687)
-	at org.testng.internal.invokers.TestInvoker.invokeTestMethod(TestInvoker.java:230)
-	at org.testng.internal.invokers.MethodRunner.runInSequence(MethodRunner.java:63)
-	at org.testng.internal.invokers.TestInvoker$MethodInvocationAgent.invoke(TestInvoker.java:995)
-	at org.testng.internal.invokers.TestInvoker.invokeTestMethods(TestInvoker.java:203)
-	at org.testng.internal.invokers.TestMethodWorker.invokeTestMethods(TestMethodWorker.java:154)
-	at org.testng.internal.invokers.TestMethodWorker.run(TestMethodWorker.java:134)
-	at java.base/java.util.ArrayList.forEach(ArrayList.java:1596)
-	at org.testng.TestRunner.privateRun(TestRunner.java:741)
-	at org.testng.TestRunner.run(TestRunner.java:616)
-	at org.testng.SuiteRunner.runTest(SuiteRunner.java:421)
-	at org.testng.SuiteRunner.runSequentially(SuiteRunner.java:413)
-	at org.testng.SuiteRunner.privateRun(SuiteRunner.java:373)
-	at org.testng.SuiteRunner.run(SuiteRunner.java:312)
-	at org.testng.SuiteRunnerWorker.runSuite(SuiteRunnerWorker.java:52)
-	at org.testng.SuiteRunnerWorker.run(SuiteRunnerWorker.java:95)
-	at org.testng.TestNG.runSuitesSequentially(TestNG.java:1274)
-	at org.testng.TestNG.runSuitesLocally(TestNG.java:1208)
-	at org.testng.TestNG.runSuites(TestNG.java:1112)
-	at org.testng.TestNG.run(TestNG.java:1079)
-	at com.intellij.rt.testng.IDEARemoteTestNG.run(IDEARemoteTestNG.java:67)
-	at com.intellij.rt.testng.RemoteTestNGStarter.main(RemoteTestNGStarter.java:109)
+2026-08-03 01:02:21 INFO  FilterTest:62 - Running on Local Environment
+2026-08-03 01:02:21 INFO  FilterTest:63 - OS: windows
+2026-08-03 01:02:21 INFO  FilterTest:64 - Browser: chrome
