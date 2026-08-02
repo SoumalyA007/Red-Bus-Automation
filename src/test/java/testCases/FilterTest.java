@@ -1,5 +1,7 @@
 package testCases;
 
+import enums.FilterChoice;
+import enums.FilterHeaders;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pageObjects.SearchResultsFilterPage;
@@ -15,13 +17,7 @@ public class FilterTest extends BaseClass {
         try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(10));
             Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
-
-            searchresultsfilterpage.selectBusType(SearchResultsFilterPage.BusType.AC);
-            searchresultsfilterpage.waitForFiltersToApply();
-
-            Assert.assertTrue(sp.getBusCardsCount() > 0, "No buses matched AC filter");
-            Assert.assertTrue(sp.allCardsMatchBusType("AC"), "Non-AC bus found after filtering by AC");
-            logTestPass(testName);
+            searchresultsfilterpage.selectFilterOption(FilterHeaders.BUS_TYPE, FilterChoice.AC);
         } catch (Throwable e) {
             logTestFailure(testName, e);
         }

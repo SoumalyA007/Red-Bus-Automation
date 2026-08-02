@@ -1,6 +1,7 @@
 package pageObjects;
 
 import enums.FilterChoice;
+import enums.FilterHeaders;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -26,46 +27,61 @@ public class SearchResultsFilterPage extends BasePage {
     private List<WebElement> filterHeaderCheckboxes;
 
     @FindBy(xpath = "//div[contains(@class,'listItem___') and @role='checkbox']")
-    private WebElement filterHeaderCheckboxe;
+    private WebElement filterHeaderCheckbox;
 
+    private final By filterChoiceCheckbox =
+            By.xpath(".//div[contains(@class,'listItem___') and @role='checkbox']");
 
 
     //Click Filter Header to open the dropdown
 
-    //Click the required element whose has the required filter
-    public void clickFilterHeaderDropdown(FilterChoice filterChoice) {
-        getFilterHeaderDropdownElement(filterChoice).click();
-    }
 
     //Get the required element whose child has the required filter
-    public WebElement getFilterHeaderDropdownElement(FilterChoice  filterChoice) {
+    public WebElement getFilterHeaderDropdownElement(FilterHeaders  filterChoice) {
         waitForAllFiltersDisplayed();
         return filterHeaderDropdowns.stream()
-                .filter(element -> element.getText().equalsIgnoreCase(filterChoice.getChoice()))
+                .filter(element -> element.getText().equalsIgnoreCase(filterChoice.getHeader()))
                 .findFirst()
                 .orElseThrow(() ->
                         new NoSuchElementException(
-                                "Filter not found: " + filterChoice.getChoice()));
+                                "Filter not found: " + filterChoice.getHeader()));
 
     }
 
+    //Click the required element whose has the required filter
+    public void clickFilterHeaderDropdown(FilterHeaders filterChoice) {
+        getFilterHeaderDropdownElement(filterChoice).click();
+    }
+
     //Choose the required filter from the dropdown
-    public WebElement getFilterFromDropdown(FilterChoice filterChoice) {
-        WebElement filterHeaderDropdown = getFilterHeaderDropdownElement(filterChoice);
+    public WebElement getFilterFromDropdown(FilterHeaders filterheader,FilterChoice filterChoice) {
+        WebElement filterHeaderDropdown = getFilterHeaderDropdownElement(filterheader);
         wait.until(ExpectedConditions.visibilityOfAllElements(filterHeaderCheckboxes));
-        return filterHeaderCheckboxes.stream()
-                .filter(element -> element.getText().equalsIgnoreCase(filterChoice.getChoice()))
+
+        List<WebElement> checkboxes = filterHeaderDropdown.findElements(filterChoiceCheckbox);
+        System.out.println("Selected Header:");
+        System.out.println(filterHeaderDropdown.getAttribute("outerHTML"));
+
+        System.out.println("Checkbox count = " + checkboxes.size());
+
+        for (WebElement checkbox : checkboxes) {
+            System.out.println("Text = [" + checkbox.getText() + "]");
+        }
+
+        return checkboxes.stream()
+                .peek(e -> System.out.println("Checkbox Text: [" + e.getText() + "]"))
+                .filter(e -> e.getText().equalsIgnoreCase(filterChoice.getChoice()))
                 .findFirst()
                 .orElseThrow(() ->
                         new NoSuchElementException(
                                 "Filter not found in dropdown: " + filterChoice.getChoice()));
     }
 
-    public void selectFilterOption(FilterChoice header, FilterChoice option) {
+    public void selectFilterOption(FilterHeaders header, FilterChoice option) {
 
         clickFilterHeaderDropdown(header);
 
-        getFilterFromDropdown(option).click();
+        getFilterFromDropdown(header,option).click();
     }
 
     public void waitForAllFiltersDisplayed() {
