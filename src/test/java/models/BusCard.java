@@ -1,5 +1,7 @@
 package models;
 
+import enums.TimeWindow;
+
 public class BusCard {
 
     private final String operator;
@@ -31,6 +33,17 @@ public class BusCard {
     public double getPrice() { return price; }
     public double getRating() { return rating; }
     public String getBusType() { return busType; }
+    public boolean isBoardingWithinWindow(TimeWindow window) {
+        return window.contains(parseHour(boardingTime));
+    }
+
+    public boolean isDroppingWithinWindow(TimeWindow window) {
+        return window.contains(parseHour(droppingTime));
+    }
+
+    private int parseHour(String time) {
+        return Integer.parseInt(time.trim().split(":")[0]);
+    }
 
     @Override
     public String toString() {

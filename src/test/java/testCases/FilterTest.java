@@ -2,6 +2,7 @@ package testCases;
 
 import enums.FilterChoice;
 import enums.FilterHeaders;
+import enums.TimeWindow;
 import org.openqa.selenium.WebElement;
 import org.testng.Assert;
 import org.testng.annotations.Test;
@@ -64,4 +65,25 @@ public class FilterTest extends BaseClass {
             logTestFailure(testName, e);
         }
     }
+
+    @Test
+    public void TC_005_single_ac_morning_wifi_filter(){
+        String testName = "TC_005_single_ac_morning_wifi_filter";
+        try{
+            helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
+            Assert.assertTrue(sp.waitForBusCardsToLoad(),"Cards did not load");
+            WebElement selected_checkbox_ac = searchresultsfilterpage.selectFilterOption(FilterHeaders.BUS_TYPE,FilterChoice.AC);
+            sp.waitForBusCardsToLoad();
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox_ac),"Intended Filter AC Not Selected");
+
+            WebElement selected_checkbox_morning = searchresultsfilterpage.selectFilterOption(FilterHeaders.DEPARTURE_TIME,FilterChoice.MORNING);
+            sp.waitForBusCardsToLoad();
+            Assert.assertTrue(sp.allCardsMatchBoardingWindow(TimeWindow.MORNING), "Non-morning departure shown");
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox_morning),"Intended Filter MORNING Not Selected");
+
+        }catch(Throwable e){
+            logTestFailure(testName,e);
+        }
+    }
+
 }

@@ -9,6 +9,7 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.util.List;
+import java.util.Locale;
 import java.util.NoSuchElementException;
 
 public class SearchResultsFilterPage extends BasePage {
@@ -88,9 +89,12 @@ public class SearchResultsFilterPage extends BasePage {
     public WebElement getFilterFromDropdown(FilterHeaders filterHeader, FilterChoice filterChoice) {
         WebElement panel = getFilterPanel(filterHeader);
         List<WebElement> checkboxes = panel.findElements(CHECKBOX_ROW);
+        for(WebElement checkbox : checkboxes) {
+            System.out.println("Checkbox"+checkbox.getText());
+        }
 
         return checkboxes.stream()
-                .filter(e -> e.getText().equalsIgnoreCase(filterChoice.getChoice()))
+                .filter(e -> e.getText().toLowerCase().contains(filterChoice.getChoice().toLowerCase()))
                 .findFirst()
                 .orElseThrow(() -> new NoSuchElementException(
                         "Filter option '" + filterChoice.getChoice()
@@ -100,6 +104,11 @@ public class SearchResultsFilterPage extends BasePage {
     // Whether the given checkbox is currently selected, per its aria-checked attribute
     public boolean isFilterSelected(WebElement checkbox) {
         return Boolean.parseBoolean(checkbox.getAttribute("aria-checked"));
+    }
+
+    //Whether the given checkbox is disabled or not
+    public boolean isFilterDisabled(WebElement checkbox) {
+        return Boolean.parseBoolean(checkbox.getAttribute("aria-disabled"));
     }
 
     // Open the header, then select the requested checkbox option within its panel.
@@ -119,7 +128,7 @@ public class SearchResultsFilterPage extends BasePage {
         clickFilterHeaderDropdown(header);
         WebElement checkbox = getFilterFromDropdown(header, option);
 
-        if (isFilterSelected(checkbox) != desiredSelected) {
+        if (isFilterSelected(checkbox) != desiredSelected && isFilterDisabled(checkbox) == false ) {
             checkbox.click();
         }
         return checkbox;

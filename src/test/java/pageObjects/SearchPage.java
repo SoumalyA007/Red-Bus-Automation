@@ -1,5 +1,6 @@
 package pageObjects;
 
+import enums.TimeWindow;
 import models.BusCard;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -19,6 +20,7 @@ public class SearchPage extends BasePage {
     public SearchPage(WebDriver driver){
         super(driver);
     }
+
 
 
     // ===========================
@@ -94,6 +96,32 @@ public class SearchPage extends BasePage {
         return result;
     }
 
+    public boolean allCardsMatchBoardingWindow(TimeWindow window) {
+        return getAllBusCardDetails().stream()
+                .allMatch(bus -> bus.isBoardingWithinWindow(window));
+    }
+
+    public boolean allCardsMatchDroppingWindow(TimeWindow window) {
+        return getAllBusCardDetails().stream()
+                .allMatch(bus -> bus.isDroppingWithinWindow(window));
+    }
+
+    public boolean allCardsMatchBusType(String expectedTypeFragment) {
+        return getAllBusCardDetails().stream()
+                .allMatch(bus -> bus.getBusType().toLowerCase().contains(expectedTypeFragment.toLowerCase()));
+    }
+
+    public boolean allCardsMeetMinRating(double minRating) {
+        return getAllBusCardDetails().stream()
+                .filter(bus -> bus.getRating() >= 0)
+                .allMatch(bus -> bus.getRating() >= minRating);
+    }
+
+    public boolean allCardsWithinPriceRange(double min, double max) {
+        return getAllBusCardDetails().stream()
+                .allMatch(bus -> bus.getPrice() >= min && bus.getPrice() <= max);
+    }
+
 
 
     public int getBusCardsCount() {
@@ -111,31 +139,6 @@ public class SearchPage extends BasePage {
     public void getCardDetails(WebElement card){
 
     }
-
-//    // SearchPage.java — add these
-//    public boolean allCardsMatchBusType(String expectedType) {
-//        return getAllBusCardDetails().stream()
-//                .allMatch(bus -> bus.getBusType().equalsIgnoreCase(expectedType));
-//    }
-//
-//    public boolean allCardsMatchDepartureWindow(int startHour, int endHour) {
-//        return getAllBusCardDetails().stream()
-//                .allMatch(bus -> {
-//                    int hour = Integer.parseInt(bus.getDepartureTime().split(":")[0]);
-//                    return hour >= startHour && hour < endHour;
-//                });
-//    }
-//
-//    public boolean allCardsMeetMinRating(double minRating) {
-//        return getAllBusCardDetails().stream()
-//                .filter(bus -> bus.getRating() >= 0)   // skip cards with no rating yet
-//                .allMatch(bus -> bus.getRating() >= minRating);
-//    }
-//
-//    public boolean allCardsWithinPriceRange(double min, double max) {
-//        return getAllBusCardDetails().stream()
-//                .allMatch(bus -> bus.getPrice() >= min && bus.getPrice() <= max);
-//    }
 
 
     // ===========================
