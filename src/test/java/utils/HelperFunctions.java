@@ -38,7 +38,8 @@ public class HelperFunctions {
 
         String targetMonth = targetDate.getMonth().getDisplayName(TextStyle.FULL, Locale.ENGLISH);
         searchbarcomponents.navigateCalendarTo(targetMonth, targetDate.getYear());
-        searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
+        //searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
+        searchbarcomponents.clickCalenderDay(targetDate);
 
     }
 

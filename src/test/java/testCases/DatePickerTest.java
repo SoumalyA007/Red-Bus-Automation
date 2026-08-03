@@ -64,11 +64,12 @@ public class DatePickerTest extends BaseClass {
                     "Next month was not displayed.");
 
             // Select a date from next month
-            searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
+            //searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
+            searchbarcomponents.clickCalenderDay(targetDate);
 
             // Verify selected journey date
             String expectedDate
-                    = targetDate.format(DateTimeFormatter.ofPattern("dd MMM, yyyy"));
+                    = targetDate.format(DateTimeFormatter.ofPattern("dd MMMM, yyyy"));
 
             Assert.assertEquals(
                     searchbarcomponents.getSelectedDate(),
@@ -121,7 +122,8 @@ public class DatePickerTest extends BaseClass {
             );
 
             // Select a date in that year
-            searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
+            //searchbarcomponents.clickCalenderDay(targetDate.getDayOfMonth());
+            searchbarcomponents.clickCalenderDay(targetDate);
 
             // Verify the selected journey date
             String expectedDate = targetDate.format(
@@ -167,8 +169,9 @@ public class DatePickerTest extends BaseClass {
         String testName = "TC_006_select_today";
         try {
             searchbarcomponents.openCalendar();
-            int todaysDate = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("dd")));
-            searchbarcomponents.clickCalenderDay(todaysDate);
+            //int todaysDate = Integer.parseInt(LocalDate.now().format(DateTimeFormatter.ofPattern("dd")));
+            LocalDate currentDate = LocalDate.now();
+            searchbarcomponents.clickCalenderDay(currentDate);
             String selectedDate = searchbarcomponents.getSelectedDate();
             String toBeSelectedDate = LocalDate.now().format(DateTimeFormatter.ofPattern("dd MMM, YYYY"));
             Assert.assertEquals(selectedDate, toBeSelectedDate, "today's date not selected");

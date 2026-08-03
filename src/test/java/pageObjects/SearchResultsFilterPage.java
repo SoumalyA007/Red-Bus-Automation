@@ -30,6 +30,21 @@ public class SearchResultsFilterPage extends BasePage {
 
     private static final By CHECKBOX_ROW = By.xpath(".//div[@role='checkbox']");
 
+    //Search option in filters
+    // Relative locator for the search input *within* a resolved filter container.
+    private static final By SEARCH_INPUT = By.xpath(".//input[contains(@class,'searchInput')]");
+
+    // Resolve the shared ancestor that wraps both the panel and its search box,
+    // then locate the search input scoped to that container.
+    private WebElement getFilterSearchBox(FilterHeaders filterHeader) {
+        WebElement panel = getFilterPanel(filterHeader);
+
+        WebElement container = panel.findElement(
+                By.xpath("./ancestor::div[contains(@class,'mainListWrapper')][1]"));
+
+        return container.findElement(SEARCH_INPUT);
+    }
+
     // ----------------------------------------------------------------
     // Waits
     // ----------------------------------------------------------------
@@ -132,5 +147,37 @@ public class SearchResultsFilterPage extends BasePage {
             checkbox.click();
         }
         return checkbox;
+    }
+
+    //search inside a filter
+    public WebElement searchAndSelectFilterOption(FilterHeaders filterHeader, String searchText) throws InterruptedException {
+        clickFilterHeaderDropdown(filterHeader);
+
+        WebElement searchBox = getFilterSearchBox(filterHeader);
+        searchBox.clear();
+        searchBox.sendKeys(searchText);
+        Thread.sleep(5000);
+
+        // The list re-renders after typing — re-fetch the panel's checkboxes NOW,
+        // not before, otherwise you'll be holding stale/unfiltered elements.
+        WebElement panel = getFilterPanel(filterHeader);
+        System.out.println(panel.getText());
+        List<WebElement> checkboxes = panel.findElements(CHECKBOX_ROW);
+
+        for(WebElement checkbox : checkboxes) {
+            System.out.println("Checkbox"+checkbox.getText());
+        }
+
+        WebElement match = checkboxes.stream()
+                .filter(e -> e.getText().toLowerCase().contains(searchText.toLowerCase()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                        "No filter option found matching search text: " + searchText));
+
+        if (!isFilterSelected(match) && !isFilterDisabled(match)) {
+            match.click();
+        }
+
+        return match;
     }
 }

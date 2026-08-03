@@ -1,6 +1,8 @@
 package components;
 
 import java.time.Duration;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -78,6 +80,8 @@ public class SearchBarComponents {
 
     @FindBy(xpath = "//button[normalize-space()='Book now']")
     public WebElement bookNowButton;
+
+    //div[contains(@class,'date___') and contains(@class, 'available___') and contains(@class,'calendarDate')]
 
     // ===========================
     // Journey Methods
@@ -160,6 +164,17 @@ public class SearchBarComponents {
         datePickerPopup.findElement(By.xpath(
                         ".//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
                 .click();
+    }
+
+    public void clickCalenderDay(LocalDate targetDate) {
+        long epochMillis = targetDate.atStartOfDay(ZoneId.of("Asia/Kolkata"))
+                .toInstant().toEpochMilli();
+
+        By dayLocator = By.xpath(
+                "//div[contains(@class,'calendarDate') and @data-date='" + epochMillis + "']");
+
+        WebElement day = wait.until(ExpectedConditions.elementToBeClickable(dayLocator));
+        day.click();
     }
 
     public void clickCalendarButton() {

@@ -20,7 +20,7 @@ public class FilterTest extends BaseClass {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(10));
             Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
             WebElement selected_checkbox = searchresultsfilterpage.selectFilterOption(FilterHeaders.BUS_TYPE, FilterChoice.AC);
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox),"Intended Filter Not Selected");
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox), "Intended Filter Not Selected");
 
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -28,13 +28,13 @@ public class FilterTest extends BaseClass {
     }
 
     @Test
-    public void TC_002_departure_time_filter_morning(){
+    public void TC_002_departure_time_filter_morning() {
         String testName = "TC_002_departure_time_filter_morning";
         try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(10));
             Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
             WebElement selected_checkbox = searchresultsfilterpage.selectFilterOption(FilterHeaders.DEPARTURE_TIME, FilterChoice.MORNING);
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox),"Intended Filter Not Selected");
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox), "Intended Filter Not Selected");
 
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -42,48 +42,68 @@ public class FilterTest extends BaseClass {
     }
 
     @Test
-    public void TC_003_dropoff_time_filter_afternoon(){
+    public void TC_003_dropoff_time_filter_afternoon() {
         String testName = "TC_003_dropoff_time_filter_afternoon";
-        try{
+        try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
-            Assert.assertTrue(sp.waitForBusCardsToLoad(),"Cards did not load");
+            Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
             WebElement selected_checkbox = searchresultsfilterpage.selectFilterOption(FilterHeaders.ARRIVAL_TIME, FilterChoice.AFTERNOON);
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox),"Intended Filter Not Selected");
-        }catch(Throwable e){
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox), "Intended Filter Not Selected");
+        } catch (Throwable e) {
             logTestFailure(testName, e);
         }
     }
+
     @Test
-    public void TC_004_single_window_seater_sleeper_filter_single_seats(){
+    public void TC_004_single_window_seater_sleeper_filter_single_seats() {
         String testName = "TC_004_single_window_seater_sleeper_filter_single_seats";
-        try{
+        try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
-            Assert.assertTrue(sp.waitForBusCardsToLoad(),"Cards did not load");
+            Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
             WebElement selected_checkbox = searchresultsfilterpage.selectFilterOption(FilterHeaders.SINGLE_WINDOW_SEATER_SLEEPER, FilterChoice.SINGLE_SEATS);
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox),"Intended Filter Not Selected");
-        }catch(Throwable e){
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox), "Intended Filter Not Selected");
+        } catch (Throwable e) {
             logTestFailure(testName, e);
         }
     }
 
     @Test
-    public void TC_005_single_ac_morning_wifi_filter(){
+    public void TC_005_single_ac_morning_wifi_filter() {
         String testName = "TC_005_single_ac_morning_wifi_filter";
-        try{
+        try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
-            Assert.assertTrue(sp.waitForBusCardsToLoad(),"Cards did not load");
-            WebElement selected_checkbox_ac = searchresultsfilterpage.selectFilterOption(FilterHeaders.BUS_TYPE,FilterChoice.AC);
+            Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
+            WebElement selected_checkbox_ac = searchresultsfilterpage.selectFilterOption(FilterHeaders.BUS_TYPE, FilterChoice.AC);
             sp.waitForBusCardsToLoad();
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox_ac),"Intended Filter AC Not Selected");
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox_ac), "Intended Filter AC Not Selected");
 
-            WebElement selected_checkbox_morning = searchresultsfilterpage.selectFilterOption(FilterHeaders.DEPARTURE_TIME,FilterChoice.MORNING);
+            WebElement selected_checkbox_morning = searchresultsfilterpage.selectFilterOption(FilterHeaders.DEPARTURE_TIME, FilterChoice.MORNING);
             sp.waitForBusCardsToLoad();
             Assert.assertTrue(sp.allCardsMatchBoardingWindow(TimeWindow.MORNING), "Non-morning departure shown");
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox_morning),"Intended Filter MORNING Not Selected");
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(selected_checkbox_morning), "Intended Filter MORNING Not Selected");
 
-        }catch(Throwable e){
-            logTestFailure(testName,e);
+        } catch (Throwable e) {
+            logTestFailure(testName, e);
         }
     }
+
+    @Test
+    public void TC_006_search_operator(){
+        String testName = "TC_006_search_operator";
+        try{
+
+            helper.searchBuses("Kolkata","Burdwan",LocalDate.now().plusDays(5));
+            Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
+            WebElement element = searchresultsfilterpage.searchAndSelectFilterOption(FilterHeaders.BUS_OPERATOR,"PA");
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(element),"Checkbox not selected");
+
+
+        } catch (Throwable e) {
+            logTestFailure(testName, e);
+        }
+    }
+
+
+
 
 }
