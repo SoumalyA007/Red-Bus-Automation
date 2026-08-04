@@ -34,6 +34,9 @@ public class SearchResultsFilterPage extends BasePage {
     // Relative locator for the search input *within* a resolved filter container.
     private static final By SEARCH_INPUT = By.xpath(".//input[contains(@class,'searchInput')]");
 
+    //expand filter options
+    private static final By VIEW_ALL_OPTIONS = By.xpath(".//div[contains(@class,'actionWrap___') and contains(@style,'--button')]");
+
     // Resolve the shared ancestor that wraps both the panel and its search box,
     // then locate the search input scoped to that container.
     private WebElement getFilterSearchBox(FilterHeaders filterHeader) {
@@ -43,6 +46,13 @@ public class SearchResultsFilterPage extends BasePage {
                 By.xpath("./ancestor::div[contains(@class,'mainListWrapper')][1]"));
 
         return container.findElement(SEARCH_INPUT);
+    }
+
+    //click expand options button
+    public void clickViewAllOptions(FilterHeaders filterHeader) {
+        WebElement panel = getFilterPanel(filterHeader);
+        WebElement button = panel.findElement(By.xpath("./ancestor::div[contains(@class,'mainListWrapper')][1]"));
+        button.findElement(VIEW_ALL_OPTIONS).click();
     }
 
     // ----------------------------------------------------------------
@@ -121,6 +131,25 @@ public class SearchResultsFilterPage extends BasePage {
         return Boolean.parseBoolean(checkbox.getAttribute("aria-checked"));
     }
 
+    public boolean isFilterSelected(FilterHeaders header, String searchText) {
+        WebElement panel = getFilterPanel(header);
+
+        List<WebElement> checkboxes = panel.findElements(CHECKBOX_ROW);
+        for(WebElement checkbox : checkboxes) {
+            System.out.println("Checkbox :: "+checkbox.getText());
+        }
+
+        WebElement checkbox = checkboxes.stream()
+                .filter(e -> e.getText().toLowerCase()
+                        .contains(searchText.toLowerCase()))
+                .findFirst()
+                .orElseThrow(() -> new NoSuchElementException(
+                        "Filter option '" + searchText + "' not found"));
+
+        return Boolean.parseBoolean(
+                checkbox.getAttribute("aria-checked"));
+    }
+
     //Whether the given checkbox is disabled or not
     public boolean isFilterDisabled(WebElement checkbox) {
         return Boolean.parseBoolean(checkbox.getAttribute("aria-disabled"));
@@ -146,6 +175,8 @@ public class SearchResultsFilterPage extends BasePage {
         if (isFilterSelected(checkbox) != desiredSelected && isFilterDisabled(checkbox) == false ) {
             checkbox.click();
         }
+
+
         return checkbox;
     }
 
@@ -156,7 +187,6 @@ public class SearchResultsFilterPage extends BasePage {
         WebElement searchBox = getFilterSearchBox(filterHeader);
         searchBox.clear();
         searchBox.sendKeys(searchText);
-        Thread.sleep(5000);
 
         // The list re-renders after typing — re-fetch the panel's checkboxes NOW,
         // not before, otherwise you'll be holding stale/unfiltered elements.

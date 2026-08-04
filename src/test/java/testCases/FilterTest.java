@@ -95,7 +95,9 @@ public class FilterTest extends BaseClass {
             helper.searchBuses("Kolkata","Burdwan",LocalDate.now().plusDays(5));
             Assert.assertTrue(sp.waitForBusCardsToLoad(), "Cards did not load");
             WebElement element = searchresultsfilterpage.searchAndSelectFilterOption(FilterHeaders.BUS_OPERATOR,"PA");
-            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(element),"Checkbox not selected");
+            searchresultsfilterpage.clickViewAllOptions(FilterHeaders.BUS_OPERATOR);
+
+            Assert.assertTrue(searchresultsfilterpage.isFilterSelected(FilterHeaders.BUS_OPERATOR,"PA"),"Checkbox not selected");
 
 
         } catch (Throwable e) {
