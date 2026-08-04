@@ -27,6 +27,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
+import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
@@ -48,6 +49,8 @@ public class BaseClass {
     public SearchBarComponents searchbarcomponents;
     public SearchResultsFilterPage searchresultsfilterpage;
 
+    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+
     @SuppressWarnings("null")
     @BeforeClass
     @Parameters({"OS", "browser"})
@@ -58,57 +61,8 @@ public class BaseClass {
 
         log = LogManager.getLogger(this.getClass());
 
-        if(p.getProperty("executionEnv").equalsIgnoreCase("local")){
-            log.info("Running on Local Environment");
-            log.info("OS: " + OS);
-            log.info("Browser: " + browser);
-            switch (browser.toLowerCase()) {
-                case "chrome":
-                    driver = new ChromeDriver();
-                    break;
-                case "firefox":
-                    driver = new FirefoxDriver();
-                    break;
-                case "edge":
-                    driver = new EdgeDriver();
-                    break;
-                default:
-                    log.error("Invalid browser specified: " + browser);
-                    throw new IllegalArgumentException("Invalid browser specified: " + browser);
-            }
-        }else if(p.getProperty("executionEnv").equalsIgnoreCase("remote")){
-            log.info("Running on Remote Environment");
-            URL gridURL = new URL("http://localhost:4444/wd/hub");
-            MutableCapabilities options;
-            switch (browser.toLowerCase()) {
-                case "chrome":
-                    options = new ChromeOptions();
-                    break;
-                case "firefox":
-                    options = new FirefoxOptions();
-                    break;
-                case "edge":
-                    options = new EdgeOptions();
-                    break;
-                default:
-                    log.error("Invalid browser specified: " + browser);
-                    throw new IllegalArgumentException("Invalid browser specified: " + browser);
-
-            }
-
-            switch (OS.toLowerCase()){
-                case "linux":
-                    options.setCapability("platformName", "linux");
-                    break;
-                case "windows":
-                    options.setCapability("platformName", "windows");
-                    break;
-                case "mac":
-                    options.setCapability("platformName", "mac");
-            }
-            driver =new RemoteWebDriver(gridURL,options);
-
-        }
+        WebDriver driver = createDriver(OS, browser);  // creates a fresh driver for this thread
+        driverThreadLocal.set(driver);
 
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
@@ -123,13 +77,37 @@ public class BaseClass {
 
     }
 
+    private WebDriver createDriver(String OS, String browser) throws IOException {
+        if (p.getProperty("executionEnv").equalsIgnoreCase("local")) {
+            switch (browser.toLowerCase()) {
+                case "chrome":  return new ChromeDriver();
+                case "firefox": return new FirefoxDriver();
+                case "edge":    return new EdgeDriver();
+                default: throw new IllegalArgumentException("Invalid browser: " + browser);
+            }
+        } else {
+            URL gridURL = new URL("http://localhost:4444/wd/hub");
+            MutableCapabilities options;
+            switch (browser.toLowerCase()) {
+                case "chrome":  options = new ChromeOptions(); break;
+                case "firefox": options = new FirefoxOptions(); break;
+                case "edge":    options = new EdgeOptions(); break;
+                default: throw new IllegalArgumentException("Invalid browser: " + browser);
+            }
+            switch (OS.toLowerCase()) {
+                case "linux":   options.setCapability("platformName", "linux"); break;
+                case "windows": options.setCapability("platformName", "windows"); break;
+                case "mac":     options.setCapability("platformName", "mac"); break;
+            }
+            return new RemoteWebDriver(new URL("http://localhost:4444/wd/hub"), options);
+        }
+    }
 
-    // @AfterClass
-    // public void tearDown() {
-    //     if (driver != null) {
-    //         driver.quit();
-    //     }
-    // }
+    @AfterClass
+    public void tearDown() {
+        driverThreadLocal.get().quit();
+        driverThreadLocal.remove();   // prevents memory leaks
+    }
 
 
     public WebDriver getDriver() {

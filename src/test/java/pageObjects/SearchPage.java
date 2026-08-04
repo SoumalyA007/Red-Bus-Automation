@@ -10,7 +10,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.security.cert.X509Certificate;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
@@ -106,9 +105,27 @@ public class SearchPage extends BasePage {
                 .allMatch(bus -> bus.isDroppingWithinWindow(window));
     }
 
+    // Normalizes a bus-type or operator string for loose matching:
+    // strips /, -, and whitespace then lowercases, so "A/C" and "AC" both
+    // become "ac" and a simple .contains() comparison works correctly.
+    private static String normalizeText(String s) {
+        return s.toLowerCase().replaceAll("[/\\-\\s]+", "");
+    }
+
+    // Verifies every visible card's bus type contains the expected fragment
+    // after normalization (e.g. "AC" matches cards showing "A/C Seater (2+2)").
     public boolean allCardsMatchBusType(String expectedTypeFragment) {
+        String normalizedExpected = normalizeText(expectedTypeFragment);
         return getAllBusCardDetails().stream()
-                .allMatch(bus -> bus.getBusType().toLowerCase().contains(expectedTypeFragment.toLowerCase()));
+                .allMatch(bus -> normalizeText(bus.getBusType()).contains(normalizedExpected));
+    }
+
+    // Verifies every visible card's operator name contains the given fragment.
+    // Used after applying a Bus Operator filter to confirm the results changed.
+    public boolean allCardsMatchOperator(String operatorFragment) {
+        String normalizedExpected = normalizeText(operatorFragment);
+        return getAllBusCardDetails().stream()
+                .allMatch(bus -> normalizeText(bus.getOperator()).contains(normalizedExpected));
     }
 
     public boolean allCardsMeetMinRating(double minRating) {
@@ -136,9 +153,7 @@ public class SearchPage extends BasePage {
         return busOperatorList.size();
     }
 
-    public void getCardDetails(WebElement card){
 
-    }
 
 
     // ===========================
