@@ -35,7 +35,6 @@ import org.testng.annotations.Parameters;
 import pageObjects.HomePage;
 import pageObjects.SearchPage;
 import pageObjects.SearchResultsFilterPage;
-import pageObjects.SortingPage;
 import utils.HelperFunctions;
 
 public class BaseClass {
@@ -49,7 +48,6 @@ public class BaseClass {
     public SearchPage sp;
     public SearchBarComponents searchbarcomponents;
     public SearchResultsFilterPage searchresultsfilterpage;
-    public SortingPage sortingPage;
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
@@ -76,7 +74,6 @@ public class BaseClass {
         sp = new SearchPage(driver);
         searchbarcomponents = new SearchBarComponents(driver);
         searchresultsfilterpage = new SearchResultsFilterPage(driver);
-        sortingPage = new SortingPage(driver);
 
     }
 
