@@ -1,5 +1,6 @@
 package pageObjects;
 
+import enums.Sorting;
 import enums.TimeWindow;
 import models.BusCard;
 import org.openqa.selenium.By;
@@ -13,6 +14,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
 
 public class SearchPage extends BasePage {
 
@@ -151,6 +153,30 @@ public class SearchPage extends BasePage {
 
     public int getBusOperatorCount(){
         return busOperatorList.size();
+    }
+
+    public <T extends Comparable<T>> boolean isSorted(
+            List<BusCard> buses,
+            Function<BusCard, T> extractor,
+            Sorting order) {
+
+        for (int i = 0; i < buses.size() - 1; i++) {
+
+            T current = extractor.apply(buses.get(i));
+            T next = extractor.apply(buses.get(i + 1));
+
+            int comparison = current.compareTo(next);
+
+            if (order == Sorting.ASCENDING && comparison > 0) {
+                return false;
+            }
+
+            if (order == Sorting.DESCENDING && comparison < 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
 

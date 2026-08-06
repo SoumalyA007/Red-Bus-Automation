@@ -15,7 +15,7 @@ public class SearchResultsSortingPage extends BasePage {
     @FindBy(xpath = "//div[contains(@aria-label,'Ratings')]")
     WebElement sortByRatingButton;
 
-    @FindBy(xpath = "//div[contains(@aria-label,'Departure Time')]")
+    @FindBy(xpath = "//div[contains(@aria-label,'Departure time')]")
     WebElement sortByDepartureButton;
 
     @FindBy(xpath = "//div[contains(@aria-label,'Price')]")
@@ -39,6 +39,8 @@ public class SearchResultsSortingPage extends BasePage {
 
 
     public Sorting getSortingStatus(Sorting sorting) {
+
+        System.out.println(sorting);
 
         WebElement element;
 
@@ -71,6 +73,58 @@ public class SearchResultsSortingPage extends BasePage {
 
         return Sorting.NOT_SELECTED;
     }
+
+    public void setSortByRatingButtontoDesc(Sorting sorting) {
+
+        Sorting ratingSort = getSortingStatus(sorting);
+        while(!ratingSort.equals(Sorting.DESCENDING)) {
+            sortByRatingButton.click();
+        }
+
+    }
+
+    public void setSortByRatingButtontoAsc(Sorting sorting) {
+
+        Sorting ratingSort = getSortingStatus(sorting);
+        while(!ratingSort.equals(Sorting.ASCENDING)) {
+            sortByRatingButton.click();
+        }
+
+    }
+
+    public void setSortByPriceButtontoAsc(Sorting sorting) {
+
+        Sorting ratingSort = getSortingStatus(sorting);
+        while(!ratingSort.equals(Sorting.ASCENDING)) {
+            sortByRatingButton.click();
+        }
+    }
+
+    public void setSortByPriceButtontoDesc(Sorting sorting) {
+
+        Sorting ratingSort = getSortingStatus(sorting);
+        while(!ratingSort.equals(Sorting.DESCENDING)) {
+            sortByPriceButton.click();
+        }
+    }
+
+    public void setSortByDepartureButtontoAsc(Sorting sorting) {
+
+        Sorting ratingSort = getSortingStatus(sorting);
+        while(!ratingSort.equals(Sorting.ASCENDING)) {
+            sortByDepartureButton.click();
+        }
+    }
+
+    public void setSortByDepartureButtontoDesc(Sorting sorting) {
+
+        Sorting ratingSort = getSortingStatus(sorting);
+        while(!ratingSort.equals(Sorting.DESCENDING)) {
+            sortByDepartureButton.click();
+        }
+    }
+
+
 
 
 
