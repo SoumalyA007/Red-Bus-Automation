@@ -113,6 +113,7 @@ public class SearchResultsSortingPage extends BasePage {
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.ASCENDING)) {
             sortByDepartureButton.click();
+            ratingSort=getSortingStatus(sorting);
         }
     }
 
@@ -121,6 +122,7 @@ public class SearchResultsSortingPage extends BasePage {
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.DESCENDING)) {
             sortByDepartureButton.click();
+            ratingSort=getSortingStatus(sorting);
         }
     }
 
