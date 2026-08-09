@@ -14,7 +14,9 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
+import java.util.stream.IntStream;
 
 public class SearchPage extends BasePage {
 
@@ -48,6 +50,8 @@ public class SearchPage extends BasePage {
 
     @FindBy(xpath = "//div[contains(@class,'travelsName___')]")
     List<WebElement> busOperatorList;
+
+
 
 
 
@@ -177,6 +181,31 @@ public class SearchPage extends BasePage {
         }
 
         return true;
+    }
+
+    public void clickViewSeatsButtonForCard(int cardIndex) {
+        WebElement card = busCards.get(cardIndex);
+        WebElement viewSeatsButton = card.findElement(By.xpath(".//button[@type='button' and contains(@class,'viewSeatsBtn___')]"));
+        viewSeatsButton.click();
+    }
+
+
+    // Overload: click View Seats button by searching for a card with a specific operator name
+    public void clickViewSeatsButtonByOperator(String operatorName) {
+
+        String normalizedOperatorName  = normalizeText(operatorName);
+        List<BusCard> allBuses = getAllBusCardDetails();
+
+        int matchIndex = IntStream.range(0, allBuses.size())
+                .peek(i -> System.out.println(
+                        "Checking operator: " + allBuses.get(i).getOperator()
+                ))
+                .filter(i -> normalizeText(allBuses.get(i).getOperator()).contains(normalizedOperatorName))
+                .findFirst()
+                .orElseThrow(()->new NoSuchElementException("Operator not found:" + normalizedOperatorName));
+
+        clickViewSeatsButtonForCard(matchIndex);
+
     }
 
 

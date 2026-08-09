@@ -32,10 +32,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Optional;
 import org.testng.annotations.Parameters;
 
-import pageObjects.HomePage;
-import pageObjects.SearchPage;
-import pageObjects.SearchResultsFilterPage;
-import pageObjects.SearchResultsSortingPage;
+import pageObjects.*;
 import utils.HelperFunctions;
 
 public class BaseClass {
@@ -50,6 +47,7 @@ public class BaseClass {
     public SearchBarComponents searchbarcomponents;
     public SearchResultsFilterPage searchresultsfilterpage;
     public SearchResultsSortingPage searchresultssortingpage;
+    public BusSeatPage busseatpage;
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
@@ -77,6 +75,7 @@ public class BaseClass {
         searchbarcomponents = new SearchBarComponents(driver);
         searchresultsfilterpage = new SearchResultsFilterPage(driver);
         searchresultssortingpage = new SearchResultsSortingPage(driver);
+        busseatpage =  new BusSeatPage(driver);
 
     }
 
