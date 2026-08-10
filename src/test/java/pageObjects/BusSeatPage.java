@@ -26,12 +26,14 @@ public class BusSeatPage extends BasePage {
     List<WebElement> soldSeats;
 
 
-    public void isSeatTabVisible(){
-        wait.until(ExpectedConditions.visibilityOf(seatTab));
+    public boolean isSeatLayoutVisible(){
+        return wait.until(
+                ExpectedConditions.visibilityOf(seatTab)
+        ).isDisplayed();
     }
 
     public WebElement seatStatus(int seatNumber){
-        isSeatTabVisible();
+        isSeatLayoutVisible();
         WebElement selectedSeat = allSeats.stream()
                 .filter(seat ->
                         String.valueOf(seatNumber)
@@ -41,6 +43,7 @@ public class BusSeatPage extends BasePage {
                         new NoSuchElementException(
                                 "Seat " + seatNumber + " was not found."
                         ));
+
         return selectedSeat;
 
 
@@ -49,14 +52,14 @@ public class BusSeatPage extends BasePage {
 
     public boolean isSeatAvailable(int seatNumber){
         WebElement seatStatus = seatStatus(seatNumber);
-        return "false".equals(seatStatus.getAttribute("aria-disabled"));
+        return !"true".equals(seatStatus.getAttribute("aria-disabled"));
     }
 
 
     public void selectSeat(int seatNumber){
-        isSeatTabVisible();
+        isSeatLayoutVisible();
         WebElement selectedSeat = seatStatus(seatNumber);
-        if(selectedSeat.getAttribute("aria-selected").equals("true")){
+        if(isSeatAvailable(seatNumber)){
             selectedSeat.click();
         }else{
             Assert.fail("Seat was not available for number " + seatNumber);
@@ -64,15 +67,14 @@ public class BusSeatPage extends BasePage {
     }
 
     public boolean isSeatSelected(int seatNumber){
-        isSeatTabVisible();
+        isSeatLayoutVisible();
         WebElement selectedSeat = seatStatus(seatNumber);
-
-        return "true".equalsIgnoreCase(selectedSeat.getAttribute("aria-selected"));
+        return "true".equalsIgnoreCase(selectedSeat.getAttribute("aria-pressed"));
     }
 
     public boolean areSoldSeatDisabled(){
         List<WebElement> soldBusSeats = soldSeats.stream()
-                .filter(soldSeat -> "true".equals(soldSeat.getAttribute("aria-disabled")))
+                .filter(soldSeat -> "true".equals(soldSeat.getAttribute("aria-pressed")))
                 .collect(Collectors.toList());
 
         return soldBusSeats.size() == soldSeats.size();

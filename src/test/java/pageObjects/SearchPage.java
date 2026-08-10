@@ -197,9 +197,9 @@ public class SearchPage extends BasePage {
         List<BusCard> allBuses = getAllBusCardDetails();
 
         int matchIndex = IntStream.range(0, allBuses.size())
-                .peek(i -> System.out.println(
-                        "Checking operator: " + allBuses.get(i).getOperator()
-                ))
+//                .peek(i -> System.out.println(
+//                        "Checking operator: " + allBuses.get(i).getOperator()
+//                ))
                 .filter(i -> normalizeText(allBuses.get(i).getOperator()).contains(normalizedOperatorName))
                 .findFirst()
                 .orElseThrow(()->new NoSuchElementException("Operator not found:" + normalizedOperatorName));

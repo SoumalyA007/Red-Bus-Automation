@@ -105,11 +105,11 @@ public class BaseClass {
         }
     }
 
-    @AfterClass
-    public void tearDown() {
-        driverThreadLocal.get().quit();
-        driverThreadLocal.remove();   // prevents memory leaks
-    }
+//    @AfterClass
+//    public void tearDown() {
+//        driverThreadLocal.get().quit();
+//        driverThreadLocal.remove();   // prevents memory leaks
+//    }
 
 
     public WebDriver getDriver() {
