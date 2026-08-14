@@ -81,12 +81,4 @@ public class BusSeatPage extends BasePage {
     }
 
 
-
-
-
-
-
-
-
-
 }
