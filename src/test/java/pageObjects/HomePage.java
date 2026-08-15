@@ -14,8 +14,6 @@ import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import components.SearchBarComponents;
 
@@ -24,9 +22,6 @@ public class HomePage extends BasePage {
     private static final Duration PAGE_LOAD_TIMEOUT = Duration.ofSeconds(15);
     private static final Duration ELEMENT_CLICKABLE_TIMEOUT = Duration.ofSeconds(5);
 
-    // Composition: HomePage owns one search bar instance instead of
-    // redeclaring/inheriting its locators (avoids the old circular
-    // HomePage <-> SearchBarComponents dependency).
     public final SearchBarComponents searchBar;
 
     public HomePage(WebDriver driver) {
@@ -77,8 +72,8 @@ public class HomePage extends BasePage {
     // Page Load Methods
     // ===========================
     public void waitForPageToLoad() {
-        WebDriverWait wait = new WebDriverWait(driver, PAGE_LOAD_TIMEOUT);
-        wait.until(webDriver -> "complete".equals(
+        WebDriverWait localWait = new WebDriverWait(driver, PAGE_LOAD_TIMEOUT);
+        localWait.until(webDriver -> "complete".equals(
                 ((JavascriptExecutor) webDriver).executeScript("return document.readyState")));
         wait.until(ExpectedConditions.visibilityOf(redBusLogo));
     }
@@ -95,38 +90,37 @@ public class HomePage extends BasePage {
     }
 
     public void scrollToFooter() {
-        JavascriptExecutor js = (JavascriptExecutor) driver;
-        js.executeScript("arguments[0].scrollIntoView(true);", faqSectionHeading);
+        scrollToElement(faqSectionHeading);
     }
 
     // ===========================
     // Header Methods
     // ===========================
     public void clickAccountButton() {
-        accountButton.click();
+        clickElement(accountButton);
     }
 
     public void clickSignInSignUpButton() {
-        signInSignUpButton.click();
+        clickElement(signInSignUpButton);
     }
 
     public void clickLoginButton() {
-        loginButton.click();
+        clickElement(loginButton);
     }
 
     public void clickRedBusLogo() {
-        redBusLogo.click();
+        clickElement(redBusLogo);
     }
 
     // ===========================
     // Booking Methods
     // ===========================
     public void clickBusTicketBookingOption() {
-        busTicketBookingOption.click();
+        clickElement(busTicketBookingOption);
     }
 
     public void clickTrainTicketBookingOption() {
-        trainTicketBookingOption.click();
+        clickElement(trainTicketBookingOption);
     }
 
     public void clickBookNowButton() {
@@ -141,8 +135,7 @@ public class HomePage extends BasePage {
     }
 
     public boolean isLogoDisplayed() {
-        wait.until(ExpectedConditions.visibilityOf(redBusLogo));
-        return redBusLogo.isDisplayed();
+        return isElementDisplayed(redBusLogo);
     }
 
     public boolean isJourneyFromDisplayed() {
@@ -162,20 +155,19 @@ public class HomePage extends BasePage {
     }
 
     public boolean isFooterDisplayed() {
-        return footer.isDisplayed();
+        return isElementDisplayed(footer);
     }
 
     public boolean isLoginButtonDisplayed() {
-        return loginButton.isDisplayed();
+        return isElementDisplayed(loginButton);
     }
 
     public boolean isAccountButtonDisplayed() {
-        return accountButton.isDisplayed();
+        return isElementDisplayed(accountButton);
     }
 
     public boolean isemptySourcePopUpMessageDisplayed() {
-        wait.until(ExpectedConditions.visibilityOf(emptySourcePopUpMessage));
-        return emptySourcePopUpMessage.isDisplayed();
+        return isElementDisplayed(emptySourcePopUpMessage);
     }
 
     // ===========================
@@ -184,11 +176,11 @@ public class HomePage extends BasePage {
     public List<String> getNonClickableMajorElements() {
         Map<String, WebElement> majorElements = getMajorHomepageElements();
         List<String> nonClickableElements = new ArrayList<>();
-        WebDriverWait wait = new WebDriverWait(driver, ELEMENT_CLICKABLE_TIMEOUT);
+        WebDriverWait waitLocal = new WebDriverWait(driver, ELEMENT_CLICKABLE_TIMEOUT);
 
         for (Map.Entry<String, WebElement> entry : majorElements.entrySet()) {
             try {
-                wait.until(ExpectedConditions.elementToBeClickable(entry.getValue()));
+                waitLocal.until(ExpectedConditions.elementToBeClickable(entry.getValue()));
             } catch (Exception e) {
                 nonClickableElements.add(entry.getKey());
             }

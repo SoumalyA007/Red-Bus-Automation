@@ -8,8 +8,6 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -23,8 +21,6 @@ public class SearchPage extends BasePage {
     public SearchPage(WebDriver driver){
         super(driver);
     }
-
-
 
     // ===========================
     // Route Locator
@@ -41,7 +37,7 @@ public class SearchPage extends BasePage {
 
     // ===========================
     // Bus Card Locators
-
+    // ===========================
     @FindBy(xpath = "//div[@data-autoid='inv-wrap']")
     WebElement parentBusCard;
 
@@ -51,23 +47,18 @@ public class SearchPage extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'travelsName___')]")
     List<WebElement> busOperatorList;
 
-
-
-
-
     // ===========================
     // Message Locators
     // ===========================
     @FindBy(xpath = "//div[contains(@class,'oopsInfoContainer___')]//p[contains(@class,'description___')]")
     WebElement noRouteMessage;
 
-
     // ===========================
     // Bus Cards Methods
     // ===========================
     public boolean waitForBusCardsToLoad() {
         try {
-            wait.until(ExpectedConditions.visibilityOfAllElements(parentBusCard));
+            wait.until(org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfAllElements(parentBusCard));
             return true;
         } catch (TimeoutException e) {
             return false;
@@ -111,23 +102,16 @@ public class SearchPage extends BasePage {
                 .allMatch(bus -> bus.isDroppingWithinWindow(window));
     }
 
-    // Normalizes a bus-type or operator string for loose matching:
-    // strips /, -, and whitespace then lowercases, so "A/C" and "AC" both
-    // become "ac" and a simple .contains() comparison works correctly.
     private static String normalizeText(String s) {
         return s.toLowerCase().replaceAll("[/\\-\\s]+", "");
     }
 
-    // Verifies every visible card's bus type contains the expected fragment
-    // after normalization (e.g. "AC" matches cards showing "A/C Seater (2+2)").
     public boolean allCardsMatchBusType(String expectedTypeFragment) {
         String normalizedExpected = normalizeText(expectedTypeFragment);
         return getAllBusCardDetails().stream()
                 .allMatch(bus -> normalizeText(bus.getBusType()).contains(normalizedExpected));
     }
 
-    // Verifies every visible card's operator name contains the given fragment.
-    // Used after applying a Bus Operator filter to confirm the results changed.
     public boolean allCardsMatchOperator(String operatorFragment) {
         String normalizedExpected = normalizeText(operatorFragment);
         return getAllBusCardDetails().stream()
@@ -144,8 +128,6 @@ public class SearchPage extends BasePage {
         return getAllBusCardDetails().stream()
                 .allMatch(bus -> bus.getPrice() >= min && bus.getPrice() <= max);
     }
-
-
 
     public int getBusCardsCount() {
         return busCards.size();
@@ -186,20 +168,15 @@ public class SearchPage extends BasePage {
     public void clickViewSeatsButtonForCard(int cardIndex) {
         WebElement card = busCards.get(cardIndex);
         WebElement viewSeatsButton = card.findElement(By.xpath(".//button[@type='button' and contains(@class,'viewSeatsBtn___')]"));
-        viewSeatsButton.click();
+        clickElement(viewSeatsButton);
     }
 
-
-    // Overload: click View Seats button by searching for a card with a specific operator name
     public void clickViewSeatsButtonByOperator(String operatorName) {
 
         String normalizedOperatorName  = normalizeText(operatorName);
         List<BusCard> allBuses = getAllBusCardDetails();
 
         int matchIndex = IntStream.range(0, allBuses.size())
-//                .peek(i -> System.out.println(
-//                        "Checking operator: " + allBuses.get(i).getOperator()
-//                ))
                 .filter(i -> normalizeText(allBuses.get(i).getOperator()).contains(normalizedOperatorName))
                 .findFirst()
                 .orElseThrow(()->new NoSuchElementException("Operator not found:" + normalizedOperatorName));
@@ -208,16 +185,10 @@ public class SearchPage extends BasePage {
 
     }
 
-
-
-
     // ===========================
     // Message Methods
     // ===========================
     public boolean isNoRouteMessageDisplayed(){
-        return noRouteMessage.isDisplayed();
+        return isElementDisplayed(noRouteMessage);
     }
-
-    
-
 }

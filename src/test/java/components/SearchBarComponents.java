@@ -1,5 +1,7 @@
 package components;
 
+import pageObjects.BasePage;
+
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -8,19 +10,12 @@ import java.util.NoSuchElementException;
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
-public class SearchBarComponents {
-
-    private final WebDriver driver;
-    private final WebDriverWait wait;
+public class SearchBarComponents extends BasePage {
 
     public SearchBarComponents(WebDriver driver) {
-        this.driver = driver;
-        this.wait = new WebDriverWait(driver, Duration.ofSeconds(10));
-        PageFactory.initElements(driver, this);
+        super(driver);
     }
 
     public enum JourneyField {
@@ -81,22 +76,24 @@ public class SearchBarComponents {
     @FindBy(xpath = "//button[normalize-space()='Book now']")
     public WebElement bookNowButton;
 
-    //div[contains(@class,'date___') and contains(@class, 'available___') and contains(@class,'calendarDate')]
-
     // ===========================
-    // Journey Methods
+    // Journey Methods (now using BasePage helpers)
     // ===========================
     public void clickJourneyFrom() {
-        journeyFrom.click();
+        clickElement(journeyFrom);
     }
 
     public void clickJourneyTo() {
-        journeyTo.click();
+        clickElement(journeyTo);
     }
 
     public boolean isSuggestionsVisible() {
-        WebElement suggestion = wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
-        return suggestion.isDisplayed();
+        try {
+            wait.until(ExpectedConditions.visibilityOf(autoSuggestion));
+            return autoSuggestion.isDisplayed();
+        } catch (TimeoutException e) {
+            return false;
+        }
     }
 
     public void selectJourneyCity(JourneyField field, String city) {
@@ -106,7 +103,10 @@ public class SearchBarComponents {
             clickJourneyTo();
         }
 
-        isSuggestionsVisible();
+        if (!isSuggestionsVisible()) {
+            // ensure active field is ready
+            wait.until(driver -> driver.switchTo().activeElement() != null);
+        }
 
         WebElement activeField = driver.switchTo().activeElement();
         activeField.sendKeys(Keys.CONTROL + "a");
@@ -123,12 +123,11 @@ public class SearchBarComponents {
                                 + "'ABCDEFGHIJKLMNOPQRSTUVWXYZ',"
                                 + "'abcdefghijklmnopqrstuvwxyz')='" + city.trim().toLowerCase() + "']]"
                 )));
-
-        cityOption.click();
+        clickElement(cityOption);
     }
 
     public void clickSwapButton() {
-        swapButton.click();
+        clickElement(swapButton);
     }
 
     public String getCurrentSource() {
@@ -140,30 +139,26 @@ public class SearchBarComponents {
     }
 
     public boolean isJourneyFromDisplayed() {
-        return journeyFrom.isDisplayed();
+        return isElementDisplayed(journeyFrom);
     }
 
     public boolean isJourneyToDisplayed() {
-        return journeyTo.isDisplayed();
+        return isElementDisplayed(journeyTo);
     }
 
-    // ===========================
     // Calendar Methods
-    // ===========================
     public boolean isCalendarButtonVisible() {
-        return calendarButton.isDisplayed();
+        return isElementDisplayed(calendarButton);
     }
 
     public void openCalendar() {
-        isCalendarButtonVisible();
-        clickCalendarButton();
+        clickElement(calendarButton);
         wait.until(ExpectedConditions.visibilityOf(datePickerPopup));
     }
 
     public void clickCalenderDay(int day) {
-        datePickerPopup.findElement(By.xpath(
-                        ".//div[contains(@class,'calendarDate')]//span[text()='" + day + "']"))
-                .click();
+        clickElement(datePickerPopup.findElement(By.xpath(
+                ".//div[contains(@class,'calendarDate')]//span[text()='" + day + "']")));
     }
 
     public void clickCalenderDay(LocalDate targetDate) {
@@ -174,20 +169,15 @@ public class SearchBarComponents {
                 "//div[contains(@class,'calendarDate') and @data-date='" + epochMillis + "']");
 
         WebElement day = wait.until(ExpectedConditions.elementToBeClickable(dayLocator));
-        day.click();
-    }
-
-    public void clickCalendarButton() {
-        calendarButton.click();
+        clickElement(day);
     }
 
     public void clickDateProgressArrow() {
-//        wait.until(ExpectedConditions.elementToBeClickable(dateProgressArrow)).click();
-        dateProgressArrow.click();
+        clickElement(dateProgressArrow);
     }
 
     public void clickDateBackArrow() {
-        wait.until(ExpectedConditions.elementToBeClickable(dateBackArrow)).click();
+        clickElement(dateBackArrow);
     }
 
     public boolean isDateBackArrowEnabled() {
@@ -195,7 +185,7 @@ public class SearchBarComponents {
     }
 
     public String getCalenderMonthYear() {
-        return calenderMonthYear.getText();
+        return getText(calenderMonthYear);
     }
 
     public void navigateCalendarTo(String targetMonth, int targetYear) {
@@ -226,12 +216,10 @@ public class SearchBarComponents {
     }
 
     public String getSelectedDate() {
-        return selectedDate.getText();
+        return getText(selectedDate);
     }
 
-    // ===========================
     // Search / Book Methods
-    // ===========================
     public boolean isSearchButtonEnabled() {
         return searchBusesButton.isEnabled();
     }
@@ -241,11 +229,11 @@ public class SearchBarComponents {
     }
 
     public void clickSearchBusesButton() {
-        searchBusesButton.click();
+        clickElement(searchBusesButton);
     }
 
     public void clickBookNowButton() {
-        bookNowButton.click();
+        clickElement(bookNowButton);
     }
 
     public void typeCity(String city) {
@@ -268,7 +256,7 @@ public class SearchBarComponents {
             WebElement cityElement = suggestion.findElement(
                     By.xpath(".//div[contains(@class,'listHeader___') and @role='heading']"));
             if (cityElement.getText().trim().equalsIgnoreCase(city)) {
-                suggestion.click();
+                clickElement(suggestion);
                 return;
             }
         }

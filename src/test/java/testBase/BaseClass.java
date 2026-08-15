@@ -61,7 +61,8 @@ public class BaseClass {
 
         log = LogManager.getLogger(this.getClass());
 
-        WebDriver driver = createDriver(OS, browser);  // creates a fresh driver for this thread
+        // FIXED: assign to class field, not a local variable
+        driver = createDriver(OS, browser);  // creates a fresh driver for this thread
         driverThreadLocal.set(driver);
 
         driver.manage().deleteAllCookies();
@@ -105,12 +106,11 @@ public class BaseClass {
         }
     }
 
-//    @AfterClass
-//    public void tearDown() {
-//        driverThreadLocal.get().quit();
-//        driverThreadLocal.remove();   // prevents memory leaks
-//    }
-
+    //    @AfterClass
+    //    public void tearDown() {
+    //        driverThreadLocal.get().quit();
+    //        driverThreadLocal.remove();   // prevents memory leaks
+    //    }
 
     public WebDriver getDriver() {
         return driver;
@@ -120,10 +120,10 @@ public class BaseClass {
         long startTime = System.nanoTime();
         driver.get(url);
         new WebDriverWait(driver, Duration.ofSeconds(20))
-            .until(driver ->
-                    ((JavascriptExecutor) driver)
-                            .executeScript("return document.readyState")
-                            .equals("complete"));
+                .until(driver ->
+                        ((JavascriptExecutor) driver)
+                                .executeScript("return document.readyState")
+                                .equals("complete"));
         long endTime = System.nanoTime();
 
         return Duration.ofNanos(endTime - startTime).toMillis();
@@ -131,21 +131,21 @@ public class BaseClass {
 
     public String captureScreen(String tname) throws IOException {
 
-       String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
+        String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
 
-       TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
-       File sourceFile = takesScreenshot.getScreenshotAs(OutputType.FILE);
+        TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+        java.io.File sourceFile = takesScreenshot.getScreenshotAs(OutputType.FILE);
 
-       String targetFilePath=System.getProperty("user.dir")+"\\screenshots\\" + tname + "_" + timeStamp + ".png";
-       File targetFile=new File(targetFilePath);
+        String targetFilePath=System.getProperty("user.dir")+"\\screenshots\\" + tname + "_" + timeStamp + ".png";
+        java.io.File targetFile=new java.io.File(targetFilePath);
 
-       sourceFile.renameTo(targetFile);
+        sourceFile.renameTo(targetFile);
 
-       return targetFilePath;
+        return targetFilePath;
 
     }
 
-        public void logTestStart(String testName) {
+    public void logTestStart(String testName) {
         log.info("Running " + testName + " ------ > ");
     }
 

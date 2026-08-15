@@ -3,7 +3,6 @@ package pageObjects;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.testng.Assert;
 
 import java.util.List;
@@ -27,12 +26,10 @@ public class BusSeatPage extends BasePage {
 
 
     public boolean isSeatLayoutVisible(){
-        return wait.until(
-                ExpectedConditions.visibilityOf(seatTab)
-        ).isDisplayed();
+        return isElementDisplayed(seatTab);
     }
 
-    public WebElement seatStatus(int seatNumber){
+    public WebElement seatStatus(String seatNumber){
         isSeatLayoutVisible();
         WebElement selectedSeat = allSeats.stream()
                 .filter(seat ->
@@ -45,28 +42,23 @@ public class BusSeatPage extends BasePage {
                         ));
 
         return selectedSeat;
-
-
-
     }
 
-    public boolean isSeatAvailable(int seatNumber){
+    public boolean isSeatAvailable(String seatNumber){
         WebElement seatStatus = seatStatus(seatNumber);
         return !"true".equals(seatStatus.getAttribute("aria-disabled"));
     }
 
-
-    public void selectSeat(int seatNumber){
+    public boolean selectSeat(String seatNumber){
         isSeatLayoutVisible();
         WebElement selectedSeat = seatStatus(seatNumber);
         if(isSeatAvailable(seatNumber)){
-            selectedSeat.click();
-        }else{
-            Assert.fail("Seat was not available for number " + seatNumber);
+            clickElement(selectedSeat);
         }
+        return false;
     }
 
-    public boolean isSeatSelected(int seatNumber){
+    public boolean isSeatSelected(String seatNumber){
         isSeatLayoutVisible();
         WebElement selectedSeat = seatStatus(seatNumber);
         return "true".equalsIgnoreCase(selectedSeat.getAttribute("aria-pressed"));
@@ -79,6 +71,57 @@ public class BusSeatPage extends BasePage {
 
         return soldBusSeats.size() == soldSeats.size();
     }
+
+    ///////////////////////////////////////////
+    ///
+
+
+
+    public boolean deselectSeat(String seatNumber){
+        isSeatLayoutVisible();
+        if(isSeatSelected(seatNumber)){
+            seatStatus(seatNumber).click();
+            return true;
+        }
+        return false;
+    }
+
+    public void selectSeats(List<String> seatNumbers){
+        seatNumbers.stream()
+                .forEach(this::selectSeat);
+    }
+
+    public void deselectSeats(List<String> seatNumbers){}
+
+    public boolean areSeatsSelected(List<String> seatNumbers){
+        return false;
+    }
+
+    public int getSelectedSeatsCount(){}
+
+    public String getFirstSoldSeatNumber(){
+        return soldSeats.stream()
+                .filter(seat -> "true".equals(seat.getAttribute("aria-disabled")))
+                .findFirst()
+                .map(seat -> seat.getAttribute("id"))
+                .orElseThrow(() -> new NoSuchElementException("No sold seats available"));
+    }
+
+    public String getFirstAvailableSeatNumber(){
+
+        return allSeats.stream()
+                .filter(seat -> !"true".equals(seat.getAttribute("aria-disabled")))
+                .findFirst()
+                .map(seat -> seat.getAttribute("id"))
+                .orElseThrow(() -> new NoSuchElementException("No available seats"));
+
+    }
+
+    public double getFareAmount(){}
+
+    public List<String> getSeatLegendLabels(){}
+
+    public boolean isSeatLegendDisplayed(){}
 
 
 }

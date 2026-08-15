@@ -21,26 +21,19 @@ public class SearchResultsSortingPage extends BasePage {
     @FindBy(xpath = "//div[contains(@aria-label,'Price')]")
     WebElement sortByPriceButton;
 
-
     public void clickSortByRatingButton(){
-        wait.until(ExpectedConditions.elementToBeClickable(sortByRatingButton));
-        sortByRatingButton.click();
+        clickElement(sortByRatingButton);
     }
 
     public void clickSortByDepartureButton(){
-        wait.until(ExpectedConditions.elementToBeClickable(sortByDepartureButton));
-        sortByDepartureButton.click();
+        clickElement(sortByDepartureButton);
     }
 
     public void clickSortByPriceButton(){
-        wait.until(ExpectedConditions.elementToBeClickable(sortByPriceButton));
-        sortByPriceButton.click();
+        clickElement(sortByPriceButton);
     }
 
-
     public Sorting getSortingStatus(Sorting sorting) {
-
-        System.out.println(sorting);
 
         WebElement element;
 
@@ -78,7 +71,8 @@ public class SearchResultsSortingPage extends BasePage {
 
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.DESCENDING)) {
-            sortByRatingButton.click();
+            clickElement(sortByRatingButton);
+            ratingSort = getSortingStatus(sorting);
         }
 
     }
@@ -87,7 +81,8 @@ public class SearchResultsSortingPage extends BasePage {
 
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.ASCENDING)) {
-            sortByRatingButton.click();
+            clickElement(sortByRatingButton);
+            ratingSort = getSortingStatus(sorting);
         }
 
     }
@@ -96,7 +91,8 @@ public class SearchResultsSortingPage extends BasePage {
 
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.ASCENDING)) {
-            sortByRatingButton.click();
+            clickElement(sortByPriceButton);
+            ratingSort = getSortingStatus(sorting);
         }
     }
 
@@ -104,7 +100,8 @@ public class SearchResultsSortingPage extends BasePage {
 
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.DESCENDING)) {
-            sortByPriceButton.click();
+            clickElement(sortByPriceButton);
+            ratingSort = getSortingStatus(sorting);
         }
     }
 
@@ -112,7 +109,7 @@ public class SearchResultsSortingPage extends BasePage {
 
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.ASCENDING)) {
-            sortByDepartureButton.click();
+            clickElement(sortByDepartureButton);
             ratingSort=getSortingStatus(sorting);
         }
     }
@@ -121,14 +118,8 @@ public class SearchResultsSortingPage extends BasePage {
 
         Sorting ratingSort = getSortingStatus(sorting);
         while(!ratingSort.equals(Sorting.DESCENDING)) {
-            sortByDepartureButton.click();
+            clickElement(sortByDepartureButton);
             ratingSort=getSortingStatus(sorting);
         }
     }
-
-
-
-
-
-
 }
