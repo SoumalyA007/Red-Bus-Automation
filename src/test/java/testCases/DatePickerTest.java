@@ -149,7 +149,7 @@ public class DatePickerTest extends BaseClass {
         try {
             LocalDate currentDateMonthYear = LocalDate.now();
             String currentDate = currentDateMonthYear.format(DateTimeFormatter.ofPattern("dd"));
-            searchbarcomponents.clickCalendarButton();
+            searchbarcomponents.openCalendar();
             if (currentDate.equals("1")) {
                 boolean isEnabled = searchbarcomponents.isDateBackArrowEnabled();
                 Assert.assertFalse(isEnabled, "Back arrow should be disabled for the previous month.");

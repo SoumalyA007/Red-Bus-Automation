@@ -66,11 +66,16 @@ public class BusSeatTest extends BaseClass {
         helper.searchBuses("Kolkata","Burdwan", LocalDate.now().plusDays(5));
         sp.clickViewSeatsButtonByOperator("Royal Cruiser");
 
-        Assert.assertTrue(busseatpage.selectSeat("5"), "Seat 5 could not be selected");
-        Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 was not selected");
+        Assert.assertTrue(busseatpage.selectSeat("5"), "Seat 5 could not be selected in select seath method");
+        Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 was not selected in isSeatSelected");
 
         Assert.assertTrue(busseatpage.deselectSeat("5"), "Seat 5 could not be deselected");
         Assert.assertFalse(busseatpage.isSeatSelected("5"), "Seat 5 is still showing as selected after deselect");
+
+        Assert.assertTrue(busseatpage.selectSeat("5"), "Seat 5 could not be selected");
+        Assert.assertTrue(busseatpage.selectSeat("6"), "Seat 6 could not be selected");
+        Assert.assertTrue(busseatpage.deselectSeats(Arrays.asList("5","6")), "Seats 5 and 6 could not be deselected");
+
     }
 
     @Test
@@ -78,19 +83,24 @@ public class BusSeatTest extends BaseClass {
         helper.searchBuses("Kolkata","Burdwan", LocalDate.now().plusDays(5));
         sp.clickViewSeatsButtonByOperator("Royal Cruiser");
 
-        Assert.assertTrue(busseatpage.selectSeat(5), "Seat 5 could not be selected");
+        double amt = 0d;
+        Assert.assertTrue(busseatpage.selectSeat("5"), "Seat 5 could not be selected");
+        amt = busseatpage.getSelectedSeatFairAmount("5");
         double fareAfterOneSeat = busseatpage.getFareAmount();
 
-        Assert.assertTrue(busseatpage.selectSeat(6), "Seat 6 could not be selected");
+        Assert.assertTrue(busseatpage.selectSeat("6"), "Seat 6 could not be selected");
+        amt =amt + busseatpage.getSelectedSeatFairAmount("6");
         double fareAfterTwoSeats = busseatpage.getFareAmount();
 
         Assert.assertTrue(fareAfterTwoSeats > fareAfterOneSeat,
                 "Fare did not increase after selecting an additional seat");
+        Assert.assertEquals(amt,fareAfterTwoSeats,"Fair is not updated as intended");
 
-        Assert.assertTrue(busseatpage.deselectSeat(6), "Seat 6 could not be deselected");
+        Assert.assertTrue(busseatpage.deselectSeat("6"), "Seat 6 could not be deselected");
+        amt = amt - busseatpage.getSelectedSeatFairAmount("6");
         double fareAfterDeselect = busseatpage.getFareAmount();
 
-        Assert.assertEquals(fareAfterDeselect, fareAfterOneSeat,
+        Assert.assertEquals(amt, fareAfterDeselect,
                 "Fare did not revert correctly after deselecting a seat");
     }
 
@@ -105,8 +115,19 @@ public class BusSeatTest extends BaseClass {
         Assert.assertFalse(legendLabels.isEmpty(), "Seat legend has no labels");
         Assert.assertTrue(legendLabels.stream().anyMatch(l -> l.toLowerCase().contains("available")),
                 "Legend missing 'Available' entry");
-        Assert.assertTrue(legendLabels.stream().anyMatch(l -> l.toLowerCase().contains("sold") || l.toLowerCase().contains("booked")),
-                "Legend missing 'Sold/Booked' entry");
+
+        List<String> expected = Arrays.asList("Available", "Available only for male passenger","Already booked","Selected by you","Available only for female passenger","Booked by female passenger","Booked by male passenger");
+
+        Assert.assertTrue(
+                expected.stream().peek(temp -> System.out.println("Inside expected:"+temp)).allMatch(expectedLabel ->
+                        legendLabels.stream()
+                                .peek(actual -> System.out.println("Inside actual:"+actual))
+                                .anyMatch(actual ->
+                                        actual.toLowerCase().contains(expectedLabel.toLowerCase())
+                                )
+                ),
+                "Legend missing Sold or Booked entry"
+        );
     }
 
     @Test

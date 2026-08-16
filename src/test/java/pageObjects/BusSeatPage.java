@@ -1,5 +1,6 @@
 package pageObjects;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -23,6 +24,17 @@ public class BusSeatPage extends BasePage {
 
     @FindBy(xpath = "//div[contains(@class,'seat___') and contains(@aria-label,'availability sold. Seat is not available for selection.')]")
     List<WebElement> soldSeats;
+
+    @FindBy(xpath = "//div[@role = 'button' and contains(@class,'priceWrap__')]")
+    WebElement totalFair;
+
+    @FindBy(xpath="//div[contains(@class,'seatMain__')]//div[@class=' ']//div[contains(@class,'container__') ]")
+    WebElement seatLegend;
+
+    @FindBy(xpath = "//table[contains(@class,'legendTable__')]//tbody//tr[contains(@class,'legendItem__')]")
+    List<WebElement> legendItems;
+
+    By selectedSeatFair = By.xpath(".//span[contains(@class,'seatPrice__')]");
 
 
     public boolean isSeatLayoutVisible(){
@@ -54,6 +66,7 @@ public class BusSeatPage extends BasePage {
         WebElement selectedSeat = seatStatus(seatNumber);
         if(isSeatAvailable(seatNumber)){
             clickElement(selectedSeat);
+            return true;
         }
         return false;
     }
@@ -91,13 +104,22 @@ public class BusSeatPage extends BasePage {
                 .forEach(this::selectSeat);
     }
 
-    public void deselectSeats(List<String> seatNumbers){}
+    public boolean deselectSeats(List<String> seatNumbers){
+        return seatNumbers.stream()
+                .allMatch(this::deselectSeat);
+    }
 
     public boolean areSeatsSelected(List<String> seatNumbers){
         return false;
     }
 
-    public int getSelectedSeatsCount(){}
+    public int getSelectedSeatsCount(){
+        isSeatLayoutVisible();
+        return (int) allSeats.stream()
+                .filter(seat -> "true".equals(seat.getAttribute("aria-pressed")))
+                .count();
+
+    }
 
     public String getFirstSoldSeatNumber(){
         return soldSeats.stream()
@@ -117,11 +139,30 @@ public class BusSeatPage extends BasePage {
 
     }
 
-    public double getFareAmount(){}
+    public double getFareAmount(){
+        isSeatLayoutVisible();
+        String fareText = totalFair.getText();
+        return Double.parseDouble(fareText.replaceAll("[^0-9.]", ""));
+    }
 
-    public List<String> getSeatLegendLabels(){}
+    public double getSelectedSeatFairAmount(String seatNumber){
+        WebElement selectedSeat = seatStatus(seatNumber);
+        String fairText = selectedSeat.findElement(selectedSeatFair).getText();
+        return Double.parseDouble(fairText.replaceAll("[^0-9.]", ""));
+    }
 
-    public boolean isSeatLegendDisplayed(){}
+    public List<String> getSeatLegendLabels(){
+        return legendItems.stream()
+                .map(item -> item.getText().trim())
+                .map(String :: trim)
+                .filter(text -> !text.isEmpty())
+                .collect(Collectors.toList());
+    }
+
+    public boolean isSeatLegendDisplayed(){
+        return isElementDisplayed(seatLegend);
+    }
+
 
 
 }
