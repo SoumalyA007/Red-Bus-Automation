@@ -36,7 +36,6 @@ public class BusSeatPage extends BasePage {
 
     By selectedSeatFair = By.xpath(".//span[contains(@class,'seatPrice__')]");
 
-
     public boolean isSeatLayoutVisible(){
         return isElementDisplayed(seatTab);
     }
@@ -85,15 +84,10 @@ public class BusSeatPage extends BasePage {
         return soldBusSeats.size() == soldSeats.size();
     }
 
-    ///////////////////////////////////////////
-    ///
-
-
-
     public boolean deselectSeat(String seatNumber){
         isSeatLayoutVisible();
         if(isSeatSelected(seatNumber)){
-            seatStatus(seatNumber).click();
+            clickElement(seatStatus(seatNumber));
             return true;
         }
         return false;
@@ -110,6 +104,7 @@ public class BusSeatPage extends BasePage {
     }
 
     public boolean areSeatsSelected(List<String> seatNumbers){
+
         return false;
     }
 
@@ -141,19 +136,20 @@ public class BusSeatPage extends BasePage {
 
     public double getFareAmount(){
         isSeatLayoutVisible();
-        String fareText = totalFair.getText();
+        String fareText = getText(totalFair);
         return Double.parseDouble(fareText.replaceAll("[^0-9.]", ""));
     }
 
     public double getSelectedSeatFairAmount(String seatNumber){
         WebElement selectedSeat = seatStatus(seatNumber);
-        String fairText = selectedSeat.findElement(selectedSeatFair).getText();
+        String fairText = getText(findElement(selectedSeat,selectedSeatFair));
+
         return Double.parseDouble(fairText.replaceAll("[^0-9.]", ""));
     }
 
     public List<String> getSeatLegendLabels(){
         return legendItems.stream()
-                .map(item -> item.getText().trim())
+                .map(item -> getText(item).trim())
                 .map(String :: trim)
                 .filter(text -> !text.isEmpty())
                 .collect(Collectors.toList());

@@ -48,6 +48,7 @@ public class BaseClass {
     public SearchResultsFilterPage searchresultsfilterpage;
     public SearchResultsSortingPage searchresultssortingpage;
     public BusSeatPage busseatpage;
+    public BoardingDroppingPoint boardingdroppingpoint;
 
     private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
 
@@ -77,6 +78,7 @@ public class BaseClass {
         searchresultsfilterpage = new SearchResultsFilterPage(driver);
         searchresultssortingpage = new SearchResultsSortingPage(driver);
         busseatpage =  new BusSeatPage(driver);
+        boardingdroppingpoint = new BoardingDroppingPoint(driver);
 
     }
 

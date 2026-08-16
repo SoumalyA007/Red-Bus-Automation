@@ -35,6 +35,17 @@ public class BasePage {
     public WebElement findElement(By locator) {
         return wait.until(ExpectedConditions.presenceOfElementLocated(locator));
     }
+    public WebElement findElement(By parentLocator,  By locator) {
+        WebElement parentElement = wait.until(
+                ExpectedConditions.presenceOfElementLocated(parentLocator)
+        );
+
+        return parentElement.findElement(locator);
+    }
+
+    public WebElement findElement(WebElement parentElement, By locator) {
+        return parentElement.findElement(locator);
+    }
 
     public List<WebElement> findElements(By locator) {
         return driver.findElements(locator);
@@ -181,6 +192,15 @@ public class BasePage {
             return element.getText();
         } catch (TimeoutException te) {
             throw new RuntimeException("Element not visible to get text", te);
+        }
+    }
+
+    public String getAttributeValue(WebElement element, String attributeName) {
+        try {
+            waitForElementVisibility(element);
+            return element.getAttribute(attributeName);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to get attribute '" + attributeName + "' from element", e);
         }
     }
 
