@@ -42,7 +42,17 @@ public class BusCard {
     }
 
     private int parseHour(String time) {
-        return Integer.parseInt(time.trim().split(":")[0]);
+        time = time.trim().toUpperCase();
+        String[] parts = time.split("[: ]"); // splits "1:15 PM" into ["1","15","PM"]
+        int hour = Integer.parseInt(parts[0]);
+        String meridiem = parts[parts.length - 1]; // "AM" or "PM"
+
+        if (meridiem.equals("PM") && hour != 12) {
+            hour += 12;
+        } else if (meridiem.equals("AM") && hour == 12) {
+            hour = 0;
+        }
+        return hour;
     }
 
     @Override

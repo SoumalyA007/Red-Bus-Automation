@@ -27,10 +27,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Optional;
-import org.testng.annotations.Parameters;
+import org.testng.annotations.*;
 
 import pageObjects.*;
 import utils.HelperFunctions;
@@ -113,6 +110,11 @@ public class BaseClass {
     //        driverThreadLocal.get().quit();
     //        driverThreadLocal.remove();   // prevents memory leaks
     //    }
+
+    @BeforeMethod
+    public void resetToHome() {
+        driver.get(p.getProperty("uri")); // or click a "modify search" / home nav element
+    }
 
     public WebDriver getDriver() {
         return driver;

@@ -2,9 +2,9 @@ package enums;
 
 public enum TimeWindow {
     MORNING(6, 12),
-    AFTERNOON(12, 17),
-    EVENING(17, 21),
-    NIGHT(21, 6); // wraps past midnight — handle specially
+    AFTERNOON(12, 18),
+    EVENING(18, 24),
+    NIGHT(24, 6); // wraps past midnight — handle specially
 
     private final int startHour;
     private final int endHour;
