@@ -48,7 +48,9 @@ public class BasePage {
     }
 
     public List<WebElement> findElements(By locator) {
-        return driver.findElements(locator);
+        return wait.until(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(locator)
+        );
     }
 
     // -------------------------

@@ -20,6 +20,21 @@ public class BoardingDroppingPointTest extends BaseClass {
         Assert.assertTrue(boardingdroppingpoint.isBoardingDroppingPointTabSelected(),"Boarding Dropping Tab is not selected");
     }
 
+    @Test
+    public void select_boarding_point_updates_selection(){
+        helper.searchBuses("Kolkata","Burdwan", LocalDate.now().plusDays(5));
+        sp.clickViewSeatsButtonForCard(1);
+
+        busseatpage.selectSeat("5");
+        Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
+
+        boardingdroppingpoint.clickBoardingDroppingPointButton();
+        boardingdroppingpoint.clickBoardingPointByIndex(1);
+        Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByIndex(1), "Boarding point at index 1 is not checked");
+        boardingdroppingpoint.clickBoardingPointByName("SALAP");
+        Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByName("SALAP"), "Boarding point with name 'SALAP' is not checked");
+    }
+
 
 
 
