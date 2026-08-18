@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
+import java.util.Objects;
 
 public class BoardingDroppingPoint extends BasePage {
     public BoardingDroppingPoint(WebDriver driver){
@@ -46,7 +47,7 @@ public class BoardingDroppingPoint extends BasePage {
     public WebElement getBoardingPointByIndex(int index){
         List<WebElement> boardingPoints = findElements(boardingPoint);
         return wait.until(driver ->
-                boardingPoints.stream()
+                Objects.requireNonNull(boardingPoints.stream()
                         .map(li -> li.findElement(
                                 By.xpath(".//div[@data-id]")
                         ))
@@ -55,7 +56,7 @@ public class BoardingDroppingPoint extends BasePage {
                                         .equals(element.getAttribute("data-id"))
                         )
                         .findFirst()
-                        .orElse(null)
+                        .orElse(null))
         );
     }
 
@@ -66,7 +67,7 @@ public class BoardingDroppingPoint extends BasePage {
             List<WebElement> boardingPoints =
                     driver.findElements(boardingPoint);
 
-            return boardingPoints.stream()
+            return Objects.requireNonNull(boardingPoints.stream()
                     .filter(li ->
                             li.findElement(boardingPointName)
                                     .getText()
@@ -75,7 +76,7 @@ public class BoardingDroppingPoint extends BasePage {
                     )
                     .map(li -> li.findElement(boardingPointRadio))
                     .findFirst()
-                    .orElse(null);
+                    .orElse(null));
         });
     }
 

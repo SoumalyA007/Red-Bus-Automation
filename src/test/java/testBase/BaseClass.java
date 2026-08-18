@@ -31,10 +31,13 @@ import org.testng.annotations.*;
 
 import pageObjects.*;
 import utils.HelperFunctions;
+import utils.TestListener;
 
+@Listeners(TestListener.class)
 public class BaseClass {
 
-    public static WebDriver driver;
+    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+
     public Logger log;
     public Properties p;
     public WebDriverWait wait;
@@ -46,8 +49,12 @@ public class BaseClass {
     public SearchResultsSortingPage searchresultssortingpage;
     public BusSeatPage busseatpage;
     public BoardingDroppingPoint boardingdroppingpoint;
+    public PassengerInfo passengerinfo;
 
-    private static final ThreadLocal<WebDriver> driverThreadLocal = new ThreadLocal<>();
+    /** Returns the WebDriver for the current thread. Always use this instead of a static field. */
+    public static WebDriver getDriver() {
+        return driverThreadLocal.get();
+    }
 
     @SuppressWarnings("null")
     @BeforeClass
@@ -59,8 +66,7 @@ public class BaseClass {
 
         log = LogManager.getLogger(this.getClass());
 
-        // FIXED: assign to class field, not a local variable
-        driver = createDriver(OS, browser);  // creates a fresh driver for this thread
+        WebDriver driver = createDriver(OS, browser);
         driverThreadLocal.set(driver);
 
         driver.manage().deleteAllCookies();
@@ -76,6 +82,7 @@ public class BaseClass {
         searchresultssortingpage = new SearchResultsSortingPage(driver);
         busseatpage =  new BusSeatPage(driver);
         boardingdroppingpoint = new BoardingDroppingPoint(driver);
+        passengerinfo = new PassengerInfo(driver);
 
     }
 
@@ -105,27 +112,27 @@ public class BaseClass {
         }
     }
 
-    //    @AfterClass
-    //    public void tearDown() {
-    //        driverThreadLocal.get().quit();
-    //        driverThreadLocal.remove();   // prevents memory leaks
-    //    }
+    @AfterClass
+    public void tearDown() {
+        WebDriver driver = driverThreadLocal.get();
+        if (driver != null) {
+            driver.quit();
+            driverThreadLocal.remove(); // prevents memory leaks in thread pools
+        }
+    }
 
     @BeforeMethod
     public void resetToHome() {
-        driver.get(p.getProperty("uri")); // or click a "modify search" / home nav element
-    }
-
-    public WebDriver getDriver() {
-        return driver;
+        getDriver().get(p.getProperty("uri"));
     }
 
     public long getPageLoadTimeInMillis(String url) {
         long startTime = System.nanoTime();
+        WebDriver driver = getDriver();
         driver.get(url);
         new WebDriverWait(driver, Duration.ofSeconds(20))
-                .until(driver ->
-                        ((JavascriptExecutor) driver)
+                .until(d ->
+                        ((JavascriptExecutor) d)
                                 .executeScript("return document.readyState")
                                 .equals("complete"));
         long endTime = System.nanoTime();
@@ -137,7 +144,7 @@ public class BaseClass {
 
         String timeStamp = new SimpleDateFormat("yyyyMMddhhmmss").format(new Date());
 
-        TakesScreenshot takesScreenshot = (TakesScreenshot) driver;
+        TakesScreenshot takesScreenshot = (TakesScreenshot) getDriver();
         java.io.File sourceFile = takesScreenshot.getScreenshotAs(OutputType.FILE);
 
         String targetFilePath=System.getProperty("user.dir")+"\\screenshots\\" + tname + "_" + timeStamp + ".png";

@@ -23,7 +23,7 @@ public class AutoSuggestionTest extends BaseClass {
         String testName = "TC_001_suggestion_appears";
         int[] previousSize = {-1}; // array to hold the previous size of suggestions
         try {
-            FluentWait<WebDriver> fluentWait = new FluentWait<>(driver)
+            FluentWait<WebDriver> fluentWait = new FluentWait<>(getDriver())
                     .withTimeout(Duration.ofSeconds(10))
                     .pollingEvery(Duration.ofMillis(500))
                     .ignoring(StaleElementReferenceException.class);
@@ -33,8 +33,7 @@ public class AutoSuggestionTest extends BaseClass {
             //need to wait for suggestion box to appear
             hp.isSuggestionsVisible();
             //after waiting for suggestion box to appear we need to move the focus to the current element
-            WebElement currentFocusedSourceElement = driver.switchTo().activeElement();
-            //clear the element if anything present
+            WebElement currentFocusedSourceElement = getDriver().switchTo().activeElement();
             currentFocusedSourceElement.sendKeys(Keys.CONTROL + "a");
             currentFocusedSourceElement.sendKeys(Keys.DELETE);
             //need to send the source now
@@ -44,7 +43,7 @@ public class AutoSuggestionTest extends BaseClass {
                     By.xpath("//div[contains(@class,'searchCategory___')][not(@role='region')]")
             ));
 
-            List<WebElement> suggestionElements = driver.findElements(
+            List<WebElement> suggestionElements = getDriver().findElements(
                     By.xpath("//div[contains(@class,'searchCategory___')]"));
 
             Assert.assertEquals(suggestionElements.size(), 3);
@@ -64,7 +63,7 @@ public class AutoSuggestionTest extends BaseClass {
             helper.enter_source("Mumbai");
             helper.enter_destination("Pune");
 
-            List<WebElement> suggestions = driver.findElements(
+            List<WebElement> suggestions = getDriver().findElements(
                     By.xpath("//div[contains(@class,'searchSuggestionWrapper___')]")
             );
 
@@ -84,7 +83,7 @@ public class AutoSuggestionTest extends BaseClass {
             //need to wait for suggestion box to appear
             hp.isSuggestionsVisible();
             //after waiting for suggestion box to appear we need to move the focus to the current element
-            WebElement currentFocusedSourceElement = driver.switchTo().activeElement();
+            WebElement currentFocusedSourceElement = getDriver().switchTo().activeElement();
             //need to send the source now
             currentFocusedSourceElement.sendKeys("Mumbai");
             currentFocusedSourceElement.sendKeys(Keys.ARROW_DOWN);
@@ -94,7 +93,7 @@ public class AutoSuggestionTest extends BaseClass {
             //need to wait for suggestion box to appear
             hp.isSuggestionsVisible();
             //after waiting for suggestion box to appear we need to move the focus to the current element
-            WebElement currentFocusedDestElement = driver.switchTo().activeElement();
+            WebElement currentFocusedDestElement = getDriver().switchTo().activeElement();
             //send the required destination
             currentFocusedDestElement.sendKeys("Kolkata");
             currentFocusedSourceElement.sendKeys(Keys.ARROW_DOWN);

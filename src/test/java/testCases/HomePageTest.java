@@ -92,7 +92,7 @@ public class HomePageTest extends BaseClass {
         logTestStart(testName);
 
         try {
-            driver.navigate().refresh();
+            getDriver().navigate().refresh();
             hp.waitForPageToLoad();
 
             Assert.assertTrue(hp.isPageLoadedSuccessfully(), "Home page functionality was not retained after refresh");
@@ -167,7 +167,7 @@ public class HomePageTest extends BaseClass {
 
         try {
             Assert.assertEquals(
-                    driver.getTitle(),
+                    getDriver().getTitle(),
                     "Bus Booking Online and Train Tickets at Lowest Price - redBus",
                     "Title did not match");
             logTestPass(testName);
