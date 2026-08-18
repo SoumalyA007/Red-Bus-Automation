@@ -105,5 +105,16 @@ public class BoardingDroppingPoint extends BasePage {
                         .getAttribute("aria-checked")
         );
     }
+
+    public boolean areAllBoardingTimesDisplayed() {
+        return getBoardingPoints().stream()
+                .map(element -> element.findElement(
+                        By.xpath(".//div[contains(@class,'dateTime___')]")
+                ))
+                .allMatch(timeElement ->
+                        timeElement.getText() != null &&
+                                !timeElement.getText().isBlank()
+                );
+    }
 }
 
