@@ -29,22 +29,40 @@ public class BoardingDroppingPointTest extends BaseClass {
     }
 
     @Test
-    public void select_boarding_point_updates_selection() {
-        String testName = "select_boarding_point_updates_selection";
+    public void select_boarding_dropping_point_updates_selection() {
+        String testName = "select_boarding_dropping_point_updates_selection";
         try {
-            helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
-            sp.clickViewSeatsButtonForCard(1);
+            helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(1));
+            sp.clickViewSeatsButtonForCard(3);
 
             busseatpage.selectSeat("5");
             Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
 
             boardingdroppingpoint.clickBoardingDroppingPointButton();
+
             boardingdroppingpoint.clickBoardingPointByIndex(1);
             Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByIndex(1),
                     "Boarding point at index 1 is not checked");
-            boardingdroppingpoint.clickBoardingPointByName("SALAP");
-            Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByName("SALAP"),
-                    "Boarding point with name 'SALAP' is not checked");
+
+            boardingdroppingpoint.clickDroppingPointByIndex(0);
+            boardingdroppingpoint.clickBoardingDroppingPointTab();
+            Assert.assertTrue(boardingdroppingpoint.isDroppingPointCheckedByIndex(0),
+                    "Dropping point at index 0 is not checked");
+
+            Thread.sleep(5000);
+
+
+            boardingdroppingpoint.clickBoardingPointByName("Dankuni");
+            Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByName("Dankuni"),
+                    "Boarding point with name 'Dankuni' is not checked");
+
+            Thread.sleep(5000);
+
+            boardingdroppingpoint.clickDroppingPointByName("Nawabab Hat");
+            boardingdroppingpoint.clickBoardingDroppingPointTab();
+            Assert.assertTrue(boardingdroppingpoint.isDroppingPointCheckedByName("Nawabab Hat"),
+                    "Dropping point with name 'Nawab Hat' is not checked");
+            Thread.sleep(5000);
 
             logTestPass(testName);
         } catch (Throwable e) {
@@ -88,11 +106,6 @@ public class BoardingDroppingPointTest extends BaseClass {
         } catch (Exception e) {
             logTestFailure(testName,e);
         }
-    }
-
-    @Test
-    public void boarding_point_list_matches_route(){
-
     }
 
 

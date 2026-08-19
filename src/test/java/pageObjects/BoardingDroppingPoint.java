@@ -24,16 +24,20 @@ public class BoardingDroppingPoint extends BasePage {
 
     By droppingPoint = By.xpath("//ul[@aria-label='Dropping points']//li[contains(@class,'bpdpListRow___') and @role='listitem']");
 
-    private final By boardingPointRadio =
+    private final By boardingDroppingPointRadio =
             By.xpath(".//div[@role='radio' and @data-id]");
 
-    private final By boardingPointName =
+    private final By boardingDroppingPointName =
             By.xpath(".//div[contains(@class,'name___')]");
 
 
 
     public void clickBoardingDroppingPointButton(){
         clickElement(boardingDroppingPointButton);
+    }
+
+    public void clickBoardingDroppingPointTab(){
+        clickElement(boardingDroppingPointTab);
     }
 
     public boolean isBoardingDroppingPointTabSelected(){
@@ -44,10 +48,31 @@ public class BoardingDroppingPoint extends BasePage {
         return findElements(boardingPoint);
     }
 
+    public List<WebElement> getDroppingPoints(){
+        return findElements(droppingPoint);
+    }
+
     public WebElement getBoardingPointByIndex(int index){
         List<WebElement> boardingPoints = findElements(boardingPoint);
         return wait.until(driver ->
                 Objects.requireNonNull(boardingPoints.stream()
+                        .map(li -> li.findElement(
+                                By.xpath(".//div[@data-id]")
+                        ))
+                        .filter(element ->
+                                String.valueOf(index)
+                                        .equals(element.getAttribute("data-id"))
+                        )
+                        .findFirst()
+                        .orElse(null))
+        );
+    }
+
+
+    public WebElement getDroppingPointByIndex(int index){
+        List<WebElement> droppingPoints = findElements(droppingPoint);
+        return wait.until(driver ->
+                Objects.requireNonNull(droppingPoints.stream()
                         .map(li -> li.findElement(
                                 By.xpath(".//div[@data-id]")
                         ))
@@ -67,14 +92,34 @@ public class BoardingDroppingPoint extends BasePage {
             List<WebElement> boardingPoints =
                     driver.findElements(boardingPoint);
 
-            return Objects.requireNonNull(boardingPoints.stream()
+            return boardingPoints.stream()
                     .filter(li ->
-                            li.findElement(boardingPointName)
+                            li.findElement(boardingDroppingPointName)
                                     .getText()
                                     .toLowerCase()
                                     .contains(name.toLowerCase())
                     )
-                    .map(li -> li.findElement(boardingPointRadio))
+                    .map(li -> li.findElement(boardingDroppingPointRadio))
+                    .findFirst()
+                    .orElse(null);
+        });
+    }
+
+    public WebElement getDroppingPointByName(String name) {
+
+        return wait.until(driver -> {
+
+            List<WebElement> droppingPoints =
+                    driver.findElements(droppingPoint);
+
+            return (droppingPoints.stream()
+                    .filter(li ->
+                            li.findElement(boardingDroppingPointName)
+                                    .getText()
+                                    .toLowerCase()
+                                    .contains(name.toLowerCase())
+                    )
+                    .map(li -> li.findElement(boardingDroppingPointRadio))
                     .findFirst()
                     .orElse(null));
         });
@@ -85,9 +130,19 @@ public class BoardingDroppingPoint extends BasePage {
         clickElement(boardingPointByIndex);
     }
 
+    public void clickDroppingPointByIndex(int index){
+        WebElement droppingPointByIndex = getDroppingPointByIndex(index);
+        clickElement(droppingPointByIndex);
+    }
+
     public void clickBoardingPointByName(String name){
         WebElement boardingPointByname = getBoardingPointByName(name);
         clickElement(boardingPointByname);
+    }
+
+    public void clickDroppingPointByName(String name){
+        WebElement droppingPointByname = getDroppingPointByName(name);
+        clickElement(droppingPointByname);
     }
 
     public boolean isBoardingPointCheckedByIndex(int index) {
@@ -100,6 +155,16 @@ public class BoardingDroppingPoint extends BasePage {
         );
     }
 
+    public boolean isDroppingPointCheckedByIndex(int index) {
+
+        WebElement droppingPointElement =
+                getDroppingPointByIndex(index);
+
+        return "true".equals(
+                droppingPointElement.getAttribute("aria-checked")
+        );
+    }
+
     public boolean isBoardingPointCheckedByName(String name) {
         return "true".equals(
                 getBoardingPointByName(name)
@@ -107,8 +172,26 @@ public class BoardingDroppingPoint extends BasePage {
         );
     }
 
+    public boolean isDroppingPointCheckedByName(String name) {
+        return "true".equals(
+                getDroppingPointByName(name)
+                        .getAttribute("aria-checked")
+        );
+    }
+
     public boolean areAllBoardingTimesDisplayed() {
         return getBoardingPoints().stream()
+                .map(element -> element.findElement(
+                        By.xpath(".//div[contains(@class,'dateTime___')]")
+                ))
+                .allMatch(timeElement ->
+                        timeElement.getText() != null &&
+                                !timeElement.getText().isBlank()
+                );
+    }
+
+    public boolean areAllDroppingTimesDisplayed() {
+        return getDroppingPoints().stream()
                 .map(element -> element.findElement(
                         By.xpath(".//div[contains(@class,'dateTime___')]")
                 ))

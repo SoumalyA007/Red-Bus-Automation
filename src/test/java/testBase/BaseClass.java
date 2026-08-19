@@ -112,14 +112,14 @@ public class BaseClass {
         }
     }
 
-    @AfterClass
-    public void tearDown() {
-        WebDriver driver = driverThreadLocal.get();
-        if (driver != null) {
-            driver.quit();
-            driverThreadLocal.remove(); // prevents memory leaks in thread pools
-        }
-    }
+//    @AfterClass
+//    public void tearDown() {
+//        WebDriver driver = driverThreadLocal.get();
+//        if (driver != null) {
+//            driver.quit();
+//            driverThreadLocal.remove(); // prevents memory leaks in thread pools
+//        }
+//    }
 
     @BeforeMethod
     public void resetToHome() {
