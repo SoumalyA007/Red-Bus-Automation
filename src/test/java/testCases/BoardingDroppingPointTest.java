@@ -5,6 +5,7 @@ import org.testng.annotations.Test;
 import testBase.BaseClass;
 
 import java.time.LocalDate;
+import java.util.HashMap;
 
 public class BoardingDroppingPointTest extends BaseClass {
 
@@ -13,7 +14,8 @@ public class BoardingDroppingPointTest extends BaseClass {
         String testName = "clickBoardingDroppingPointButtonTest";
         try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
-            sp.clickViewSeatsButtonForCard(1);
+            // Automatically find a card with at least 2 boarding + 1 dropping point
+            helper.clickViewSeatsForCardWithMinPoints(2, 1);
 
             busseatpage.selectSeat("5");
             Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
@@ -33,7 +35,8 @@ public class BoardingDroppingPointTest extends BaseClass {
         String testName = "select_boarding_dropping_point_updates_selection";
         try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(1));
-            sp.clickViewSeatsButtonForCard(3);
+            // Need at least 2 boarding + 2 dropping points so we can pick and verify
+            helper.clickViewSeatsForCardWithMinPoints(2, 2);
 
             busseatpage.selectSeat("5");
             Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
@@ -44,25 +47,20 @@ public class BoardingDroppingPointTest extends BaseClass {
             Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByIndex(1),
                     "Boarding point at index 1 is not checked");
 
-            boardingdroppingpoint.clickDroppingPointByIndex(0);
-            boardingdroppingpoint.clickBoardingDroppingPointTab();
-            Assert.assertTrue(boardingdroppingpoint.isDroppingPointCheckedByIndex(0),
-                    "Dropping point at index 0 is not checked");
+        boardingdroppingpoint.clickDroppingPointByIndex(0);
+        boardingdroppingpoint.clickBoardingDroppingPointTab();
+        Assert.assertTrue(boardingdroppingpoint.isDroppingPointCheckedByIndex(0),
+                "Dropping point at index 0 is not checked");
 
-            Thread.sleep(5000);
+        // No need for Thread.sleep() - the following assertion will wait for the element state using WebDriverWait
+        boardingdroppingpoint.clickBoardingPointByName("Dankuni");
+        Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByName("Dankuni"),
+                "Boarding point with name 'Dankuni' is not checked");
 
-
-            boardingdroppingpoint.clickBoardingPointByName("Dankuni");
-            Assert.assertTrue(boardingdroppingpoint.isBoardingPointCheckedByName("Dankuni"),
-                    "Boarding point with name 'Dankuni' is not checked");
-
-            Thread.sleep(5000);
-
-            boardingdroppingpoint.clickDroppingPointByName("Nawabab Hat");
-            boardingdroppingpoint.clickBoardingDroppingPointTab();
-            Assert.assertTrue(boardingdroppingpoint.isDroppingPointCheckedByName("Nawabab Hat"),
-                    "Dropping point with name 'Nawab Hat' is not checked");
-            Thread.sleep(5000);
+        boardingdroppingpoint.clickDroppingPointByName("Nawabab Hat");
+        boardingdroppingpoint.clickBoardingDroppingPointTab();
+        Assert.assertTrue(boardingdroppingpoint.isDroppingPointCheckedByName("Nawab Hat"),
+                "Dropping point with name 'Nawab Hat' is not checked");
 
             logTestPass(testName);
         } catch (Throwable e) {
@@ -71,11 +69,12 @@ public class BoardingDroppingPointTest extends BaseClass {
     }
 
     @Test
-    public void verify_all_boarding_times_displayed() {
-        String testName = "verify_all_boarding_times_displayed";
+    public void verify_all_boarding_dropping_times_displayed() {
+        String testName = "verify_all_boarding_dropping_times_displayed";
         try {
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
-            sp.clickViewSeatsButtonForCard(1);
+            // Any card with at least 1 boarding + 1 dropping point is fine for this test
+            helper.clickViewSeatsForCardWithMinPoints(1, 1);
 
             busseatpage.selectSeat("5");
             Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
@@ -84,6 +83,9 @@ public class BoardingDroppingPointTest extends BaseClass {
             Assert.assertTrue(boardingdroppingpoint.areAllBoardingTimesDisplayed(),
                     "Not all boarding times are displayed");
 
+            Assert.assertTrue(boardingdroppingpoint.areAllDroppingTimesDisplayed(),
+                    "Not all dropping times are displayed");
+
             logTestPass(testName);
         } catch (Throwable e) {
             logTestFailure(testName, e);
@@ -91,7 +93,33 @@ public class BoardingDroppingPointTest extends BaseClass {
     }
 
     @Test
-    public void boarding_point_required_before_proceed(){
+    public void boarding_point_required_before_proceed() {
+        String testName = "boarding_point_required_before_proceed";
+        try {
+            helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
+            // Need >= 2 dropping points so that none is auto-selected by RedBus
+            helper.clickViewSeatsForCardWithMinPoints(2, 2);
+
+            busseatpage.selectSeat("5");
+            Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
+
+            boardingdroppingpoint.clickBoardingDroppingPointButton();
+            boardingdroppingpoint.clickDroppingPointByIndex(0);
+
+            Assert.assertTrue(passengerinfo.isFillPassengerDetailButtonNotPresent(), "Passenger detail button shall not be present before selecting any boarding point");
+            passengerinfo.clickPassengerInfoButton();
+            HashMap<Boolean, String> map = boardingdroppingpoint.isboardingDroppingVlidationMessageDisplayed();
+            Assert.assertTrue(map.containsKey(true), "The validation message did not pop up");
+            Assert.assertTrue(map.containsValue("Please select a boarding and dropping point"), "The validation message does not match with the required message");
+
+            logTestPass(testName);
+        } catch (Exception e) {
+            logTestFailure(testName, e);
+        }
+    }
+
+    @Test
+    public void dropping_point_required_before_proceed(){
         String testName ="boarding_point_required_before_proceed";
         try{
             helper.searchBuses("Kolkata", "Burdwan", LocalDate.now().plusDays(5));
@@ -100,7 +128,14 @@ public class BoardingDroppingPointTest extends BaseClass {
             busseatpage.selectSeat("5");
             Assert.assertTrue(busseatpage.isSeatSelected("5"), "Seat 5 could not be selected");
 
-            Assert.assertTrue(!passengerinfo.isFillPassengerDetailButtonPresent(),"Passenger detail button shall not be present before selecting any boarding point");
+            boardingdroppingpoint.clickBoardingDroppingPointButton();
+            boardingdroppingpoint.clickDroppingPointByIndex(0);
+
+            Assert.assertTrue(passengerinfo.isFillPassengerDetailButtonNotPresent(),"Passenger detail button shall not be present before selecting any boarding point");
+            passengerinfo.clickPassengerInfoButton();
+            HashMap<Boolean, String> map = boardingdroppingpoint.isboardingDroppingVlidationMessageDisplayed();
+            Assert.assertTrue(map.containsKey(true),"The valiation message did not pop up");
+            Assert.assertTrue(map.containsValue("Please select a boarding and dropping point"),"The validation message does not match with the required message");
 
 
         } catch (Exception e) {

@@ -73,6 +73,24 @@ public class BasePage {
         }
     }
 
+    /**
+     * Checks if an element is NOT displayed/present using a SHORT timeout.
+     * Useful for negative assertions where you expect the element to NOT be visible.
+     * Returns quickly (within 1 second) if element is absent, instead of waiting the full timeout.
+     *
+     * @param element the WebElement to check
+     * @return true if element is NOT displayed, false if it IS displayed
+     */
+    public boolean isElementNotDisplayed(WebElement element) {
+        try {
+            WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(SHORT_TIMEOUT_SECONDS));
+            shortWait.until(ExpectedConditions.visibilityOf(element));
+            return false; // Element IS displayed
+        } catch (TimeoutException | NoSuchElementException e) {
+            return true; // Element is NOT displayed
+        }
+    }
+
     public boolean isElementClickable(WebElement element) {
         try {
             WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(SHORT_TIMEOUT_SECONDS));

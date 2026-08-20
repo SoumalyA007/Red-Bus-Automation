@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +21,9 @@ public class BoardingDroppingPoint extends BasePage {
     @FindBy(xpath = "//div[contains(@aria-label,'Board/Drop point')]")
     WebElement boardingDroppingPointTab;
 
+    @FindBy(xpath = "//div[contains(@class,'snackbar___')]")
+    WebElement boardingDroppingPointValidationMessageBox;
+
     By boardingPoint = By.xpath("//ul[@aria-label='Boarding points']//li[contains(@class,'bpdpListRow___') and @role='listitem']");
 
     By droppingPoint = By.xpath("//ul[@aria-label='Dropping points']//li[contains(@class,'bpdpListRow___') and @role='listitem']");
@@ -29,7 +33,6 @@ public class BoardingDroppingPoint extends BasePage {
 
     private final By boardingDroppingPointName =
             By.xpath(".//div[contains(@class,'name___')]");
-
 
 
     public void clickBoardingDroppingPointButton(){
@@ -52,38 +55,43 @@ public class BoardingDroppingPoint extends BasePage {
         return findElements(droppingPoint);
     }
 
-    public WebElement getBoardingPointByIndex(int index){
-        List<WebElement> boardingPoints = findElements(boardingPoint);
-        return wait.until(driver ->
-                Objects.requireNonNull(boardingPoints.stream()
-                        .map(li -> li.findElement(
-                                By.xpath(".//div[@data-id]")
-                        ))
-                        .filter(element ->
-                                String.valueOf(index)
-                                        .equals(element.getAttribute("data-id"))
-                        )
-                        .findFirst()
-                        .orElse(null))
-        );
+    public WebElement getBoardingPointByIndex(int index) {
+
+        return wait.until(driver -> {
+
+            List<WebElement> boardingPoints =
+                    driver.findElements(boardingPoint);
+
+            return boardingPoints.stream()
+                    .map(li -> li.findElement(boardingDroppingPointRadio))
+                    .filter(element ->
+                            String.valueOf(index)
+                                    .equals(element.getAttribute("data-id"))
+                    )
+                    .findFirst()
+                    .orElse(null);
+        });
     }
 
 
-    public WebElement getDroppingPointByIndex(int index){
-        List<WebElement> droppingPoints = findElements(droppingPoint);
-        return wait.until(driver ->
-                Objects.requireNonNull(droppingPoints.stream()
-                        .map(li -> li.findElement(
-                                By.xpath(".//div[@data-id]")
-                        ))
-                        .filter(element ->
-                                String.valueOf(index)
-                                        .equals(element.getAttribute("data-id"))
-                        )
-                        .findFirst()
-                        .orElse(null))
-        );
+    public WebElement getDroppingPointByIndex(int index) {
+
+        return wait.until(driver -> {
+
+            List<WebElement> droppingPoints =
+                    driver.findElements(droppingPoint);
+
+            return droppingPoints.stream()
+                    .map(li -> li.findElement(boardingDroppingPointRadio))
+                    .filter(element ->
+                            String.valueOf(index)
+                                    .equals(element.getAttribute("data-id"))
+                    )
+                    .findFirst()
+                    .orElse(null);
+        });
     }
+
 
     public WebElement getBoardingPointByName(String name) {
 
@@ -96,14 +104,15 @@ public class BoardingDroppingPoint extends BasePage {
                     .filter(li ->
                             li.findElement(boardingDroppingPointName)
                                     .getText()
-                                    .toLowerCase()
-                                    .contains(name.toLowerCase())
+                                    .trim()
+                                    .equalsIgnoreCase(name.trim())
                     )
                     .map(li -> li.findElement(boardingDroppingPointRadio))
                     .findFirst()
                     .orElse(null);
         });
     }
+
 
     public WebElement getDroppingPointByName(String name) {
 
@@ -112,19 +121,18 @@ public class BoardingDroppingPoint extends BasePage {
             List<WebElement> droppingPoints =
                     driver.findElements(droppingPoint);
 
-            return (droppingPoints.stream()
+            return droppingPoints.stream()
                     .filter(li ->
                             li.findElement(boardingDroppingPointName)
                                     .getText()
-                                    .toLowerCase()
-                                    .contains(name.toLowerCase())
+                                    .trim()
+                                    .equalsIgnoreCase(name.trim())
                     )
                     .map(li -> li.findElement(boardingDroppingPointRadio))
                     .findFirst()
-                    .orElse(null));
+                    .orElse(null);
         });
     }
-
     public void clickBoardingPointByIndex(int index){
         WebElement boardingPointByIndex = getBoardingPointByIndex(index);
         clickElement(boardingPointByIndex);
@@ -199,6 +207,15 @@ public class BoardingDroppingPoint extends BasePage {
                         timeElement.getText() != null &&
                                 !timeElement.getText().isBlank()
                 );
+    }
+
+    public HashMap<Boolean, String> isboardingDroppingVlidationMessageDisplayed(){
+        boolean status = isElementDisplayed(boardingDroppingPointValidationMessageBox);
+        String message =boardingDroppingPointValidationMessageBox.getText() ;
+
+        HashMap<Boolean, String> map = new HashMap<>();
+        map.put(status,message);
+        return map;
     }
 }
 

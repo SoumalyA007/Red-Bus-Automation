@@ -70,7 +70,7 @@ public class BaseClass {
         driverThreadLocal.set(driver);
 
         driver.manage().deleteAllCookies();
-        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
+        //driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(5));
         driver.get(p.getProperty("uri"));
         driver.manage().window().maximize();
         wait = new WebDriverWait(driver, Duration.ofSeconds(10));
