@@ -127,6 +127,7 @@ public class BusSeatPage extends BasePage {
     public String getFirstAvailableSeatNumber(){
 
         return allSeats.stream()
+                .peek(seat -> System.out.println("Available seat found: " + seat.getAttribute("id")))
                 .filter(seat -> !"true".equals(seat.getAttribute("aria-disabled")))
                 .findFirst()
                 .map(seat -> seat.getAttribute("id"))

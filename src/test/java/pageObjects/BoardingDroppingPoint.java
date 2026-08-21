@@ -36,6 +36,11 @@ public class BoardingDroppingPoint extends BasePage {
 
 
     public void clickBoardingDroppingPointButton(){
+        List<WebElement> existingPanel = driver.findElements(
+                By.xpath("//ul[@aria-label='Boarding points']"));
+        if (!existingPanel.isEmpty() && existingPanel.get(0).isDisplayed()) {
+            return; // panel already open, nothing to do
+        }
         clickElement(boardingDroppingPointButton);
     }
 
