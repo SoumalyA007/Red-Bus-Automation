@@ -214,15 +214,7 @@ public class SearchPage extends BasePage {
         By boardingPoint = By.xpath(
                 "//ul[@aria-label='Boarding points']//li[contains(@class,'bpdpListRow___') and @role='listitem']");
         try {
-            // Use a short wait — if the boarding point list doesn't appear quickly, the panel
-            // may not have a boarding/dropping section at all (single-point auto-select).
             WebDriverWait shortWait = new WebDriverWait(driver, Duration.ofSeconds(5));
-            // First click the boarding/dropping button if it is present
-            By bdpBtn = By.xpath("//button[normalize-space()='Select boarding & dropping points']");
-            List<WebElement> btnList = driver.findElements(bdpBtn);
-            if (!btnList.isEmpty()) {
-                clickElement(btnList.get(0));
-            }
             List<WebElement> points = shortWait.until(
                     ExpectedConditions.presenceOfAllElementsLocatedBy(boardingPoint));
             return points.size();
@@ -245,6 +237,23 @@ public class SearchPage extends BasePage {
             return points.size();
         } catch (TimeoutException e) {
             return 0;
+        }
+    }
+
+    /**
+     * Opens the boarding/dropping points panel if it isn't already open. Idempotent —
+     * safe to call even if the panel is already showing.
+     */
+    public void openBoardingDroppingPanel() {
+        By boardingList = By.xpath("//ul[@aria-label='Boarding points']");
+        List<WebElement> existing = driver.findElements(boardingList);
+        if (!existing.isEmpty() && existing.get(0).isDisplayed()) {
+            return; // already open
+        }
+        By bdpBtn = By.xpath("//button[normalize-space()='Select boarding & dropping points']");
+        List<WebElement> btnList = driver.findElements(bdpBtn);
+        if (!btnList.isEmpty()) {
+            clickElement(btnList.get(0));
         }
     }
 

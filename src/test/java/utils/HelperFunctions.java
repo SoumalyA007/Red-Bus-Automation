@@ -3,11 +3,14 @@ package utils;
 import java.time.LocalDate;
 import java.time.format.TextStyle;
 import java.util.Locale;
+import java.util.NoSuchElementException;
 
 import components.SearchBarComponents;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import pageObjects.BoardingDroppingPoint;
+import pageObjects.BusSeatPage;
 import pageObjects.HomePage;
 import components.SearchBarComponents.JourneyField;
 import pageObjects.SearchPage;
@@ -17,10 +20,14 @@ public class HelperFunctions {
     private final HomePage hp;
     private final SearchPage sp;
     private final SearchBarComponents searchbarcomponents;
+    private final BusSeatPage busseatpage;
+    private final BoardingDroppingPoint boardingdroppingpoint;
 
     public HelperFunctions(WebDriver driver, WebDriverWait wait) {
         this.hp = new HomePage(driver);
         this.sp = new SearchPage(driver);
+        this.busseatpage = new BusSeatPage(driver);
+        this.boardingdroppingpoint = new BoardingDroppingPoint(driver);
         this.searchbarcomponents = new SearchBarComponents(driver);
 
     }
@@ -69,36 +76,42 @@ public class HelperFunctions {
      * @throws java.util.NoSuchElementException if no card on the current results page satisfies
      *                                          the criteria
      */
-    public void clickViewSeatsForCardWithMinPoints(int minBoarding, int minDropping) {
+    public String clickViewSeatsForCardWithMinPoints(int minBoarding, int minDropping) {
         int total = sp.getBusCardsCount();
         if (total == 0) {
-            throw new java.util.NoSuchElementException(
+            throw new NoSuchElementException(
                     "No bus cards found on the search results page. " +
-                    "The route may have no available buses, or the page did not finish loading.");
+                            "The route may have no available buses, or the page did not finish loading.");
         }
 
         for (int i = 0; i < total; i++) {
-            // Open this card's seat panel
             sp.clickViewSeatsButtonForCard(i);
 
-            // Peek at how many boarding/dropping points it has
+            String seat;
+            try {
+                busseatpage.isSeatLayoutVisible();
+                seat = busseatpage.getFirstAvailableSeatNumber();
+            } catch (NoSuchElementException e) {
+                sp.closeOpenSeatPanel();
+                continue;
+            }
+            busseatpage.selectSeat(seat);
+
+            sp.openBoardingDroppingPanel();
             int boardingCount = sp.getOpenPanelBoardingPointCount();
             int droppingCount = sp.getOpenPanelDroppingPointCount();
 
             if (boardingCount >= minBoarding && droppingCount >= minDropping) {
-                // This card qualifies — leave the panel open for the test to use
-                return;
+                return seat; // qualifying card, seat already selected, panel open
             }
 
-            // Not enough points — close the panel and try the next card
             sp.closeOpenSeatPanel();
         }
 
-        throw new java.util.NoSuchElementException(
-                "No bus card found with at least " + minBoarding + " boarding point(s) and " +
-                minDropping + " dropping point(s) out of " + total + " card(s) on the page.");
+        throw new NoSuchElementException(
+                "No bus card found with at least " + minBoarding + " boarding and "
+                        + minDropping + " dropping points that also has an available seat.");
     }
-
     /**
      * Convenience overload: finds a card with at least {@code minBoarding} boarding points
      * and at least 1 dropping point.
