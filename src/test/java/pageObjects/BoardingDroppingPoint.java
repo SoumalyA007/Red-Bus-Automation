@@ -24,6 +24,12 @@ public class BoardingDroppingPoint extends BasePage {
     @FindBy(xpath = "//div[contains(@class,'snackbar___')]")
     WebElement boardingDroppingPointValidationMessageBox;
 
+    @FindBy(xpath = "//div[contains(@class,'bpdpContainer___') and contains(@class,'bpdpContainerDesktopFlexNone___')][1]")
+    WebElement boardingTab;
+
+    @FindBy(xpath = "//div[contains(@class,'bpdpContainer___') and contains(@class,'bpdpContainerDesktopFlexNone___')][1]")
+    WebElement droppingTab;
+
     By boardingPoint = By.xpath("//ul[@aria-label='Boarding points']//li[contains(@class,'bpdpListRow___') and @role='listitem']");
 
     By droppingPoint = By.xpath("//ul[@aria-label='Dropping points']//li[contains(@class,'bpdpListRow___') and @role='listitem']");
@@ -36,6 +42,8 @@ public class BoardingDroppingPoint extends BasePage {
 
 
     public void clickBoardingDroppingPointButton(){
+
+        isElementDisplayed(boardingDroppingPointButton);
         clickElement(boardingDroppingPointButton);
     }
 
@@ -48,10 +56,12 @@ public class BoardingDroppingPoint extends BasePage {
     }
 
     public List<WebElement> getBoardingPoints(){
+        isElementDisplayed(boardingTab);
         return findElements(boardingPoint);
     }
 
     public List<WebElement> getDroppingPoints(){
+        isElementDisplayed(boardingTab);
         return findElements(droppingPoint);
     }
 
@@ -208,6 +218,16 @@ public class BoardingDroppingPoint extends BasePage {
                                 !timeElement.getText().isBlank()
                 );
     }
+
+    public int getBoardingPointsCount(){
+        return getBoardingPoints().size();
+    }
+
+    public int getDroppingPointsCount(){
+        return getDroppingPoints().size();
+    }
+
+
 
     public HashMap<Boolean, String> isboardingDroppingVlidationMessageDisplayed(){
         boolean status = isElementDisplayed(boardingDroppingPointValidationMessageBox);
